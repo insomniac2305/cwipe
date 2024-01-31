@@ -1,3 +1,5 @@
+"use server";
+
 import { DiscoverMovies } from "@/app/lib/definitions";
 
 export async function getMovies() {

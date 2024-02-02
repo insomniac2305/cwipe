@@ -31,7 +31,6 @@ export default function MovieStack({ movies }: { movies: DiscoverMovies["results
                     onLoad={(e) => ((e.target as HTMLImageElement).style.opacity = "1")}
                     alt={movie.title}
                     draggable={false}
-                    priority={index === 0}
                   />
                 </div>
               </SwipeCard>

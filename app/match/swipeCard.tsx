@@ -7,13 +7,13 @@ const MAX_ROTATION = 10;
 
 export default function SwipeCard({
   isActive,
-  swipeLeft,
-  swipeRight,
+  handleSwipeLeft,
+  handleSwipeRight,
   children,
 }: {
   isActive: boolean;
-  swipeLeft: undefined | (() => void);
-  swipeRight: undefined | (() => void);
+  handleSwipeLeft: () => void;
+  handleSwipeRight: () => void;
   children: React.ReactNode;
 }) {
   const ref = useRef<HTMLElement>(null);
@@ -37,10 +37,11 @@ export default function SwipeCard({
     if (!isActive) return;
     const currentRef = ref.current;
 
-    const startSwipe = (e: MouseEvent | TouchEvent) => {
-      const { clientX, clientY } = e.type === "mousedown" ? (e as MouseEvent) : (e as TouchEvent).touches[0];
+    const startSwipe = (e: MouseEvent | TouchEvent): void => {
+      const { clientX, clientY } = "touches" in e ? (e as TouchEvent).touches[0] : (e as MouseEvent);
       if (currentRef) {
         const rect = ref.current?.getBoundingClientRect();
+
         setRenderProps((prevState) => ({
           ...prevState,
           width: rect.width,
@@ -52,17 +53,18 @@ export default function SwipeCard({
           offsetCenterX: clientX - (rect.width / 2 + rect.left),
           rotation: 0,
         }));
+
         setPointer({
           x: clientX,
           y: clientY,
         });
+
         setIsSwiping(true);
       }
     };
 
     currentRef?.addEventListener("mousedown", startSwipe);
     currentRef?.addEventListener("touchstart", startSwipe);
-
     return () => {
       currentRef?.removeEventListener("mousedown", startSwipe);
       currentRef?.removeEventListener("touchstart", startSwipe);
@@ -70,14 +72,17 @@ export default function SwipeCard({
   }, [isActive]);
 
   useEffect(() => {
-    if (!isActive) return;
+    if (!isActive || !isSwiping) return;
 
     const handleSwipeMove = (e: MouseEvent | TouchEvent) => {
-      const { clientX, clientY } = e.type === "mousemove" ? (e as MouseEvent) : (e as TouchEvent).touches[0];
+      const { clientX, clientY } = "touches" in e ? (e as TouchEvent).touches[0] : (e as MouseEvent);
       setPointer({ x: clientX, y: clientY });
-      let rotation =
-        ((clientX - renderProps.offsetCenterX - renderProps.centerX) / (renderProps.width / 4)) * MAX_ROTATION;
-      rotation = rotation > MAX_ROTATION ? MAX_ROTATION : rotation < -MAX_ROTATION ? -MAX_ROTATION : rotation;
+
+      const moveDistance = clientX - renderProps.offsetCenterX - renderProps.centerX;
+      const maxDistance = renderProps.width / 4;
+      let rotation = (moveDistance / maxDistance) * MAX_ROTATION;
+      rotation = Math.max(-MAX_ROTATION, Math.min(MAX_ROTATION, rotation));
+
       setRenderProps((prevState) => ({ ...prevState, rotation }));
     };
 
@@ -87,7 +92,7 @@ export default function SwipeCard({
       window.removeEventListener("mousemove", handleSwipeMove);
       window.removeEventListener("touchmove", handleSwipeMove);
     };
-  }, [isActive, renderProps.centerX, renderProps.offsetCenterX, renderProps.width]);
+  }, [isActive, renderProps.centerX, renderProps.offsetCenterX, renderProps.width, isSwiping]);
 
   useEffect(() => {
     if (!isActive) return;
@@ -97,9 +102,9 @@ export default function SwipeCard({
 
     const evaluateSwipe = () => {
       if (renderProps.rotation >= MAX_ROTATION) {
-        if (swipeRight) swipeRight();
+        handleSwipeRight();
       } else if (renderProps.rotation <= -MAX_ROTATION) {
-        if (swipeLeft) swipeLeft();
+        handleSwipeLeft();
       }
     };
 
@@ -115,13 +120,13 @@ export default function SwipeCard({
       currentRef?.removeEventListener("touchend", stopSwipe);
       clearTimeout(timeoutID);
     };
-  }, [isActive, renderProps.rotation, swipeLeft, swipeRight]);
+  }, [isActive, renderProps.rotation, handleSwipeLeft, handleSwipeRight]);
 
   return (
     <article
       ref={ref}
       className={clsx(
-        "h-full w-full select-none touch-none",
+        "relative h-full w-full select-none touch-none",
         isSwiping ? "shadow-lg cursor-grabbing transition-none" : "cursor-grab transition-transform"
       )}
       style={{

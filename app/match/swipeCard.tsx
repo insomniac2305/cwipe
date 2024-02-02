@@ -6,14 +6,12 @@ import { useEffect, useRef, useState } from "react";
 const MAX_ROTATION = 10;
 
 export default function SwipeCard({
-  isActive,
-  handleSwipeLeft,
-  handleSwipeRight,
+  onSwipeLeft,
+  onSwipeRight,
   children,
 }: {
-  isActive: boolean;
-  handleSwipeLeft: () => void;
-  handleSwipeRight: () => void;
+  onSwipeLeft: () => void;
+  onSwipeRight: () => void;
   children: React.ReactNode;
 }) {
   const ref = useRef<HTMLElement>(null);
@@ -34,33 +32,32 @@ export default function SwipeCard({
   });
 
   useEffect(() => {
-    if (!isActive) return;
     const currentRef = ref.current;
 
     const startSwipe = (e: MouseEvent | TouchEvent): void => {
+      if (!currentRef) return;
+
       const { clientX, clientY } = "touches" in e ? (e as TouchEvent).touches[0] : (e as MouseEvent);
-      if (currentRef) {
-        const rect = ref.current?.getBoundingClientRect();
+      const rect = ref.current?.getBoundingClientRect();
 
-        setRenderProps((prevState) => ({
-          ...prevState,
-          width: rect.width,
-          centerX: rect.width / 2 + rect.left,
-          originalX: rect.left,
-          originalY: rect.top,
-          offsetX: clientX - rect.left,
-          offsetY: clientY - rect.top,
-          offsetCenterX: clientX - (rect.width / 2 + rect.left),
-          rotation: 0,
-        }));
+      setRenderProps((prevState) => ({
+        ...prevState,
+        width: rect.width,
+        centerX: rect.width / 2 + rect.left,
+        originalX: rect.left,
+        originalY: rect.top,
+        offsetX: clientX - rect.left,
+        offsetY: clientY - rect.top,
+        offsetCenterX: clientX - (rect.width / 2 + rect.left),
+        rotation: 0,
+      }));
 
-        setPointer({
-          x: clientX,
-          y: clientY,
-        });
+      setPointer({
+        x: clientX,
+        y: clientY,
+      });
 
-        setIsSwiping(true);
-      }
+      setIsSwiping(true);
     };
 
     currentRef?.addEventListener("mousedown", startSwipe);
@@ -69,10 +66,10 @@ export default function SwipeCard({
       currentRef?.removeEventListener("mousedown", startSwipe);
       currentRef?.removeEventListener("touchstart", startSwipe);
     };
-  }, [isActive]);
+  }, []);
 
   useEffect(() => {
-    if (!isActive || !isSwiping) return;
+    if (!isSwiping) return;
 
     const handleSwipeMove = (e: MouseEvent | TouchEvent) => {
       const { clientX, clientY } = "touches" in e ? (e as TouchEvent).touches[0] : (e as MouseEvent);
@@ -92,19 +89,17 @@ export default function SwipeCard({
       window.removeEventListener("mousemove", handleSwipeMove);
       window.removeEventListener("touchmove", handleSwipeMove);
     };
-  }, [isActive, renderProps.centerX, renderProps.offsetCenterX, renderProps.width, isSwiping]);
+  }, [renderProps.centerX, renderProps.offsetCenterX, renderProps.width, isSwiping]);
 
   useEffect(() => {
-    if (!isActive) return;
-
     const currentRef = ref.current;
     let timeoutID: NodeJS.Timeout | undefined;
 
     const evaluateSwipe = () => {
       if (renderProps.rotation >= MAX_ROTATION) {
-        handleSwipeRight();
+        onSwipeRight();
       } else if (renderProps.rotation <= -MAX_ROTATION) {
-        handleSwipeLeft();
+        onSwipeLeft();
       }
     };
 
@@ -120,7 +115,7 @@ export default function SwipeCard({
       currentRef?.removeEventListener("touchend", stopSwipe);
       clearTimeout(timeoutID);
     };
-  }, [isActive, renderProps.rotation, handleSwipeLeft, handleSwipeRight]);
+  }, [renderProps.rotation, onSwipeLeft, onSwipeRight]);
 
   return (
     <article

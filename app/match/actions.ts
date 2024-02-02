@@ -349,8 +349,6 @@ const movieData: DiscoverMovies = {
   total_results: 845038,
 };
 
-movieData.results.reverse();
-
 export async function getMovies() {
   // const options = {
   //   method: "GET",
@@ -373,7 +371,10 @@ export async function getMovies() {
 
 export async function rateMovie(id: number, isLiked: boolean) {
   await new Promise((resolve) => setTimeout(resolve, 1000));
-  const removed = movieData.results.splice(movieData.results.findIndex((movie) => movie.id === id));
+  const removed = movieData.results.splice(
+    movieData.results.findIndex((movie) => movie.id === id),
+    1
+  );
   revalidatePath("/match");
   return { removed, isLiked };
 }

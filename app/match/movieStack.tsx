@@ -5,7 +5,7 @@ import { rateMovie } from "@/app/match/actions";
 import SwipeCard from "@/app/match/swipeCard";
 import Image from "next/image";
 import { useState } from "react";
-import { HiMiniStar } from "react-icons/hi2";
+import { HiArrowUturnLeft, HiHandThumbDown, HiHandThumbUp, HiInformationCircle, HiMiniStar } from "react-icons/hi2";
 
 export default function MovieStack({ movies }: { movies: DiscoverMovies["results"] }) {
   const [swipedMovies, setSwipedMovies] = useState<Array<number>>([]);
@@ -35,7 +35,7 @@ export default function MovieStack({ movies }: { movies: DiscoverMovies["results
                       draggable={false}
                     />
                   </div>
-                  <div className="bg-gradient-to-t from-gray-900 from-40% via-gray-900/90 via-70% h-1/3 w-full absolute bottom-0 p-6 flex flex-col gap-2 justify-center">
+                  <div className="bg-gradient-to-t from-gray-900 from-40% via-gray-900/90 via-70% h-72 w-full absolute bottom-0 p-6 flex flex-col gap-2 justify-center">
                     <h1 className="w-full text-2xl font-bold text-gray-50 whitespace-nowrap text-ellipsis overflow-hidden">
                       {movie.title}
                     </h1>
@@ -50,6 +50,20 @@ export default function MovieStack({ movies }: { movies: DiscoverMovies["results
                   </div>
                 </div>
               </SwipeCard>
+              <div className="flex absolute bottom-0 p-4 justify-evenly w-full items-center">
+                <button className="bg-slate-500 p-2 rounded-full text-gray-50 text-2xl">
+                  <HiArrowUturnLeft />
+                </button>
+                <button className="bg-pink-600 p-2 rounded-full text-gray-50 text-4xl">
+                  <HiHandThumbDown />
+                </button>
+                <button className="bg-indigo-600 p-2 rounded-full text-gray-50 text-4xl">
+                  <HiHandThumbUp />
+                </button>
+                <button className="bg-slate-500 p-2 rounded-full text-gray-50 text-2xl">
+                  <HiInformationCircle />
+                </button>
+              </div>
             </li>
           )
       )}

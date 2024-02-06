@@ -1,5 +1,6 @@
 "use client";
 
+import { SwipeDirection } from "@/app/lib/definitions";
 import clsx from "clsx";
 import { useEffect, useRef, useState } from "react";
 
@@ -30,6 +31,15 @@ export default function SwipeCard({
     x: 0,
     y: 0,
   });
+  let swipeDirection: SwipeDirection | undefined;
+
+  if (renderProps.rotation >= MAX_ROTATION && !swipeDirection) {
+    swipeDirection = "right";
+  } else if (renderProps.rotation <= -MAX_ROTATION && !swipeDirection) {
+    swipeDirection = "left";
+  } else {
+    swipeDirection = undefined;
+  }
 
   useEffect(() => {
     const currentRef = ref.current;
@@ -93,19 +103,9 @@ export default function SwipeCard({
 
   useEffect(() => {
     const currentRef = ref.current;
-    let timeoutID: NodeJS.Timeout | undefined;
-
-    const evaluateSwipe = () => {
-      if (renderProps.rotation >= MAX_ROTATION) {
-        onSwipeRight();
-      } else if (renderProps.rotation <= -MAX_ROTATION) {
-        onSwipeLeft();
-      }
-    };
 
     const stopSwipe = () => {
       setIsSwiping(false);
-      timeoutID = setTimeout(evaluateSwipe, 150);
     };
 
     currentRef?.addEventListener("mouseup", stopSwipe);
@@ -113,9 +113,25 @@ export default function SwipeCard({
     return () => {
       currentRef?.removeEventListener("mouseup", stopSwipe);
       currentRef?.removeEventListener("touchend", stopSwipe);
-      clearTimeout(timeoutID);
     };
-  }, [renderProps.rotation, onSwipeLeft, onSwipeRight]);
+  }, []);
+
+  useEffect(() => {
+    const currentRef = ref.current;
+
+    const callSwipeAction = () => {
+      if (swipeDirection === "right") {
+        onSwipeRight();
+      } else if (swipeDirection === "left") {
+        onSwipeLeft();
+      }
+    };
+
+    currentRef?.addEventListener("transitionend", callSwipeAction);
+    return () => {
+      currentRef?.removeEventListener("transitionend", callSwipeAction);
+    };
+  }, [onSwipeLeft, onSwipeRight, swipeDirection]);
 
   return (
     <article
@@ -131,9 +147,9 @@ export default function SwipeCard({
               ${pointer.y - renderProps.originalY - renderProps.offsetY}px
             ) 
             rotate(${renderProps.rotation}deg)`
-          : renderProps.rotation >= MAX_ROTATION
+          : swipeDirection === "right"
           ? `translate(${renderProps.width * 1.2}px, 0) rotate(${MAX_ROTATION}deg)`
-          : renderProps.rotation <= -MAX_ROTATION
+          : swipeDirection === "left"
           ? `translate(${-renderProps.width * 1.2}px, 0) rotate(${-MAX_ROTATION}deg)`
           : "translate(0,0) rotate(0deg)",
       }}

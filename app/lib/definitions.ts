@@ -19,3 +19,5 @@ export interface DiscoverMovies {
   total_pages: number;
   total_results: number;
 }
+
+export type SwipeDirection = "left" | "right";

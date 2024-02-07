@@ -7,9 +7,11 @@ import { HiArrowUturnLeft, HiHandThumbDown, HiHandThumbUp, HiInformationCircle, 
 export default function MovieCard({
   movie,
   onRateMovie,
+  onUndoRating,
 }: {
   movie: DiscoverMovies["results"][number];
-  onRateMovie: (id: number, isLiked: boolean) => void;
+  onRateMovie: (movie: DiscoverMovies["results"][number], isLiked: boolean) => void;
+  onUndoRating: () => void;
 }) {
   const swipeRef = useRef<SwipeCardRef>(null);
   const simulateSwipe = (direction: SwipeDirection) => {
@@ -19,8 +21,8 @@ export default function MovieCard({
   return (
     <>
       <SwipeCard
-        onSwipeLeft={onRateMovie.bind(null, movie.id, false)}
-        onSwipeRight={onRateMovie.bind(null, movie.id, true)}
+        onSwipeLeft={onRateMovie.bind(null, movie, false)}
+        onSwipeRight={onRateMovie.bind(null, movie, true)}
         ref={swipeRef}
       >
         <div className="relative bg-gray-900 h-full w-full">
@@ -50,7 +52,7 @@ export default function MovieCard({
         </div>
       </SwipeCard>
       <div className="flex absolute bottom-0 p-4 justify-evenly w-full items-center">
-        <button className="bg-slate-500 p-2 rounded-full text-gray-50 text-2xl">
+        <button className="bg-slate-500 p-2 rounded-full text-gray-50 text-2xl" onClick={onUndoRating}>
           <HiArrowUturnLeft />
         </button>
         <button

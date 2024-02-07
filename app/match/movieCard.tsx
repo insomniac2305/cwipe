@@ -1,20 +1,27 @@
-import { DiscoverMovies } from "@/app/lib/definitions";
+import { DiscoverMovies, SwipeCardRef, SwipeDirection } from "@/app/lib/definitions";
 import SwipeCard from "@/app/match/swipeCard";
 import Image from "next/image";
+import { useRef } from "react";
 import { HiArrowUturnLeft, HiHandThumbDown, HiHandThumbUp, HiInformationCircle, HiMiniStar } from "react-icons/hi2";
 
 export default function MovieCard({
   movie,
-  handleSwipe,
+  onRateMovie,
 }: {
   movie: DiscoverMovies["results"][number];
-  handleSwipe: (id: number, isLiked: boolean) => void;
+  onRateMovie: (id: number, isLiked: boolean) => void;
 }) {
+  const swipeRef = useRef<SwipeCardRef>(null);
+  const simulateSwipe = (direction: SwipeDirection) => {
+    swipeRef.current?.swipe(direction);
+  };
+
   return (
     <>
       <SwipeCard
-        onSwipeLeft={handleSwipe.bind(null, movie.id, false)}
-        onSwipeRight={handleSwipe.bind(null, movie.id, true)}
+        onSwipeLeft={onRateMovie.bind(null, movie.id, false)}
+        onSwipeRight={onRateMovie.bind(null, movie.id, true)}
+        ref={swipeRef}
       >
         <div className="relative bg-gray-900 h-full w-full">
           <div className="relative h-[90%] w-full">
@@ -48,13 +55,13 @@ export default function MovieCard({
         </button>
         <button
           className="bg-pink-600 p-2 rounded-full text-gray-50 text-4xl"
-          onClick={handleSwipe.bind(null, movie.id, false)}
+          onClick={simulateSwipe.bind(null, "left")}
         >
           <HiHandThumbDown />
         </button>
         <button
           className="bg-indigo-600 p-2 rounded-full text-gray-50 text-4xl"
-          onClick={handleSwipe.bind(null, movie.id, true)}
+          onClick={simulateSwipe.bind(null, "right")}
         >
           <HiHandThumbUp />
         </button>

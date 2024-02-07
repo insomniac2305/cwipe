@@ -21,3 +21,7 @@ export interface DiscoverMovies {
 }
 
 export type SwipeDirection = "left" | "right";
+
+export interface SwipeCardRef {
+  swipe: (direction: SwipeDirection) => void;
+}

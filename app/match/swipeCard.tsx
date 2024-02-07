@@ -1,20 +1,21 @@
 "use client";
 
-import { SwipeDirection } from "@/app/lib/definitions";
+import { SwipeCardRef, SwipeDirection } from "@/app/lib/definitions";
 import clsx from "clsx";
-import { useEffect, useRef, useState } from "react";
+import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
 
 const MAX_ROTATION = 10;
 
-export default function SwipeCard({
-  onSwipeLeft,
-  onSwipeRight,
-  children,
-}: {
+interface Props {
   onSwipeLeft: () => void;
   onSwipeRight: () => void;
   children: React.ReactNode;
-}) {
+}
+
+export default forwardRef<SwipeCardRef, Props>(function SwipeCard(
+  { onSwipeLeft, onSwipeRight, children },
+  forwardedRef
+) {
   const ref = useRef<HTMLElement>(null);
   const [isSwiping, setIsSwiping] = useState(false);
   const [renderProps, setRenderProps] = useState({
@@ -33,13 +34,26 @@ export default function SwipeCard({
   });
   let swipeDirection: SwipeDirection | undefined;
 
-  if (renderProps.rotation >= MAX_ROTATION && !swipeDirection) {
+  if (renderProps.rotation >= MAX_ROTATION) {
     swipeDirection = "right";
-  } else if (renderProps.rotation <= -MAX_ROTATION && !swipeDirection) {
+  } else if (renderProps.rotation <= -MAX_ROTATION) {
     swipeDirection = "left";
-  } else {
-    swipeDirection = undefined;
   }
+
+  useImperativeHandle(forwardedRef, () => {
+    return {
+      swipe(direction: SwipeDirection) {
+        const width = ref.current?.getBoundingClientRect().width || 0;
+        const rotation = direction === "right" ? MAX_ROTATION : -MAX_ROTATION;
+
+        setRenderProps((prevState) => ({
+          ...prevState,
+          width,
+          rotation,
+        }));
+      },
+    };
+  });
 
   useEffect(() => {
     const currentRef = ref.current;
@@ -157,4 +171,4 @@ export default function SwipeCard({
       {children}
     </article>
   );
-}
+});

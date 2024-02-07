@@ -6,9 +6,9 @@ import MovieCard from "@/app/match/movieCard";
 import { useState } from "react";
 
 export default function MovieStack({ movies }: { movies: DiscoverMovies["results"] }) {
-  const [swipedMovies, setSwipedMovies] = useState<Array<number>>([]);
-  const handleSwipe = (id: number, isLiked: boolean) => {
-    setSwipedMovies((prevState) => [...prevState, id]);
+  const [ratedMovies, setRatedMovies] = useState<Array<number>>([]);
+  const handleRateMovie = (id: number, isLiked: boolean) => {
+    setRatedMovies((prevState) => [...prevState, id]);
     rateMovie(id, isLiked);
   };
 
@@ -16,9 +16,9 @@ export default function MovieStack({ movies }: { movies: DiscoverMovies["results
     <ul className="relative min-h-screen">
       {movies.map(
         (movie, index) =>
-          swipedMovies.includes(movie.id) || (
+          ratedMovies.includes(movie.id) || (
             <li className={`absolute top-0 h-full w-full`} key={movie.id} style={{ zIndex: movies.length - index }}>
-              <MovieCard movie={movie} handleSwipe={handleSwipe} />
+              <MovieCard movie={movie} onRateMovie={handleRateMovie} />
             </li>
           )
       )}

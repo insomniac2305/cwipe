@@ -39,25 +39,22 @@ export default forwardRef<SwipeCardRef, Props>(function SwipeCard(
     x: 0,
     y: 0,
   });
-  let swipeDirection: SwipeDirection | undefined;
-
-  if (renderProps.rotation >= MAX_ROTATION) {
-    swipeDirection = "right";
-  } else if (renderProps.rotation <= -MAX_ROTATION) {
-    swipeDirection = "left";
-  }
+  const [swipeDirection, setSwipeDirection] = useState<SwipeDirection>();
 
   useImperativeHandle(forwardedRef, () => {
     return {
       swipe(direction: SwipeDirection) {
         const width = ref.current?.getBoundingClientRect().width || 0;
-        const rotation = direction === "right" ? MAX_ROTATION : -MAX_ROTATION;
-
         setRenderProps((prevState) => ({
           ...prevState,
           width,
-          rotation,
         }));
+        setSwipeDirection(direction);
+      },
+      undoSwipe() {
+        if (swipeDirection) {
+          setSwipeDirection(undefined);
+        }
       },
     };
   });
@@ -115,6 +112,14 @@ export default forwardRef<SwipeCardRef, Props>(function SwipeCard(
       rotation = Math.max(-MAX_ROTATION, Math.min(MAX_ROTATION, rotation));
 
       setRenderProps((prevState) => ({ ...prevState, rotation }));
+
+      if (rotation >= MAX_ROTATION) {
+        setSwipeDirection("right");
+      } else if (rotation <= -MAX_ROTATION) {
+        setSwipeDirection("left");
+      } else {
+        setSwipeDirection(undefined);
+      }
     };
 
     window.addEventListener("mousemove", handleSwipeMove);

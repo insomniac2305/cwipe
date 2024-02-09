@@ -4,8 +4,9 @@ import {
   SwipeDirection,
 } from "@/app/lib/definitions";
 import SwipeCard from "@/app/match/swipeCard";
+import clsx from "clsx";
 import Image from "next/image";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import {
   HiArrowUturnLeft,
   HiHandThumbDown,
@@ -17,11 +18,13 @@ import {
 export default function MovieCard({
   movie,
   zIndex,
+  isLiked,
   onRateMovie,
   onUndoRating,
 }: {
   movie: DiscoverMovies["results"][number];
   zIndex: number;
+  isLiked?: boolean;
   onRateMovie: (
     movie: DiscoverMovies["results"][number],
     isLiked: boolean,
@@ -33,6 +36,12 @@ export default function MovieCard({
     swipeRef.current?.swipe(direction);
   };
 
+  useEffect(() => {
+    if (isLiked === undefined) {
+      swipeRef.current?.undoSwipe();
+    }
+  }, [isLiked]);
+
   return (
     <>
       <SwipeCard
@@ -41,7 +50,12 @@ export default function MovieCard({
         ref={swipeRef}
         zIndex={zIndex}
       >
-        <div className="relative h-full w-full bg-gray-900">
+        <div
+          className={clsx(
+            "relative h-full w-full bg-gray-900",
+            isLiked !== undefined && "hidden",
+          )}
+        >
           <div className="relative h-[90%] w-full">
             <Image
               src={`${process.env.NEXT_PUBLIC_TMDB_IMAGE_BASE_URL}/original${movie.poster_path}`}
@@ -70,7 +84,10 @@ export default function MovieCard({
         </div>
       </SwipeCard>
       <div
-        className="absolute bottom-0 flex w-full items-center justify-evenly p-4"
+        className={clsx(
+          "absolute bottom-0 flex w-full items-center justify-evenly p-4",
+          isLiked !== undefined && "hidden",
+        )}
         style={{ zIndex: zIndex }}
       >
         <button

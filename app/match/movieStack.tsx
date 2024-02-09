@@ -11,38 +11,70 @@ export default function MovieStack({
   movies: DiscoverMovies["results"];
 }) {
   const [ratedMovies, setRatedMovies] = useState<
-    Array<DiscoverMovies["results"][number]>
+    Array<DiscoverMovies["results"][number] & { isLiked?: boolean }>
   >([]);
 
   const handleRateMovie = (
     movie: DiscoverMovies["results"][number],
     isLiked: boolean,
   ) => {
-    setRatedMovies((prevState) => [...prevState, movie]);
+    const ratedIndex = ratedMovies.findIndex(
+      (findMovie) => findMovie.id === movie.id,
+    );
+
+    if (ratedIndex > -1) {
+      const updatedMovies = ratedMovies.map((mapMovie) => {
+        if (mapMovie.id === movie.id) {
+          return { ...mapMovie, isLiked };
+        } else {
+          return mapMovie;
+        }
+      });
+
+      setRatedMovies(updatedMovies);
+    } else {
+      setRatedMovies((prevState) => [...prevState, { ...movie, isLiked }]);
+    }
+
     rateMovie(movie.id, isLiked);
   };
 
-  const handleUndoRating = () => {
-    const ratedMovie = ratedMovies[ratedMovies.length - 1];
-    if (!ratedMovie) return;
-    setRatedMovies((prevState) => prevState.slice(0, prevState.length - 1));
-    undoMovieRating(ratedMovie.id);
+  const handleUndoRating = (id: number) => {
+    const updatedMovies = ratedMovies.map((movie) => {
+      if (movie.id === id) {
+        return { ...movie, isLiked: undefined };
+      } else {
+        return movie;
+      }
+    });
+
+    setRatedMovies(updatedMovies);
+    undoMovieRating(id);
   };
+
+  const renderedMovies = [...ratedMovies];
+  const renderedMovieIds = renderedMovies.map((movie) => movie.id);
+  movies.forEach((movie) => {
+    if (!renderedMovieIds.includes(movie.id)) {
+      renderedMovies.push({ ...movie, isLiked: undefined });
+    }
+  });
 
   return (
     <div className="relative min-h-screen">
-      {movies.map(
-        (movie, index) =>
-          ratedMovies.includes(movie) || (
-            <MovieCard
-              key={movie.id}
-              movie={movie}
-              onRateMovie={handleRateMovie}
-              onUndoRating={handleUndoRating}
-              zIndex={movies.length - index}
-            />
-          ),
-      )}
+      {renderedMovies.map((movie, index) => (
+        <MovieCard
+          key={movie.id}
+          movie={movie}
+          onRateMovie={handleRateMovie}
+          onUndoRating={handleUndoRating.bind(
+            null,
+            renderedMovies[index - 1]?.id,
+          )}
+          zIndex={renderedMovies.length - index}
+          isLiked={movie.isLiked}
+        />
+      ))}
     </div>
   );
 }

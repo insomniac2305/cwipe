@@ -732,6 +732,8 @@ export async function rateMovie(id: number, isLiked: boolean) {
 export async function undoMovieRating(id: number) {
   await new Promise((resolve) => setTimeout(resolve, 1000));
   const restoredMovie = movieDataCopy.results.find((movie) => movie.id === id);
-  restoredMovie && movieData.results.unshift(restoredMovie);
+  if (restoredMovie && !movieData.results.includes(restoredMovie)) {
+    movieData.results.unshift(restoredMovie);
+  }
   revalidatePath("/match");
 }

@@ -16,10 +16,12 @@ import {
 
 export default function MovieCard({
   movie,
+  zIndex,
   onRateMovie,
   onUndoRating,
 }: {
   movie: DiscoverMovies["results"][number];
+  zIndex: number;
   onRateMovie: (
     movie: DiscoverMovies["results"][number],
     isLiked: boolean,
@@ -37,6 +39,7 @@ export default function MovieCard({
         onSwipeLeft={onRateMovie.bind(null, movie, false)}
         onSwipeRight={onRateMovie.bind(null, movie, true)}
         ref={swipeRef}
+        zIndex={zIndex}
       >
         <div className="relative h-full w-full bg-gray-900">
           <div className="relative h-[90%] w-full">
@@ -66,7 +69,10 @@ export default function MovieCard({
           </div>
         </div>
       </SwipeCard>
-      <div className="absolute bottom-0 flex w-full items-center justify-evenly p-4">
+      <div
+        className="absolute bottom-0 flex w-full items-center justify-evenly p-4"
+        style={{ zIndex: zIndex }}
+      >
         <button
           className="rounded-full bg-slate-500 p-2 text-2xl text-gray-50"
           onClick={onUndoRating}

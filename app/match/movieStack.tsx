@@ -30,23 +30,19 @@ export default function MovieStack({
   };
 
   return (
-    <ul className="relative min-h-screen">
+    <div className="relative min-h-screen">
       {movies.map(
         (movie, index) =>
           ratedMovies.includes(movie) || (
-            <li
-              className={`absolute top-0 h-full w-full`}
+            <MovieCard
               key={movie.id}
-              style={{ zIndex: movies.length - index }}
-            >
-              <MovieCard
-                movie={movie}
-                onRateMovie={handleRateMovie}
-                onUndoRating={handleUndoRating}
-              />
-            </li>
+              movie={movie}
+              onRateMovie={handleRateMovie}
+              onUndoRating={handleUndoRating}
+              zIndex={movies.length - index}
+            />
           ),
       )}
-    </ul>
+    </div>
   );
 }

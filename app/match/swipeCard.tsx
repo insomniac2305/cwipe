@@ -2,18 +2,25 @@
 
 import { SwipeCardRef, SwipeDirection } from "@/app/lib/definitions";
 import clsx from "clsx";
-import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
+import {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from "react";
 
 const MAX_ROTATION = 10;
 
 interface Props {
+  zIndex: number;
   onSwipeLeft: () => void;
   onSwipeRight: () => void;
   children: React.ReactNode;
 }
 
 export default forwardRef<SwipeCardRef, Props>(function SwipeCard(
-  { onSwipeLeft, onSwipeRight, children },
+  { zIndex, onSwipeLeft, onSwipeRight, children },
   forwardedRef,
 ) {
   const ref = useRef<HTMLElement>(null);
@@ -101,7 +108,8 @@ export default forwardRef<SwipeCardRef, Props>(function SwipeCard(
         "touches" in e ? (e as TouchEvent).touches[0] : (e as MouseEvent);
       setPointer({ x: clientX, y: clientY });
 
-      const moveDistance = clientX - renderProps.offsetCenterX - renderProps.centerX;
+      const moveDistance =
+        clientX - renderProps.offsetCenterX - renderProps.centerX;
       const maxDistance = renderProps.width / 4;
       let rotation = (moveDistance / maxDistance) * MAX_ROTATION;
       rotation = Math.max(-MAX_ROTATION, Math.min(MAX_ROTATION, rotation));
@@ -115,7 +123,12 @@ export default forwardRef<SwipeCardRef, Props>(function SwipeCard(
       window.removeEventListener("mousemove", handleSwipeMove);
       window.removeEventListener("touchmove", handleSwipeMove);
     };
-  }, [renderProps.centerX, renderProps.offsetCenterX, renderProps.width, isSwiping]);
+  }, [
+    renderProps.centerX,
+    renderProps.offsetCenterX,
+    renderProps.width,
+    isSwiping,
+  ]);
 
   useEffect(() => {
     const currentRef = ref.current;
@@ -153,12 +166,13 @@ export default forwardRef<SwipeCardRef, Props>(function SwipeCard(
     <article
       ref={ref}
       className={clsx(
-        "relative h-full w-full touch-none select-none",
+        "absolute top-0 h-full w-full touch-none select-none",
         isSwiping
           ? "cursor-grabbing shadow-lg transition-none"
           : "cursor-grab transition-transform",
       )}
       style={{
+        zIndex: zIndex,
         transform: isSwiping
           ? `translate(
               ${pointer.x - renderProps.originalX - renderProps.offsetX}px, 

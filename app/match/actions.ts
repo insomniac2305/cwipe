@@ -217,7 +217,8 @@ const movieData: DiscoverMovies = {
       id: 982940,
       original_language: "en",
       original_title: "Due Justice",
-      overview: "An attorney with a military past hunts down the gang who killed his wife and took his daughter.",
+      overview:
+        "An attorney with a military past hunts down the gang who killed his wife and took his daughter.",
       popularity: 624.212,
       poster_path: "/35Uef7fz9ctYbJLXbJBCqvtttEQ.jpg",
       release_date: "2023-11-24",
@@ -335,7 +336,8 @@ const movieData: DiscoverMovies = {
       id: 872585,
       original_language: "en",
       original_title: "Oppenheimer",
-      overview: "The story of J. Robert Oppenheimer's role in the development of the atomic bomb during World War II.",
+      overview:
+        "The story of J. Robert Oppenheimer's role in the development of the atomic bomb during World War II.",
       popularity: 446.574,
       poster_path: "/ptpr0kGAckfQkJeJIt8st5dglvd.jpg",
       release_date: "2023-07-19",
@@ -563,7 +565,8 @@ const movieDataCopy: DiscoverMovies = {
       id: 982940,
       original_language: "en",
       original_title: "Due Justice",
-      overview: "An attorney with a military past hunts down the gang who killed his wife and took his daughter.",
+      overview:
+        "An attorney with a military past hunts down the gang who killed his wife and took his daughter.",
       popularity: 624.212,
       poster_path: "/35Uef7fz9ctYbJLXbJBCqvtttEQ.jpg",
       release_date: "2023-11-24",
@@ -681,7 +684,8 @@ const movieDataCopy: DiscoverMovies = {
       id: 872585,
       original_language: "en",
       original_title: "Oppenheimer",
-      overview: "The story of J. Robert Oppenheimer's role in the development of the atomic bomb during World War II.",
+      overview:
+        "The story of J. Robert Oppenheimer's role in the development of the atomic bomb during World War II.",
       popularity: 446.574,
       poster_path: "/ptpr0kGAckfQkJeJIt8st5dglvd.jpg",
       release_date: "2023-07-19",
@@ -719,7 +723,7 @@ export async function rateMovie(id: number, isLiked: boolean) {
   await new Promise((resolve) => setTimeout(resolve, 1000));
   const removed = movieData.results.splice(
     movieData.results.findIndex((movie) => movie.id === id),
-    1
+    1,
   );
   revalidatePath("/match");
   return { removed, isLiked };

@@ -14,7 +14,7 @@ interface Props {
 
 export default forwardRef<SwipeCardRef, Props>(function SwipeCard(
   { onSwipeLeft, onSwipeRight, children },
-  forwardedRef
+  forwardedRef,
 ) {
   const ref = useRef<HTMLElement>(null);
   const [isSwiping, setIsSwiping] = useState(false);
@@ -61,7 +61,8 @@ export default forwardRef<SwipeCardRef, Props>(function SwipeCard(
     const startSwipe = (e: MouseEvent | TouchEvent): void => {
       if (!currentRef) return;
 
-      const { clientX, clientY } = "touches" in e ? (e as TouchEvent).touches[0] : (e as MouseEvent);
+      const { clientX, clientY } =
+        "touches" in e ? (e as TouchEvent).touches[0] : (e as MouseEvent);
       const rect = ref.current?.getBoundingClientRect();
 
       setRenderProps((prevState) => ({
@@ -96,7 +97,8 @@ export default forwardRef<SwipeCardRef, Props>(function SwipeCard(
     if (!isSwiping) return;
 
     const handleSwipeMove = (e: MouseEvent | TouchEvent) => {
-      const { clientX, clientY } = "touches" in e ? (e as TouchEvent).touches[0] : (e as MouseEvent);
+      const { clientX, clientY } =
+        "touches" in e ? (e as TouchEvent).touches[0] : (e as MouseEvent);
       setPointer({ x: clientX, y: clientY });
 
       const moveDistance = clientX - renderProps.offsetCenterX - renderProps.centerX;
@@ -151,8 +153,10 @@ export default forwardRef<SwipeCardRef, Props>(function SwipeCard(
     <article
       ref={ref}
       className={clsx(
-        "relative h-full w-full select-none touch-none",
-        isSwiping ? "shadow-lg cursor-grabbing transition-none" : "cursor-grab transition-transform"
+        "relative h-full w-full touch-none select-none",
+        isSwiping
+          ? "cursor-grabbing shadow-lg transition-none"
+          : "cursor-grab transition-transform",
       )}
       style={{
         transform: isSwiping
@@ -162,10 +166,10 @@ export default forwardRef<SwipeCardRef, Props>(function SwipeCard(
             ) 
             rotate(${renderProps.rotation}deg)`
           : swipeDirection === "right"
-          ? `translate(${renderProps.width * 1.2}px, 0) rotate(${MAX_ROTATION}deg)`
-          : swipeDirection === "left"
-          ? `translate(${-renderProps.width * 1.2}px, 0) rotate(${-MAX_ROTATION}deg)`
-          : "translate(0,0) rotate(0deg)",
+            ? `translate(${renderProps.width * 1.2}px, 0) rotate(${MAX_ROTATION}deg)`
+            : swipeDirection === "left"
+              ? `translate(${-renderProps.width * 1.2}px, 0) rotate(${-MAX_ROTATION}deg)`
+              : "translate(0,0) rotate(0deg)",
       }}
     >
       {children}

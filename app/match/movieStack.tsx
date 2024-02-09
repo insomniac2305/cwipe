@@ -5,9 +5,19 @@ import { rateMovie, undoMovieRating } from "@/app/match/actions";
 import MovieCard from "@/app/match/movieCard";
 import { useState } from "react";
 
-export default function MovieStack({ movies }: { movies: DiscoverMovies["results"] }) {
-  const [ratedMovies, setRatedMovies] = useState<Array<DiscoverMovies["results"][number]>>([]);
-  const handleRateMovie = (movie: DiscoverMovies["results"][number], isLiked: boolean) => {
+export default function MovieStack({
+  movies,
+}: {
+  movies: DiscoverMovies["results"];
+}) {
+  const [ratedMovies, setRatedMovies] = useState<
+    Array<DiscoverMovies["results"][number]>
+  >([]);
+
+  const handleRateMovie = (
+    movie: DiscoverMovies["results"][number],
+    isLiked: boolean,
+  ) => {
     setRatedMovies((prevState) => [...prevState, movie]);
     rateMovie(movie.id, isLiked);
   };
@@ -24,10 +34,18 @@ export default function MovieStack({ movies }: { movies: DiscoverMovies["results
       {movies.map(
         (movie, index) =>
           ratedMovies.includes(movie) || (
-            <li className={`absolute top-0 h-full w-full`} key={movie.id} style={{ zIndex: movies.length - index }}>
-              <MovieCard movie={movie} onRateMovie={handleRateMovie} onUndoRating={handleUndoRating} />
+            <li
+              className={`absolute top-0 h-full w-full`}
+              key={movie.id}
+              style={{ zIndex: movies.length - index }}
+            >
+              <MovieCard
+                movie={movie}
+                onRateMovie={handleRateMovie}
+                onUndoRating={handleUndoRating}
+              />
             </li>
-          )
+          ),
       )}
     </ul>
   );

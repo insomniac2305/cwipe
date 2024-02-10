@@ -14,13 +14,14 @@ const MAX_ROTATION = 10;
 
 interface Props {
   zIndex: number;
+  isActive: boolean;
   onSwipeLeft: () => void;
   onSwipeRight: () => void;
   children: React.ReactNode;
 }
 
 export default forwardRef<SwipeCardRef, Props>(function SwipeCard(
-  { zIndex, onSwipeLeft, onSwipeRight, children },
+  { zIndex, isActive, onSwipeLeft, onSwipeRight, children },
   forwardedRef,
 ) {
   const ref = useRef<HTMLElement>(null);
@@ -60,6 +61,7 @@ export default forwardRef<SwipeCardRef, Props>(function SwipeCard(
   });
 
   useEffect(() => {
+    if (!isActive) return;
     const currentRef = ref.current;
 
     const startSwipe = (e: MouseEvent | TouchEvent): void => {
@@ -95,7 +97,7 @@ export default forwardRef<SwipeCardRef, Props>(function SwipeCard(
       currentRef?.removeEventListener("mousedown", startSwipe);
       currentRef?.removeEventListener("touchstart", startSwipe);
     };
-  }, []);
+  }, [isActive]);
 
   useEffect(() => {
     if (!isSwiping) return;

@@ -61,7 +61,7 @@ export default function MovieStack({
   });
 
   return (
-    <div className="relative min-h-screen">
+    <div className="relative h-screen w-screen overflow-hidden">
       {renderedMovies.map((movie, index) => (
         <MovieCard
           key={movie.id}

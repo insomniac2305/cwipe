@@ -6,7 +6,7 @@ import {
 import SwipeCard from "@/app/match/swipeCard";
 import clsx from "clsx";
 import Image from "next/image";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   HiArrowUturnLeft,
   HiHandThumbDown,
@@ -31,9 +31,14 @@ export default function MovieCard({
   ) => void;
   onUndoRating: () => void;
 }) {
+  const [isInfoVisible, setIsInfoVisible] = useState(false);
   const swipeRef = useRef<SwipeCardRef>(null);
   const simulateSwipe = (direction: SwipeDirection) => {
     swipeRef.current?.swipe(direction);
+  };
+
+  const toggleInfo = () => {
+    setIsInfoVisible((prevState) => !prevState);
   };
 
   useEffect(() => {
@@ -49,6 +54,7 @@ export default function MovieCard({
         onSwipeRight={onRateMovie.bind(null, movie, true)}
         ref={swipeRef}
         zIndex={zIndex}
+        isActive={!isInfoVisible}
       >
         <div
           className={clsx(
@@ -56,7 +62,7 @@ export default function MovieCard({
             isLiked !== undefined && "hidden",
           )}
         >
-          <div className="relative h-[90%] w-full">
+          <div className="relative h-[calc(100%-5rem)] w-full">
             <Image
               src={`${process.env.NEXT_PUBLIC_TMDB_IMAGE_BASE_URL}/original${movie.poster_path}`}
               fill={true}
@@ -68,18 +74,51 @@ export default function MovieCard({
               draggable={false}
             />
           </div>
-          <div className="absolute bottom-0 flex h-72 w-full flex-col justify-center gap-2 bg-gradient-to-t from-gray-900 from-40% via-gray-900/90 via-70% p-6">
-            <h1 className="w-full overflow-hidden text-ellipsis whitespace-nowrap text-2xl font-bold text-gray-50">
-              {movie.title}
-            </h1>
-            <ul className="flex gap-2 text-xs text-gray-200">
-              <li className="rounded-full bg-slate-700 p-2">Science Fiction</li>
-              <li className="rounded-full bg-slate-700 p-2">Action</li>
-            </ul>
-            <p className="text-sm text-gray-200">
-              <HiMiniStar className="relative top-[1px] inline align-baseline" />{" "}
-              {movie.vote_average} - {movie.release_date.slice(0, 4)} - 1h 45m
-            </p>
+          <div
+            className={clsx(
+              "absolute top-0 h-full w-full transition-transform duration-300",
+              isInfoVisible && "-translate-y-1/2",
+            )}
+          >
+            <div className="absolute bottom-0 h-64 w-full bg-gradient-to-t from-gray-900 from-40% via-gray-900/90 via-70%"></div>
+            <div className="absolute top-[calc(100%-13rem)] mt-6 flex h-full w-full flex-col gap-2 transition-all">
+              <h1 className="w-full overflow-hidden text-ellipsis whitespace-nowrap px-6 text-2xl font-bold text-gray-50">
+                {movie.title}
+              </h1>
+              <ul className="flex gap-2 px-6 text-xs text-gray-200">
+                <li className="rounded-full bg-slate-700 p-2">
+                  Science Fiction
+                </li>
+                <li className="rounded-full bg-slate-700 p-2">Action</li>
+              </ul>
+              <p className="px-6 text-sm text-gray-200">
+                <HiMiniStar className="relative top-[1px] inline align-baseline" />{" "}
+                {movie.vote_average} - {movie.release_date.slice(0, 4)} - 1h 45m
+              </p>
+              <div
+                className={clsx(
+                  "h-1/2 bg-gray-900 px-6 pb-6",
+                  isInfoVisible && "overflow-y-auto",
+                )}
+              >
+                <h1
+                  className={clsx(
+                    "mt-2 text-lg font-bold text-gray-50 opacity-0 transition-opacity duration-300",
+                    isInfoVisible && "opacity-100",
+                  )}
+                >
+                  Description
+                </h1>
+                <p
+                  className={clsx(
+                    "text-base leading-snug text-gray-200 opacity-0 transition-opacity duration-300",
+                    isInfoVisible && "opacity-100",
+                  )}
+                >
+                  {movie.overview}
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </SwipeCard>
@@ -108,7 +147,10 @@ export default function MovieCard({
         >
           <HiHandThumbUp />
         </button>
-        <button className="rounded-full bg-slate-500 p-2 text-2xl text-gray-50">
+        <button
+          className="rounded-full bg-slate-500 p-2 text-2xl text-gray-50"
+          onClick={toggleInfo}
+        >
           <HiInformationCircle />
         </button>
       </div>

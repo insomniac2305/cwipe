@@ -1,6 +1,7 @@
 "use client";
 
 import { SwipeCardRef, SwipeDirection } from "@/app/lib/definitions";
+import { Card } from "@nextui-org/react";
 import clsx from "clsx";
 import {
   forwardRef,
@@ -24,7 +25,7 @@ export default forwardRef<SwipeCardRef, Props>(function SwipeCard(
   { zIndex, isActive, onSwipeLeft, onSwipeRight, children },
   forwardedRef,
 ) {
-  const ref = useRef<HTMLElement>(null);
+  const ref = useRef<HTMLDivElement>(null);
   const [isSwiping, setIsSwiping] = useState(false);
   const [renderProps, setRenderProps] = useState({
     width: 0,
@@ -170,16 +171,16 @@ export default forwardRef<SwipeCardRef, Props>(function SwipeCard(
   }, [onSwipeLeft, onSwipeRight, swipeDirection]);
 
   return (
-    <article
+    <Card
       ref={ref}
+      radius="none"
       className={clsx(
         "absolute top-0 h-full w-full touch-none select-none",
-        isSwiping
-          ? "cursor-grabbing shadow-lg transition-none"
-          : "cursor-grab transition-transform",
+        isSwiping ? "cursor-grabbing" : "cursor-grab",
       )}
       style={{
         zIndex: zIndex,
+        transitionProperty: isSwiping ? "none" : "transform",
         transform: isSwiping
           ? `translate(
               ${pointer.x - renderProps.originalX - renderProps.offsetX}px, 
@@ -194,6 +195,6 @@ export default forwardRef<SwipeCardRef, Props>(function SwipeCard(
       }}
     >
       {children}
-    </article>
+    </Card>
   );
 });

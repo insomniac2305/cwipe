@@ -4,6 +4,7 @@ import {
   SwipeDirection,
 } from "@/app/lib/definitions";
 import SwipeCard from "@/app/match/swipeCard";
+import { Button } from "@nextui-org/react";
 import clsx from "clsx";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
@@ -124,35 +125,53 @@ export default function MovieCard({
       </SwipeCard>
       <div
         className={clsx(
-          "absolute bottom-0 flex w-full items-center justify-evenly p-4",
+          "absolute bottom-0 flex w-full items-center justify-evenly bg-gray-900 p-4",
           isLiked !== undefined && "hidden",
         )}
         style={{ zIndex: zIndex }}
       >
-        <button
-          className="rounded-full bg-slate-500 p-2 text-2xl text-gray-50"
-          onClick={onUndoRating}
+        <Button
+          className="text-xl"
+          aria-label="Undo"
+          radius="full"
+          variant="flat"
+          onPress={onUndoRating}
+          isIconOnly
         >
           <HiArrowUturnLeft />
-        </button>
-        <button
-          className="rounded-full bg-pink-600 p-2 text-4xl text-gray-50"
-          onClick={simulateSwipe.bind(null, "left")}
+        </Button>
+        <Button
+          className="text-3xl"
+          size="lg"
+          aria-label="Dislike"
+          radius="full"
+          color="secondary"
+          onPress={simulateSwipe.bind(null, "left")}
+          isIconOnly
         >
           <HiHandThumbDown />
-        </button>
-        <button
-          className="rounded-full bg-indigo-600 p-2 text-4xl text-gray-50"
-          onClick={simulateSwipe.bind(null, "right")}
+        </Button>
+        <Button
+          className="text-3xl"
+          size="lg"
+          aria-label="Like"
+          radius="full"
+          color="primary"
+          onPress={simulateSwipe.bind(null, "right")}
+          isIconOnly
         >
           <HiHandThumbUp />
-        </button>
-        <button
-          className="rounded-full bg-slate-500 p-2 text-2xl text-gray-50"
-          onClick={toggleInfo}
+        </Button>
+        <Button
+          className="text-xl"
+          aria-label="More Info"
+          radius="full"
+          variant="flat"
+          onPress={toggleInfo}
+          isIconOnly
         >
           <HiInformationCircle />
-        </button>
+        </Button>
       </div>
     </>
   );

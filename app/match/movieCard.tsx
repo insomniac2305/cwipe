@@ -7,6 +7,7 @@ import SwipeCard from "@/app/match/swipeCard";
 import { Button } from "@nextui-org/react";
 import clsx from "clsx";
 import Image from "next/image";
+
 import { useEffect, useRef, useState } from "react";
 import {
   HiArrowUturnLeft,
@@ -57,68 +58,57 @@ export default function MovieCard({
         zIndex={zIndex}
         isActive={!isInfoVisible}
       >
+        <div className="relative h-[calc(100%-5rem)] w-full">
+          <Image
+            src={`${process.env.NEXT_PUBLIC_TMDB_IMAGE_BASE_URL}/original${movie.poster_path}`}
+            fill={true}
+            className="object-cover opacity-0 transition-opacity duration-500"
+            onLoad={(e) => ((e.target as HTMLImageElement).style.opacity = "1")}
+            alt={movie.title}
+            draggable={false}
+          />
+        </div>
         <div
           className={clsx(
-            "relative h-full w-full bg-gray-900",
-            isLiked !== undefined && "hidden",
+            "absolute top-0 h-full w-full p-0 transition-transform duration-300",
+            isInfoVisible && "-translate-y-1/2",
           )}
         >
-          <div className="relative h-[calc(100%-5rem)] w-full">
-            <Image
-              src={`${process.env.NEXT_PUBLIC_TMDB_IMAGE_BASE_URL}/original${movie.poster_path}`}
-              fill={true}
-              className="object-cover opacity-0 transition-opacity duration-500"
-              onLoad={(e) =>
-                ((e.target as HTMLImageElement).style.opacity = "1")
-              }
-              alt={movie.title}
-              draggable={false}
-            />
-          </div>
-          <div
-            className={clsx(
-              "absolute top-0 h-full w-full transition-transform duration-300",
-              isInfoVisible && "-translate-y-1/2",
-            )}
-          >
-            <div className="absolute bottom-0 h-64 w-full bg-gradient-to-t from-gray-900 from-40% via-gray-900/90 via-70%"></div>
-            <div className="absolute top-[calc(100%-13rem)] mt-6 flex h-full w-full flex-col gap-2 transition-all">
-              <h1 className="w-full overflow-hidden text-ellipsis whitespace-nowrap px-6 text-2xl font-bold text-gray-50">
-                {movie.title}
-              </h1>
-              <ul className="flex gap-2 px-6 text-xs text-gray-200">
-                <li className="rounded-full bg-slate-700 p-2">
-                  Science Fiction
-                </li>
-                <li className="rounded-full bg-slate-700 p-2">Action</li>
-              </ul>
-              <p className="px-6 text-sm text-gray-200">
-                <HiMiniStar className="relative top-[1px] inline align-baseline" />{" "}
-                {movie.vote_average} - {movie.release_date.slice(0, 4)} - 1h 45m
-              </p>
-              <div
+          <div className="absolute bottom-0 h-64 w-full bg-gradient-to-t from-gray-900 from-40% via-gray-900/90 via-70%"></div>
+          <div className="absolute top-[calc(100%-13rem)] mt-6 flex h-full w-full flex-col gap-2 transition-all">
+            <h1 className="w-full overflow-hidden text-ellipsis whitespace-nowrap px-6 text-2xl font-bold text-gray-50">
+              {movie.title}
+            </h1>
+            <ul className="flex gap-2 px-6 text-xs text-gray-200">
+              <li className="rounded-full bg-slate-700 p-2">Science Fiction</li>
+              <li className="rounded-full bg-slate-700 p-2">Action</li>
+            </ul>
+            <p className="px-6 text-sm text-gray-200">
+              <HiMiniStar className="relative top-[1px] inline align-baseline" />{" "}
+              {movie.vote_average} - {movie.release_date.slice(0, 4)} - 1h 45m
+            </p>
+            <div
+              className={clsx(
+                "h-1/2 bg-gray-900 px-6 pb-6",
+                isInfoVisible && "overflow-y-auto",
+              )}
+            >
+              <h1
                 className={clsx(
-                  "h-1/2 bg-gray-900 px-6 pb-6",
-                  isInfoVisible && "overflow-y-auto",
+                  "mt-2 text-lg font-bold text-gray-50 opacity-0 transition-opacity duration-300",
+                  isInfoVisible && "opacity-100",
                 )}
               >
-                <h1
-                  className={clsx(
-                    "mt-2 text-lg font-bold text-gray-50 opacity-0 transition-opacity duration-300",
-                    isInfoVisible && "opacity-100",
-                  )}
-                >
-                  Description
-                </h1>
-                <p
-                  className={clsx(
-                    "text-base leading-snug text-gray-200 opacity-0 transition-opacity duration-300",
-                    isInfoVisible && "opacity-100",
-                  )}
-                >
-                  {movie.overview}
-                </p>
-              </div>
+                Description
+              </h1>
+              <p
+                className={clsx(
+                  "text-base leading-snug text-gray-200 opacity-0 transition-opacity duration-300",
+                  isInfoVisible && "opacity-100",
+                )}
+              >
+                {movie.overview}
+              </p>
             </div>
           </div>
         </div>

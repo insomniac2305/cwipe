@@ -42,6 +42,7 @@ export default forwardRef<SwipeCardRef, Props>(function SwipeCard(
     y: 0,
   });
   const [swipeDirection, setSwipeDirection] = useState<SwipeDirection>();
+  const [isSwipeDone, setIsSwipeDone] = useState(false);
 
   useImperativeHandle(forwardedRef, () => {
     return {
@@ -55,6 +56,7 @@ export default forwardRef<SwipeCardRef, Props>(function SwipeCard(
       },
       undoSwipe() {
         if (swipeDirection) {
+          setIsSwipeDone(false);
           setSwipeDirection(undefined);
         }
       },
@@ -159,8 +161,10 @@ export default forwardRef<SwipeCardRef, Props>(function SwipeCard(
     const callSwipeAction = () => {
       if (swipeDirection === "right") {
         onSwipeRight();
+        setIsSwipeDone(true);
       } else if (swipeDirection === "left") {
         onSwipeLeft();
+        setIsSwipeDone(true);
       }
     };
 
@@ -175,8 +179,9 @@ export default forwardRef<SwipeCardRef, Props>(function SwipeCard(
       ref={ref}
       radius="none"
       className={clsx(
-        "absolute top-0 h-full w-full touch-none select-none",
+        "absolute top-0 h-full w-full",
         isSwiping ? "cursor-grabbing" : "cursor-grab",
+        isSwipeDone ? "invisible" : "visible",
       )}
       style={{
         zIndex: zIndex,

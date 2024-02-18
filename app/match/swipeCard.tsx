@@ -70,6 +70,9 @@ export default forwardRef<SwipeCardRef, Props>(function SwipeCard(
     const startSwipe = (e: MouseEvent | TouchEvent): void => {
       if (!currentRef) return;
 
+      if (e.target instanceof HTMLElement && e.target.closest(".cancel-swipe"))
+        return;
+
       const { clientX, clientY } =
         "touches" in e ? (e as TouchEvent).touches[0] : (e as MouseEvent);
       const rect = ref.current?.getBoundingClientRect();

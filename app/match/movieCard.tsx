@@ -4,7 +4,7 @@ import {
   SwipeDirection,
 } from "@/app/lib/definitions";
 import SwipeCard from "@/app/match/swipeCard";
-import { Button } from "@nextui-org/react";
+import { Button, Chip, Divider, ScrollShadow } from "@nextui-org/react";
 import clsx from "clsx";
 import Image from "next/image";
 
@@ -75,18 +75,32 @@ export default function MovieCard({
           )}
         >
           <div className="absolute bottom-0 h-64 w-full bg-gradient-to-t from-gray-900 from-40% via-gray-900/90 via-70%"></div>
-          <div className="absolute top-[calc(100%-13rem)] mt-6 flex h-full w-full flex-col gap-2 transition-all">
+          <div className="absolute top-[calc(100%-12rem)] mt-6 flex h-full w-full flex-col gap-2 transition-all">
             <h1 className="w-full overflow-hidden text-ellipsis whitespace-nowrap px-6 text-2xl font-bold text-gray-50">
               {movie.title}
             </h1>
-            <ul className="flex gap-2 px-6 text-xs text-gray-200">
-              <li className="rounded-full bg-slate-700 p-2">Science Fiction</li>
-              <li className="rounded-full bg-slate-700 p-2">Action</li>
-            </ul>
-            <p className="px-6 text-sm text-gray-200">
-              <HiMiniStar className="relative top-[1px] inline align-baseline" />{" "}
-              {movie.vote_average} - {movie.release_date.slice(0, 4)} - 1h 45m
-            </p>
+            <ScrollShadow
+              orientation="horizontal"
+              hideScrollBar
+              className="cancel-card-swipe mx-6 flex gap-2"
+            >
+              <Chip variant="flat" size="sm" color="default">
+                Action
+              </Chip>
+              <Chip variant="flat" size="sm" color="default">
+                Science Fiction
+              </Chip>
+            </ScrollShadow>
+            <div className="flex gap-2 px-6 text-sm text-gray-200">
+              <div>
+                <HiMiniStar className="relative top-[1px] inline align-baseline" />{" "}
+                {movie.vote_average}
+              </div>
+              <Divider orientation="vertical" />
+              {movie.release_date.slice(0, 4)}
+              <Divider orientation="vertical" />
+              1h 45m
+            </div>
             <div
               className={clsx(
                 "h-1/2 bg-gray-900 px-6 pb-6",

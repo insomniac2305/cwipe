@@ -1,12 +1,17 @@
-import {
-  DiscoverMovies,
-  SwipeCardRef,
-  SwipeDirection,
-} from "@/app/lib/definitions";
+import { Movie, SwipeCardRef, SwipeDirection } from "@/app/lib/definitions";
+import { getInitials } from "@/app/lib/util";
 import SwipeCard from "@/app/match/swipeCard";
-import { Button, Chip, Divider, ScrollShadow } from "@nextui-org/react";
+import {
+  Image,
+  Button,
+  Chip,
+  Divider,
+  ScrollShadow,
+  User,
+  Link,
+} from "@nextui-org/react";
 import clsx from "clsx";
-import Image from "next/image";
+import NextImage from "next/image";
 
 import { useEffect, useRef, useState } from "react";
 import {
@@ -24,13 +29,10 @@ export default function MovieCard({
   onRateMovie,
   onUndoRating,
 }: {
-  movie: DiscoverMovies["results"][number];
+  movie: Movie;
   zIndex: number;
   isLiked?: boolean;
-  onRateMovie: (
-    movie: DiscoverMovies["results"][number],
-    isLiked: boolean,
-  ) => void;
+  onRateMovie: (movie: Movie, isLiked: boolean) => void;
   onUndoRating: () => void;
 }) {
   const [isInfoVisible, setIsInfoVisible] = useState(false);
@@ -59,7 +61,7 @@ export default function MovieCard({
         isActive={!isInfoVisible}
       >
         <div className="relative h-[calc(100%-5rem)] w-full">
-          <Image
+          <NextImage
             src={`${process.env.NEXT_PUBLIC_TMDB_IMAGE_BASE_URL}/original${movie.poster_path}`}
             fill={true}
             className="object-cover opacity-0 transition-opacity duration-500"
@@ -84,22 +86,23 @@ export default function MovieCard({
               hideScrollBar
               className="cancel-card-swipe mx-6 flex gap-2"
             >
-              <Chip variant="flat" size="sm" color="default">
-                Action
-              </Chip>
-              <Chip variant="flat" size="sm" color="default">
-                Science Fiction
-              </Chip>
+              {movie.genres.map((genre) => {
+                return (
+                  <Chip key={genre.id} variant="flat" size="sm" color="default">
+                    {genre.name}
+                  </Chip>
+                );
+              })}
             </ScrollShadow>
             <div className="flex gap-2 px-6 text-sm text-gray-200">
               <div>
                 <HiMiniStar className="relative top-[1px] inline align-baseline" />{" "}
-                {movie.vote_average}
+                {movie.vote_average.toFixed(1)}
               </div>
               <Divider orientation="vertical" />
               {movie.release_date.slice(0, 4)}
               <Divider orientation="vertical" />
-              1h 45m
+              {`${Math.floor(movie.runtime / 60)}h ${movie.runtime % 60}m`}
             </div>
             <div
               className={clsx(
@@ -107,22 +110,89 @@ export default function MovieCard({
                 isInfoVisible && "overflow-y-auto",
               )}
             >
-              <h1
+              <div
                 className={clsx(
-                  "mt-2 text-lg font-bold text-gray-50 opacity-0 transition-opacity duration-300",
+                  "opacity-0 transition-opacity duration-300",
                   isInfoVisible && "opacity-100",
                 )}
               >
-                Description
-              </h1>
-              <p
-                className={clsx(
-                  "text-base leading-snug text-gray-200 opacity-0 transition-opacity duration-300",
-                  isInfoVisible && "opacity-100",
+                {movie.watch_providers?.flatrate && (
+                  <>
+                    <h2 className="mb-1 mt-4 text-lg font-bold text-gray-50">
+                      Available on
+                    </h2>
+
+                    <ScrollShadow
+                      orientation="horizontal"
+                      hideScrollBar
+                      className="flex items-start gap-2"
+                    >
+                      {movie.watch_providers.flatrate?.map((watchProvider) => {
+                        return (
+                          <Link
+                            href={movie.watch_providers?.link}
+                            isExternal
+                            key={
+                              movie.id.toString() +
+                              watchProvider.provider_id.toString()
+                            }
+                          >
+                            <Image
+                              as={NextImage}
+                              src={`${process.env.NEXT_PUBLIC_TMDB_IMAGE_BASE_URL}/w45${watchProvider.logo_path}`}
+                              width={45}
+                              height={45}
+                              className="object-cover"
+                              alt={watchProvider.provider_name}
+                              draggable={false}
+                            />
+                          </Link>
+                        );
+                      })}
+                    </ScrollShadow>
+                  </>
                 )}
-              >
-                {movie.overview}
-              </p>
+                <h2 className="mb-1 mt-4 text-lg font-bold text-gray-50">
+                  Description
+                </h2>
+                <p className="text-base leading-snug text-gray-200">
+                  {movie.overview}
+                </p>
+                <h2 className="mb-1 mt-4 text-lg font-bold text-gray-50">
+                  Cast
+                </h2>
+                <ScrollShadow
+                  orientation="horizontal"
+                  hideScrollBar
+                  className="flex items-start gap-4"
+                >
+                  {movie.cast.map((actor) => {
+                    return (
+                      <User
+                        key={movie.id.toString() + actor.cast_id.toString()}
+                        avatarProps={{
+                          className: "h-20 w-20",
+                          classNames: {
+                            name: "text-3xl font-medium",
+                          },
+                          getInitials: getInitials,
+                          src:
+                            actor.profile_path &&
+                            `${process.env.NEXT_PUBLIC_TMDB_IMAGE_BASE_URL}/w185/${actor.profile_path}`,
+                        }}
+                        name={actor.name}
+                        description={actor.character}
+                        classNames={{
+                          base: "flex flex-col items-center",
+                          wrapper: "text-center",
+                          description:
+                            "w-20 overflow-hidden text-ellipsis whitespace-nowrap",
+                        }}
+                      />
+                    );
+                  })}
+                </ScrollShadow>
+              </div>
             </div>
           </div>
         </div>

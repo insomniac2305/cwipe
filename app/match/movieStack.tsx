@@ -1,23 +1,16 @@
 "use client";
 
-import { DiscoverMovies } from "@/app/lib/definitions";
+import { Movie } from "@/app/lib/definitions";
 import { rateMovie, undoMovieRating } from "@/app/match/actions";
 import MovieCard from "@/app/match/movieCard";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-export default function MovieStack({
-  movies,
-}: {
-  movies: DiscoverMovies["results"];
-}) {
+export default function MovieStack({ movies }: { movies: Array<Movie> }) {
   const [ratedMovies, setRatedMovies] = useState<
-    Array<DiscoverMovies["results"][number] & { isLiked?: boolean }>
+    Array<Movie & { isLiked?: boolean }>
   >([]);
 
-  const handleRateMovie = (
-    movie: DiscoverMovies["results"][number],
-    isLiked: boolean,
-  ) => {
+  const handleRateMovie = (movie: Movie, isLiked: boolean) => {
     const ratedIndex = ratedMovies.findIndex(
       (findMovie) => findMovie.id === movie.id,
     );
@@ -59,6 +52,10 @@ export default function MovieStack({
       renderedMovies.push({ ...movie, isLiked: undefined });
     }
   });
+
+  useEffect(() => {
+    console.log(movies);
+  }, [movies]);
 
   return (
     <div className="relative h-screen w-screen overflow-hidden">

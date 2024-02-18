@@ -1,7 +1,15 @@
 "use server";
 
-import { DiscoverMovies } from "@/app/lib/definitions";
+import { DiscoverMovies, Movie, MovieDetails } from "@/app/lib/definitions";
 import { revalidatePath } from "next/cache";
+
+const tmdbFetchOptions = {
+  method: "GET",
+  headers: {
+    accept: "application/json",
+    Authorization: "Bearer " + process.env.TMDB_API_TOKEN,
+  },
+};
 
 const movieData: DiscoverMovies = {
   page: 1,
@@ -700,23 +708,37 @@ const movieDataCopy: DiscoverMovies = {
 };
 
 export async function getMovies() {
-  // const options = {
-  //   method: "GET",
-  //   headers: {
-  //     accept: "application/json",
-  //     Authorization: "Bearer " + process.env.TMDB_API_TOKEN,
-  //   },
-  // };
+  const response = await fetch(
+    process.env.TMDB_API_URL +
+      "discover/movie?include_adult=false&include_video=false&language=de-DE&page=1&sort_by=popularity.desc",
+    tmdbFetchOptions,
+  );
+  const discoveredMovies: DiscoverMovies = await response.json();
 
-  // const response = await fetch(
-  //   process.env.TMDB_API_URL +
-  //     "discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc",
-  //   options
-  // );
-  // const data: DiscoverMovies = await response.json();
-  // return data.results;
+  const movies: Array<Movie> = await Promise.all(
+    discoveredMovies.results.map(async (movie) => {
+      const detailResponse = await fetch(
+        process.env.TMDB_API_URL +
+          `movie/${movie.id}?append_to_response=credits%2Cwatch%2Fproviders&language=de-DE`,
+        tmdbFetchOptions,
+      );
+      const movieData: MovieDetails = await detailResponse.json();
+      return {
+        id: movieData.id,
+        title: movieData.title,
+        poster_path: movieData.poster_path,
+        genres: movieData.genres,
+        watch_providers: movieData["watch/providers"].results["DE"],
+        vote_average: movieData.vote_average,
+        release_date: movieData.release_date,
+        runtime: movieData.runtime,
+        overview: movieData.overview,
+        cast: movieData.credits.cast,
+      };
+    }),
+  );
 
-  return movieData.results;
+  return movies;
 }
 
 export async function rateMovie(id: number, isLiked: boolean) {

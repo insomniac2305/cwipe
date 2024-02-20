@@ -4,7 +4,6 @@ import SwipeCard from "@/app/match/swipeCard";
 import {
   Image,
   Button,
-  Chip,
   Divider,
   ScrollShadow,
   User,
@@ -21,6 +20,39 @@ import {
   HiInformationCircle,
   HiMiniStar,
 } from "react-icons/hi2";
+import { Genre } from "@/app/components/Genre";
+
+function GenreList({ genres }: { genres: Movie["genres"] }) {
+  return (
+    <ScrollShadow
+      orientation="horizontal"
+      hideScrollBar
+      className="cancel-card-swipe mx-6 flex gap-2"
+    >
+      {genres.map((genre) => {
+        return (
+          <Genre key={genre.id} id={genre.id}>
+            {genre.name}
+          </Genre>
+        );
+      })}
+    </ScrollShadow>
+  );
+}
+
+function LogoImage({ src, name }: { src: string; name: string }) {
+  return (
+    <Image
+      as={NextImage}
+      src={`${process.env.NEXT_PUBLIC_TMDB_IMAGE_BASE_URL}/w45${src}`}
+      width={45}
+      height={45}
+      className="object-cover"
+      alt={name}
+      draggable={false}
+    />
+  );
+}
 
 export default function MovieCard({
   movie,
@@ -81,19 +113,7 @@ export default function MovieCard({
             <h1 className="w-full overflow-hidden text-ellipsis whitespace-nowrap px-6 text-2xl font-bold text-gray-50">
               {movie.title}
             </h1>
-            <ScrollShadow
-              orientation="horizontal"
-              hideScrollBar
-              className="cancel-card-swipe mx-6 flex gap-2"
-            >
-              {movie.genres.map((genre) => {
-                return (
-                  <Chip key={genre.id} variant="flat" size="sm" color="default">
-                    {genre.name}
-                  </Chip>
-                );
-              })}
-            </ScrollShadow>
+            <GenreList genres={movie.genres}></GenreList>
             <div className="flex gap-2 px-6 text-sm text-gray-200">
               <div>
                 <HiMiniStar className="relative top-[1px] inline align-baseline" />{" "}
@@ -137,14 +157,9 @@ export default function MovieCard({
                               watchProvider.provider_id.toString()
                             }
                           >
-                            <Image
-                              as={NextImage}
-                              src={`${process.env.NEXT_PUBLIC_TMDB_IMAGE_BASE_URL}/w45${watchProvider.logo_path}`}
-                              width={45}
-                              height={45}
-                              className="object-cover"
-                              alt={watchProvider.provider_name}
-                              draggable={false}
+                            <LogoImage
+                              src={watchProvider.logo_path}
+                              name={watchProvider.provider_name}
                             />
                           </Link>
                         );

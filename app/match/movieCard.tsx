@@ -55,17 +55,20 @@ export default function MovieCard({
   onRateMovie: (movie: Movie, isLiked: boolean) => void;
 }) {
   const swipeRef = useRef<SwipeCardRef>(null);
-  const simulateSwipe = (direction: SwipeDirection) => {
-    swipeRef.current?.swipe(direction);
+  const simulateSwipe = (
+    direction: SwipeDirection,
+    shouldCallHandler: boolean,
+  ) => {
+    swipeRef.current?.swipe(direction, shouldCallHandler);
   };
 
   useEffect(() => {
     if (isLiked === undefined) {
       swipeRef.current?.undoSwipe();
     } else if (isLiked === true) {
-      simulateSwipe("right");
+      simulateSwipe("right", false);
     } else if (isLiked === false) {
-      simulateSwipe("left");
+      simulateSwipe("left", false);
     }
   }, [isLiked]);
 

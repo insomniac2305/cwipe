@@ -133,6 +133,6 @@ export interface Movie {
 export type SwipeDirection = "left" | "right";
 
 export interface SwipeCardRef {
-  swipe: (direction: SwipeDirection) => void;
+  swipe: (direction: SwipeDirection, shouldHandleSwipe?: boolean) => void;
   undoSwipe: () => void;
 }

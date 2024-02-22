@@ -43,16 +43,18 @@ export default forwardRef<SwipeCardRef, Props>(function SwipeCard(
   });
   const [swipeDirection, setSwipeDirection] = useState<SwipeDirection>();
   const [isSwipeDone, setIsSwipeDone] = useState(false);
+  const [shouldHandleSwipe, setShouldHandleSwipe] = useState(true);
 
   useImperativeHandle(forwardedRef, () => {
     return {
-      swipe(direction: SwipeDirection) {
+      swipe(direction: SwipeDirection, shouldCallHandler = true) {
         const width = ref.current?.getBoundingClientRect().width || 0;
         setRenderProps((prevState) => ({
           ...prevState,
           width,
         }));
         setSwipeDirection(direction);
+        shouldCallHandler || setShouldHandleSwipe(false);
       },
       undoSwipe() {
         if (swipeDirection) {
@@ -98,6 +100,7 @@ export default forwardRef<SwipeCardRef, Props>(function SwipeCard(
       });
 
       setIsSwiping(true);
+      setShouldHandleSwipe(true);
     };
 
     currentRef?.addEventListener("mousedown", startSwipe);
@@ -165,7 +168,9 @@ export default forwardRef<SwipeCardRef, Props>(function SwipeCard(
     const currentRef = ref.current;
 
     const callSwipeAction = () => {
-      if (swipeDirection === "right") {
+      if (!shouldHandleSwipe) {
+        return;
+      } else if (swipeDirection === "right") {
         onSwipeRight();
         setIsSwipeDone(true);
       } else if (swipeDirection === "left") {
@@ -178,7 +183,7 @@ export default forwardRef<SwipeCardRef, Props>(function SwipeCard(
     return () => {
       currentRef?.removeEventListener("transitionend", callSwipeAction);
     };
-  }, [onSwipeLeft, onSwipeRight, swipeDirection]);
+  }, [onSwipeLeft, onSwipeRight, swipeDirection, shouldHandleSwipe]);
 
   return (
     <Card

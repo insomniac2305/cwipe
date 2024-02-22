@@ -3,14 +3,29 @@
 import { Movie } from "@/app/lib/definitions";
 import { rateMovie, undoMovieRating } from "@/app/match/actions";
 import MovieCard from "@/app/match/movieCard";
-import { useEffect, useState } from "react";
+import { Button } from "@nextui-org/react";
+import { useState } from "react";
+import {
+  HiArrowUturnLeft,
+  HiHandThumbDown,
+  HiHandThumbUp,
+  HiInformationCircle,
+} from "react-icons/hi2";
 
 export default function MovieStack({ movies }: { movies: Array<Movie> }) {
   const [ratedMovies, setRatedMovies] = useState<
     Array<Movie & { isLiked?: boolean }>
   >([]);
+  const [isInfoVisible, setIsInfoVisible] = useState(false);
 
-  const handleRateMovie = (movie: Movie, isLiked: boolean) => {
+  const toggleInfo = () => {
+    setIsInfoVisible((prevState) => !prevState);
+  };
+
+  const handleRateMovie = (movie: Movie | undefined, isLiked: boolean) => {
+    if (!movie) return;
+    setIsInfoVisible(false);
+
     const ratedIndex = ratedMovies.findIndex(
       (findMovie) => findMovie.id === movie.id,
     );
@@ -32,7 +47,10 @@ export default function MovieStack({ movies }: { movies: Array<Movie> }) {
     rateMovie(movie.id, isLiked);
   };
 
-  const handleUndoRating = (id: number) => {
+  const handleUndoRating = (id?: number) => {
+    if (!id) return;
+    setIsInfoVisible(false);
+
     const updatedMovies = ratedMovies.map((movie) => {
       if (movie.id === id) {
         return { ...movie, isLiked: undefined };
@@ -53,25 +71,94 @@ export default function MovieStack({ movies }: { movies: Array<Movie> }) {
     }
   });
 
-  useEffect(() => {
-    console.log(movies);
-  }, [movies]);
+  const nextRatedMovie = renderedMovies.find(
+    (movie) => movie.isLiked === undefined,
+  );
+  const lastRatedMovie = ratedMovies.findLast(
+    (movie) => movie.isLiked !== undefined,
+  );
 
   return (
     <div className="relative h-screen w-screen overflow-hidden">
-      {renderedMovies.map((movie, index) => (
-        <MovieCard
-          key={movie.id}
-          movie={movie}
-          onRateMovie={handleRateMovie}
-          onUndoRating={handleUndoRating.bind(
-            null,
-            renderedMovies[index - 1]?.id,
-          )}
-          zIndex={renderedMovies.length - index}
-          isLiked={movie.isLiked}
+      <div className="relative h-[calc(100%-5rem)] overflow-hidden">
+        {renderedMovies.map((movie, index) => (
+          <MovieCard
+            key={movie.id}
+            movie={movie}
+            onRateMovie={handleRateMovie}
+            zIndex={renderedMovies.length - index}
+            isLiked={movie.isLiked}
+            isInfoVisible={isInfoVisible && movie.id === nextRatedMovie?.id}
+          />
+        ))}
+      </div>
+      <div className="absolute bottom-0 w-full">
+        <SwipeButtonRow
+          onLike={handleRateMovie.bind(null, nextRatedMovie, true)}
+          onDislike={handleRateMovie.bind(null, nextRatedMovie, false)}
+          onUndoRating={handleUndoRating.bind(null, lastRatedMovie?.id)}
+          onToggleInfo={toggleInfo}
         />
-      ))}
+      </div>
+    </div>
+  );
+}
+
+function SwipeButtonRow({
+  onLike,
+  onDislike,
+  onUndoRating,
+  onToggleInfo,
+}: {
+  onLike: () => void;
+  onDislike: () => void;
+  onUndoRating: () => void;
+  onToggleInfo: () => void;
+}) {
+  return (
+    <div className="flex w-full items-center justify-evenly bg-gray-900 p-4">
+      <Button
+        className="text-xl"
+        aria-label="Undo"
+        radius="full"
+        variant="flat"
+        onPress={onUndoRating}
+        isIconOnly
+      >
+        <HiArrowUturnLeft />
+      </Button>
+      <Button
+        className="text-3xl"
+        size="lg"
+        aria-label="Dislike"
+        radius="full"
+        color="secondary"
+        onPress={onDislike}
+        isIconOnly
+      >
+        <HiHandThumbDown />
+      </Button>
+      <Button
+        className="text-3xl"
+        size="lg"
+        aria-label="Like"
+        radius="full"
+        color="primary"
+        onPress={onLike}
+        isIconOnly
+      >
+        <HiHandThumbUp />
+      </Button>
+      <Button
+        className="text-xl"
+        aria-label="More Info"
+        radius="full"
+        variant="flat"
+        onPress={onToggleInfo}
+        isIconOnly
+      >
+        <HiInformationCircle />
+      </Button>
     </div>
   );
 }

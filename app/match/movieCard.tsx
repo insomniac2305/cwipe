@@ -1,25 +1,12 @@
 import { Movie, SwipeCardRef, SwipeDirection } from "@/app/lib/definitions";
 import { getInitials } from "@/app/lib/util";
 import SwipeCard from "@/app/match/swipeCard";
-import {
-  Image,
-  Button,
-  Divider,
-  ScrollShadow,
-  User,
-  Link,
-} from "@nextui-org/react";
+import { Image, Divider, ScrollShadow, User, Link } from "@nextui-org/react";
 import clsx from "clsx";
 import NextImage from "next/image";
 
-import { useEffect, useRef, useState } from "react";
-import {
-  HiArrowUturnLeft,
-  HiHandThumbDown,
-  HiHandThumbUp,
-  HiInformationCircle,
-  HiMiniStar,
-} from "react-icons/hi2";
+import { useEffect, useRef } from "react";
+import { HiMiniStar } from "react-icons/hi2";
 import { Genre } from "@/app/components/Genre";
 
 function GenreList({ genres }: { genres: Movie["genres"] }) {
@@ -58,28 +45,27 @@ export default function MovieCard({
   movie,
   zIndex,
   isLiked,
+  isInfoVisible,
   onRateMovie,
-  onUndoRating,
 }: {
   movie: Movie;
   zIndex: number;
   isLiked?: boolean;
+  isInfoVisible: boolean;
   onRateMovie: (movie: Movie, isLiked: boolean) => void;
-  onUndoRating: () => void;
 }) {
-  const [isInfoVisible, setIsInfoVisible] = useState(false);
   const swipeRef = useRef<SwipeCardRef>(null);
   const simulateSwipe = (direction: SwipeDirection) => {
     swipeRef.current?.swipe(direction);
   };
 
-  const toggleInfo = () => {
-    setIsInfoVisible((prevState) => !prevState);
-  };
-
   useEffect(() => {
     if (isLiked === undefined) {
       swipeRef.current?.undoSwipe();
+    } else if (isLiked === true) {
+      simulateSwipe("right");
+    } else if (isLiked === false) {
+      simulateSwipe("left");
     }
   }, [isLiked]);
 
@@ -92,37 +78,36 @@ export default function MovieCard({
         zIndex={zIndex}
         isActive={!isInfoVisible}
       >
-        <div className="relative h-[calc(100%-5rem)] w-full">
-          <NextImage
-            src={`${process.env.NEXT_PUBLIC_TMDB_IMAGE_BASE_URL}/w780${movie.poster_path}`}
-            fill={true}
-            className="object-cover opacity-0 transition-opacity duration-500"
-            onLoad={(e) => ((e.target as HTMLImageElement).style.opacity = "1")}
-            alt={movie.title}
-            draggable={false}
-          />
-        </div>
+        <NextImage
+          src={`${process.env.NEXT_PUBLIC_TMDB_IMAGE_BASE_URL}/w780${movie.poster_path}`}
+          fill={true}
+          className="h-full w-full object-cover opacity-0 transition-opacity duration-500"
+          onLoad={(e) => ((e.target as HTMLImageElement).style.opacity = "1")}
+          alt={movie.title}
+          draggable={false}
+        />
         <div
           className={clsx(
             "absolute top-0 h-full w-full p-0 transition-transform duration-300",
             isInfoVisible && "-translate-y-1/2",
           )}
         >
-          <div className="absolute bottom-0 h-64 w-full bg-gradient-to-t from-gray-900 from-40% via-gray-900/90 via-70%"></div>
-          <div className="absolute top-[calc(100%-12rem)] mt-6 flex h-full w-full flex-col gap-2 transition-all">
-            <h1 className="w-full overflow-hidden text-ellipsis whitespace-nowrap px-6 text-2xl font-bold text-gray-50">
-              {movie.title}
-            </h1>
-            <GenreList genres={movie.genres}></GenreList>
-            <div className="flex gap-2 px-6 text-sm text-gray-200">
-              <div>
-                <HiMiniStar className="relative top-[1px] inline align-baseline" />{" "}
-                {movie.vote_average.toFixed(1)}
+          <div className="absolute top-[calc(100%-10rem)] flex h-full w-full flex-col transition-all">
+            <div className="flex h-40 w-full flex-col justify-end gap-2 bg-gradient-to-t from-gray-900 from-30% via-gray-900/90 via-60%">
+              <h1 className="w-full overflow-hidden text-ellipsis whitespace-nowrap px-6 text-2xl font-bold text-gray-50">
+                {movie.title}
+              </h1>
+              <GenreList genres={movie.genres}></GenreList>
+              <div className="flex gap-2 px-6 text-sm text-gray-200">
+                <div>
+                  <HiMiniStar className="relative top-[1px] inline align-baseline" />{" "}
+                  {movie.vote_average.toFixed(1)}
+                </div>
+                <Divider orientation="vertical" />
+                {movie.release_date.slice(0, 4)}
+                <Divider orientation="vertical" />
+                {`${Math.floor(movie.runtime / 60)}h ${movie.runtime % 60}m`}
               </div>
-              <Divider orientation="vertical" />
-              {movie.release_date.slice(0, 4)}
-              <Divider orientation="vertical" />
-              {`${Math.floor(movie.runtime / 60)}h ${movie.runtime % 60}m`}
             </div>
             <div
               className={clsx(
@@ -212,56 +197,6 @@ export default function MovieCard({
           </div>
         </div>
       </SwipeCard>
-      <div
-        className={clsx(
-          "absolute bottom-0 flex w-full items-center justify-evenly bg-gray-900 p-4",
-          isLiked !== undefined && "hidden",
-        )}
-        style={{ zIndex: zIndex }}
-      >
-        <Button
-          className="text-xl"
-          aria-label="Undo"
-          radius="full"
-          variant="flat"
-          onPress={onUndoRating}
-          isIconOnly
-        >
-          <HiArrowUturnLeft />
-        </Button>
-        <Button
-          className="text-3xl"
-          size="lg"
-          aria-label="Dislike"
-          radius="full"
-          color="secondary"
-          onPress={simulateSwipe.bind(null, "left")}
-          isIconOnly
-        >
-          <HiHandThumbDown />
-        </Button>
-        <Button
-          className="text-3xl"
-          size="lg"
-          aria-label="Like"
-          radius="full"
-          color="primary"
-          onPress={simulateSwipe.bind(null, "right")}
-          isIconOnly
-        >
-          <HiHandThumbUp />
-        </Button>
-        <Button
-          className="text-xl"
-          aria-label="More Info"
-          radius="full"
-          variant="flat"
-          onPress={toggleInfo}
-          isIconOnly
-        >
-          <HiInformationCircle />
-        </Button>
-      </div>
     </>
   );
 }

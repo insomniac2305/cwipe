@@ -80,7 +80,7 @@ export default function MovieStack({ movies }: { movies: Array<Movie> }) {
 
   return (
     <div className="relative h-screen w-screen overflow-hidden">
-      <div className="relative h-[calc(100%-5rem)] overflow-hidden">
+      <div className="relative h-[calc(100%-4.5rem)] overflow-hidden">
         {renderedMovies.map((movie, index) => (
           <MovieCard
             key={movie.id}
@@ -116,7 +116,7 @@ function SwipeButtonRow({
   onToggleInfo: () => void;
 }) {
   return (
-    <div className="flex w-full items-center justify-evenly bg-gray-900 p-4">
+    <div className="flex w-full items-center justify-evenly bg-gray-900 p-4 pt-2">
       <Button
         className="text-xl"
         aria-label="Undo"

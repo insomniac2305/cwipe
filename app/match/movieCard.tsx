@@ -65,7 +65,7 @@ export default function MovieCard({
           )}
         >
           <div className="absolute top-[calc(100%-10rem)] flex h-full w-full flex-col transition-all">
-            <div className="flex h-40 w-full flex-col justify-end gap-2 bg-gradient-to-t from-gray-900 from-30% via-gray-900/90 via-60%">
+            <div className="flex h-40 w-full flex-col justify-end gap-2 bg-gradient-to-t from-gray-900 from-30% via-gray-900/90 via-60% pb-3">
               <h1 className="w-full overflow-hidden text-ellipsis whitespace-nowrap px-6 text-2xl font-bold text-gray-50">
                 {movie.title}
               </h1>

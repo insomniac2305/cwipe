@@ -1,45 +1,14 @@
 import { Movie, SwipeCardRef, SwipeDirection } from "@/app/lib/definitions";
-import { getInitials } from "@/app/lib/util";
 import SwipeCard from "@/app/match/swipeCard";
-import { Image, Divider, ScrollShadow, User, Link } from "@nextui-org/react";
+import { Divider, ScrollShadow, Link } from "@nextui-org/react";
 import clsx from "clsx";
 import NextImage from "next/image";
 
 import { useEffect, useRef } from "react";
 import { HiMiniStar } from "react-icons/hi2";
 import { Genre } from "@/app/components/Genre";
-
-function GenreList({ genres }: { genres: Movie["genres"] }) {
-  return (
-    <ScrollShadow
-      orientation="horizontal"
-      hideScrollBar
-      className="cancel-card-swipe mx-6 flex gap-2"
-    >
-      {genres.map((genre) => {
-        return (
-          <Genre key={genre.id} id={genre.id}>
-            {genre.name}
-          </Genre>
-        );
-      })}
-    </ScrollShadow>
-  );
-}
-
-function LogoImage({ src, name }: { src: string; name: string }) {
-  return (
-    <Image
-      as={NextImage}
-      src={`${process.env.NEXT_PUBLIC_TMDB_IMAGE_BASE_URL}/w45${src}`}
-      width={45}
-      height={45}
-      className="object-cover"
-      alt={name}
-      draggable={false}
-    />
-  );
-}
+import { Actor } from "@/app/components/Actor";
+import { LogoImage } from "@/app/components/LogoImage";
 
 export default function MovieCard({
   movie,
@@ -129,77 +98,105 @@ export default function MovieCard({
                     <h2 className="mb-1 mt-4 text-lg font-bold text-gray-50">
                       Available on
                     </h2>
-
-                    <ScrollShadow
-                      orientation="horizontal"
-                      hideScrollBar
-                      className="flex items-start gap-2"
-                    >
-                      {movie.watch_providers.flatrate?.map((watchProvider) => {
-                        return (
-                          <Link
-                            href={movie.watch_providers?.link}
-                            isExternal
-                            key={
-                              movie.id.toString() +
-                              watchProvider.provider_id.toString()
-                            }
-                          >
-                            <LogoImage
-                              src={watchProvider.logo_path}
-                              name={watchProvider.provider_name}
-                            />
-                          </Link>
-                        );
-                      })}
-                    </ScrollShadow>
+                    <WatchProviderList
+                      watchProviders={movie.watch_providers}
+                      movieId={movie.id}
+                    />
                   </>
                 )}
+
                 <h2 className="mb-1 mt-4 text-lg font-bold text-gray-50">
                   Description
                 </h2>
                 <p className="text-base leading-snug text-gray-200">
                   {movie.overview}
                 </p>
+
                 <h2 className="mb-1 mt-4 text-lg font-bold text-gray-50">
                   Cast
                 </h2>
-                <ScrollShadow
-                  orientation="horizontal"
-                  hideScrollBar
-                  className="flex items-start gap-4"
-                >
-                  {movie.cast.map((actor) => {
-                    return (
-                      <User
-                        key={movie.id.toString() + actor.cast_id.toString()}
-                        avatarProps={{
-                          className: "h-20 w-20",
-                          classNames: {
-                            name: "text-3xl font-medium",
-                          },
-                          getInitials: getInitials,
-                          src:
-                            actor.profile_path &&
-                            `${process.env.NEXT_PUBLIC_TMDB_IMAGE_BASE_URL}/w185/${actor.profile_path}`,
-                        }}
-                        name={actor.name}
-                        description={actor.character}
-                        classNames={{
-                          base: "flex flex-col items-center",
-                          wrapper: "text-center",
-                          description:
-                            "w-20 overflow-hidden text-ellipsis whitespace-nowrap",
-                        }}
-                      />
-                    );
-                  })}
-                </ScrollShadow>
+                <ActorList actors={movie.cast} movieId={movie.id} />
               </div>
             </div>
           </div>
         </div>
       </SwipeCard>
     </>
+  );
+}
+
+function GenreList({ genres }: { genres: Movie["genres"] }) {
+  return (
+    <ScrollShadow
+      orientation="horizontal"
+      hideScrollBar
+      className="cancel-card-swipe mx-6 flex gap-2"
+    >
+      {genres.map((genre) => {
+        return (
+          <Genre key={genre.id} id={genre.id}>
+            {genre.name}
+          </Genre>
+        );
+      })}
+    </ScrollShadow>
+  );
+}
+
+function ActorList({
+  movieId,
+  actors,
+}: {
+  movieId: number;
+  actors: Movie["cast"];
+}) {
+  return (
+    <ScrollShadow
+      orientation="horizontal"
+      hideScrollBar
+      className="flex items-start gap-4"
+    >
+      {actors.map((actor) => {
+        return (
+          <Actor
+            key={movieId.toString() + actor.cast_id.toString()}
+            name={actor.name}
+            role={actor.character}
+            imageSrc={actor.profile_path}
+          />
+        );
+      })}
+    </ScrollShadow>
+  );
+}
+
+function WatchProviderList({
+  movieId,
+  watchProviders,
+}: {
+  movieId: number;
+  watchProviders: NonNullable<Movie["watch_providers"]>;
+}) {
+  return (
+    <ScrollShadow
+      orientation="horizontal"
+      hideScrollBar
+      className="flex items-start gap-2"
+    >
+      {watchProviders.flatrate?.map((watchProvider) => {
+        return (
+          <Link
+            href={watchProviders.link}
+            isExternal
+            key={movieId.toString() + watchProvider.provider_id.toString()}
+          >
+            <LogoImage
+              src={watchProvider.logo_path}
+              name={watchProvider.provider_name}
+            />
+          </Link>
+        );
+      })}
+    </ScrollShadow>
   );
 }

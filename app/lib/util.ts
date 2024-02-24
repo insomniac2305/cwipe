@@ -7,3 +7,14 @@ export function getInitials(name: string, maxLength = 3) {
   }
   return initials;
 }
+
+export function getImageSet(srcSet = "") {
+  const imageSet = srcSet
+    .split(", ")
+    .map((str) => {
+      const [url, dpi] = str.split(" ");
+      return `url("${url}") ${dpi}`;
+    })
+    .join(", ");
+  return `image-set(${imageSet})`;
+}

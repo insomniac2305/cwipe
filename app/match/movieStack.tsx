@@ -79,7 +79,7 @@ export default function MovieStack({ movies }: { movies: Array<Movie> }) {
   );
 
   return (
-    <div className="relative h-screen w-screen overflow-hidden">
+    <div className="relative h-dvh w-dvw overflow-hidden">
       <div className="relative h-[calc(100%-4.5rem)] overflow-hidden">
         {renderedMovies.map((movie, index) => (
           <MovieCard

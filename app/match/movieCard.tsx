@@ -51,7 +51,7 @@ export default function MovieCard({
         isActive={!isInfoVisible}
       >
         <NextImage
-          src={`${process.env.NEXT_PUBLIC_TMDB_IMAGE_BASE_URL}/w780${movie.poster_path}`}
+          src={`${process.env.NEXT_PUBLIC_TMDB_IMAGE_BASE_URL}/original${movie.poster_path}`}
           fill={true}
           className="h-full w-full object-cover opacity-0 transition-opacity duration-500"
           onLoad={(e) => ((e.target as HTMLImageElement).style.opacity = "1")}

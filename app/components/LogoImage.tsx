@@ -5,7 +5,7 @@ export function LogoImage({ src, name }: { src: string; name: string }) {
   return (
     <Image
       as={NextImage}
-      src={`${process.env.NEXT_PUBLIC_TMDB_IMAGE_BASE_URL}/w45${src}`}
+      src={`${process.env.NEXT_PUBLIC_TMDB_IMAGE_BASE_URL}/original${src}`}
       width={45}
       height={45}
       className="object-cover"

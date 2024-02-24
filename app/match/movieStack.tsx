@@ -12,6 +12,8 @@ import {
   HiInformationCircle,
 } from "react-icons/hi2";
 
+const RENDER_LIMIT = 3;
+
 export default function MovieStack({ movies }: { movies: Array<Movie> }) {
   const [ratedMovies, setRatedMovies] = useState<
     Array<Movie & { isLiked?: boolean }>
@@ -71,9 +73,10 @@ export default function MovieStack({ movies }: { movies: Array<Movie> }) {
     }
   });
 
-  const nextRatedMovie = renderedMovies.find(
+  const currentMovieIndex = renderedMovies.findIndex(
     (movie) => movie.isLiked === undefined,
   );
+  const nextRatedMovie = renderedMovies[currentMovieIndex];
   const lastRatedMovie = ratedMovies.findLast(
     (movie) => movie.isLiked !== undefined,
   );
@@ -81,16 +84,19 @@ export default function MovieStack({ movies }: { movies: Array<Movie> }) {
   return (
     <div className="relative h-dvh w-dvw overflow-hidden">
       <div className="relative h-[calc(100%-4.5rem)] overflow-hidden">
-        {renderedMovies.map((movie, index) => (
-          <MovieCard
-            key={movie.id}
-            movie={movie}
-            onRateMovie={handleRateMovie}
-            zIndex={renderedMovies.length - index}
-            isLiked={movie.isLiked}
-            isInfoVisible={isInfoVisible && movie.id === nextRatedMovie?.id}
-          />
-        ))}
+        {renderedMovies.map(
+          (movie, index) =>
+            index <= currentMovieIndex + RENDER_LIMIT && (
+              <MovieCard
+                key={movie.id}
+                movie={movie}
+                onRateMovie={handleRateMovie}
+                zIndex={renderedMovies.length - index}
+                isLiked={movie.isLiked}
+                isInfoVisible={isInfoVisible && movie.id === nextRatedMovie?.id}
+              />
+            ),
+        )}
       </div>
       <div className="absolute bottom-0 w-full">
         <SwipeButtonRow

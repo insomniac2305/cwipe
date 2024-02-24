@@ -168,14 +168,16 @@ export default forwardRef<SwipeCardRef, Props>(function SwipeCard(
     const currentRef = ref.current;
 
     const callSwipeAction = () => {
+      if (swipeDirection) {
+        setIsSwipeDone(true);
+      }
+
       if (!shouldHandleSwipe) {
         return;
       } else if (swipeDirection === "right") {
         onSwipeRight();
-        setIsSwipeDone(true);
       } else if (swipeDirection === "left") {
         onSwipeLeft();
-        setIsSwipeDone(true);
       }
     };
 
@@ -210,7 +212,7 @@ export default forwardRef<SwipeCardRef, Props>(function SwipeCard(
               : "translate(0,0) rotate(0deg)",
       }}
     >
-      {children}
+      {isSwipeDone || children}
     </Card>
   );
 });

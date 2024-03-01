@@ -1,6 +1,7 @@
 import { randomUUID } from "crypto";
 import type { NextAuthConfig } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import GoogleProvider from "next-auth/providers/google";
 import { z } from "zod";
 
 export const authConfig = {
@@ -8,6 +9,7 @@ export const authConfig = {
     signIn: "/login",
   },
   providers: [
+    GoogleProvider,
     CredentialsProvider({
       async authorize(credentials) {
         const parsedCredentials = z

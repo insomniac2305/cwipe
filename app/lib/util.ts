@@ -18,3 +18,20 @@ export function getImageSet(srcSet = "") {
     .join(", ");
   return `image-set(${imageSet})`;
 }
+
+export const matchRoutes = (
+  routeToBeChecked: string,
+  routesAllowed: string[],
+) => {
+  for (let i = 0; i < routesAllowed.length; i++) {
+    const routeAllowed = routesAllowed[i];
+    let isMatched = false;
+    if (routeAllowed.endsWith("*")) {
+      isMatched = routeToBeChecked.startsWith(routeAllowed);
+    } else {
+      isMatched = routeToBeChecked === routeAllowed;
+    }
+    if (isMatched) return true;
+  }
+  return false;
+};

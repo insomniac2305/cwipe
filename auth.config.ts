@@ -1,17 +1,24 @@
 import { randomUUID } from "crypto";
 import type { NextAuthConfig } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import { z } from "zod";
 
 export const authConfig = {
+  pages: {
+    signIn: "/login",
+  },
   providers: [
     CredentialsProvider({
-      name: "Anonymous",
-      credentials: { name: { label: "Username", type: "text" } },
       async authorize(credentials) {
-        if (credentials.name) {
-          console.log(credentials);
+        const parsedCredentials = z
+          .object({ name: z.string().min(1) })
+          .safeParse(credentials);
 
-          const user = { id: randomUUID(), name: credentials.name as string };
+        if (parsedCredentials.success) {
+          const user = {
+            id: randomUUID(),
+            name: parsedCredentials.data.name,
+          };
           return user;
         } else {
           return null;

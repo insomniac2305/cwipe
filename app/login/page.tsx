@@ -6,9 +6,10 @@ import {
   CardFooter,
   CardHeader,
   Divider,
-  Input,
 } from "@nextui-org/react";
-import { FaApple, FaFacebook, FaGoogle } from "react-icons/fa6";
+import { FaApple, FaFacebook } from "react-icons/fa6";
+import { LoginForm } from "./LoginForm";
+import { FcGoogle } from "react-icons/fc";
 
 export default async function Login() {
   return (
@@ -18,12 +19,7 @@ export default async function Login() {
           Login
         </CardHeader>
         <CardBody>
-          <form className="flex flex-col gap-4">
-            <Input label="Name" id="name"></Input>
-            <Button type="submit" color="primary">
-              Get started
-            </Button>
-          </form>
+          <LoginForm />
         </CardBody>
         <div className="relative mb-4 mt-8 flex justify-center bg-inherit">
           <Divider orientation="horizontal" />
@@ -31,14 +27,26 @@ export default async function Login() {
             Or sign in via
           </small>
         </div>
-        <CardFooter className="justify-center gap-2">
-          <Button isIconOnly className="text-xl">
+        <CardFooter className="justify-center gap-3">
+          <Button
+            isIconOnly
+            className="bg-white text-2xl text-[#080808]"
+            aria-description="Apple"
+          >
             <FaApple />
           </Button>
-          <Button isIconOnly className="text-xl">
-            <FaGoogle />
+          <Button
+            isIconOnly
+            className="bg-white text-2xl"
+            aria-description="Google"
+          >
+            <FcGoogle />
           </Button>
-          <Button isIconOnly className="text-xl">
+          <Button
+            isIconOnly
+            className="bg-white text-2xl text-[#1877F2]"
+            aria-description="Facebook"
+          >
             <FaFacebook />
           </Button>
         </CardFooter>

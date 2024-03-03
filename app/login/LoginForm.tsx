@@ -10,14 +10,14 @@ export function LoginForm() {
   return (
     <form action={dispatch} className="flex flex-col gap-4">
       <Input
-        label="Name"
+        label="Your name"
         id="name"
         name="name"
         isInvalid={!!errorMessage}
         errorMessage={errorMessage}
       />
       <Button type="submit" color="primary" isLoading={pending}>
-        Get started
+        Start session
       </Button>
     </form>
   );

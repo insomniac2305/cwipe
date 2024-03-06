@@ -122,7 +122,7 @@ function SwipeButtonRow({
   onToggleInfo: () => void;
 }) {
   return (
-    <div className="flex w-full items-center justify-evenly bg-gray-900 p-4 pt-2">
+    <div className="flex w-full items-center justify-evenly bg-default-50 p-4 pt-2">
       <Button
         className="text-xl"
         aria-label="Undo"

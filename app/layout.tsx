@@ -1,10 +1,18 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Schibsted_Grotesk, Suez_One } from "next/font/google";
 import "./globals.css";
 import clsx from "clsx";
 import { Providers } from "@/app/providers";
 
-const inter = Inter({ subsets: ["latin"] });
+const schibstedGrotesk = Schibsted_Grotesk({
+  subsets: ["latin"],
+  variable: "--font-sans",
+});
+const suezOne = Suez_One({
+  weight: "400",
+  subsets: ["latin"],
+  variable: "--font-heading",
+});
 
 export const metadata: Metadata = {
   title: "Cwipe - Movie Matcher",
@@ -18,8 +26,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
-      <body className={clsx(inter.className, "overflow-hidden")}>
+    <html
+      lang="en"
+      className={clsx(schibstedGrotesk.variable, suezOne.variable, "dark")}
+    >
+      <body className="overflow-hidden">
         <Providers>{children}</Providers>
       </body>
     </html>

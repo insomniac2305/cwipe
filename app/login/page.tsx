@@ -8,7 +8,7 @@ import {
 } from "@nextui-org/react";
 import { LoginForm } from "./LoginForm";
 import GoogleSignInButton from "./GoogleSignInButton";
-import { BrandLogo } from "@/app/components/BrandLogo";
+import { BrandLogo } from "@/app/components/Brand";
 
 export default async function Login() {
   return (

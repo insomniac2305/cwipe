@@ -14,7 +14,7 @@ export default async function Login() {
   return (
     <MainBackground>
       <Card className="max-w-xs p-4">
-        <CardHeader className="px-10">
+        <CardHeader className="justify-center px-10">
           <BrandLogo />
         </CardHeader>
         <CardBody>

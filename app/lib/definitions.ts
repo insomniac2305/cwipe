@@ -130,6 +130,33 @@ export interface Movie {
   cast: MovieDetails["credits"]["cast"];
 }
 
+export interface Language {
+  iso_639_1: string;
+  english_name: string;
+  name: string;
+}
+
+export interface Region {
+  iso_3166_1: string;
+  english_name: string;
+  native_name: string;
+}
+
+export interface WatchRegionsApi {
+  results: Array<Region>;
+}
+
+export interface WatchProvider {
+  display_priority: number;
+  logo_path: string;
+  provider_name: string;
+  provider_id: number;
+}
+
+export interface WatchProvidersApi {
+  results: Array<WatchProvider>;
+}
+
 export type SwipeDirection = "left" | "right";
 
 export interface SwipeCardRef {

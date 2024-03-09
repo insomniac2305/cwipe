@@ -30,7 +30,7 @@ export default function RootLayout({
       lang="en"
       className={clsx(schibstedGrotesk.variable, suezOne.variable, "dark")}
     >
-      <body className="overflow-hidden">
+      <body>
         <Providers>{children}</Providers>
       </body>
     </html>

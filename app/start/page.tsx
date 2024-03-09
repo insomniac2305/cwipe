@@ -1,9 +1,10 @@
 import { getRegions, getLanguages } from "@/app/lib/tmdbConfiguration";
 import { RegionSelect } from "./RegionSelect";
 import { LanguageSelect } from "./LanguageSelect";
-import { WatchProviderList } from "./WatchProviderList";
+import { WatchProviderCheckboxGroup } from "./WatchProviderCheckboxGroup";
 import { Suspense } from "react";
 import { Skeleton } from "@nextui-org/react";
+import { GenreCheckboxGroup } from "@/app/start/GenreCheckboxGroup";
 
 function LoadingSkeleton() {
   return (
@@ -38,7 +39,7 @@ export default async function Start({
   const region = searchParams.region;
 
   return (
-    <main className="flex min-h-dvh flex-col items-center justify-center gap-4 p-8">
+    <main className="flex min-h-dvh flex-col items-center justify-center gap-2 p-8">
       <h1 className="font-heading text-2xl">Localization</h1>
       <div className="flex w-full flex-wrap justify-center gap-4">
         <div className="min-w-48 grow basis-48">
@@ -48,12 +49,16 @@ export default async function Start({
           <RegionSelect regions={regions}></RegionSelect>
         </div>
       </div>
-      <h1 className="font-heading text-2xl">Watch Providers</h1>
+      <h1 className="mt-8 font-heading text-2xl">Watch Providers</h1>
       <Suspense fallback={<LoadingSkeleton />}>
-        <WatchProviderList
+        <WatchProviderCheckboxGroup
           language={language || "en"}
           region={region || "DE"}
         />
+      </Suspense>
+      <h1 className="mt-8 font-heading text-2xl">Genres</h1>
+      <Suspense fallback={<LoadingSkeleton />}>
+        <GenreCheckboxGroup language={language || "en"} />
       </Suspense>
     </main>
   );

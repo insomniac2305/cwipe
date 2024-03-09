@@ -8,6 +8,7 @@ import {
   CheckboxIcon,
 } from "@nextui-org/react";
 import clsx from "clsx";
+import Image from "next/image";
 
 export default function WatchProviderCheckbox({
   provider,
@@ -32,9 +33,12 @@ export default function WatchProviderCheckbox({
             "flex-col w-16 align-start p-0",
             isFocusVisible && "outline-primary",
           ),
-          name: "text-center line-clamp-1 text-xs text-foreground-400",
+          name: "text-center truncate text-xs text-foreground-400 w-full",
+          wrapper: "w-full",
         }}
         avatarProps={{
+          ImgComponent: Image,
+          imgProps: { width: 64, height: 64 },
           src: `${process.env.NEXT_PUBLIC_TMDB_IMAGE_BASE_URL}/original${provider.logo_path}`,
           className: "transition-opacity w-16 h-16",
           isDisabled: isSelected,

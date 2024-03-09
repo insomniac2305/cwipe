@@ -2,7 +2,7 @@ import { getWatchProviders } from "@/app/lib/tmdbConfiguration";
 import WatchProviderCheckbox from "@/app/start/WatchProviderCheckbox";
 import { CheckboxGroup } from "@nextui-org/react";
 
-export async function WatchProviderList({
+export async function WatchProviderCheckboxGroup({
   language,
   region,
 }: {

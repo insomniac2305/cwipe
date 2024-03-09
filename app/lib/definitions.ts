@@ -1,3 +1,39 @@
+export interface Language {
+  iso_639_1: string;
+  english_name: string;
+  name: string;
+}
+
+export interface Region {
+  iso_3166_1: string;
+  english_name: string;
+  native_name: string;
+}
+
+export interface WatchRegionsApi {
+  results: Array<Region>;
+}
+
+export interface WatchProvider {
+  display_priority: number;
+  logo_path: string;
+  provider_name: string;
+  provider_id: number;
+}
+
+export interface WatchProvidersApi {
+  results: Array<WatchProvider>;
+}
+
+export interface Genre {
+  id: number;
+  name: string;
+}
+
+export interface GenreApi {
+  genres: Array<Genre>;
+}
+
 export interface DiscoverMovies {
   page: number;
   results: Array<{
@@ -25,10 +61,7 @@ export interface MovieDetails {
   backdrop_path: string;
   belongs_to_collection: string;
   budget: number;
-  genres: Array<{
-    id: number;
-    name: string;
-  }>;
+  genres: Array<Genre>;
   homepage: string;
   id: number;
   imdb_id: string;
@@ -118,7 +151,7 @@ export interface MovieDetails {
 }
 
 export interface Movie {
-  genres: MovieDetails["genres"];
+  genres: Array<Genre>;
   id: number;
   overview: string;
   poster_path: string;
@@ -128,33 +161,6 @@ export interface Movie {
   vote_average: number;
   watch_providers?: MovieDetails["watch/providers"]["results"][string];
   cast: MovieDetails["credits"]["cast"];
-}
-
-export interface Language {
-  iso_639_1: string;
-  english_name: string;
-  name: string;
-}
-
-export interface Region {
-  iso_3166_1: string;
-  english_name: string;
-  native_name: string;
-}
-
-export interface WatchRegionsApi {
-  results: Array<Region>;
-}
-
-export interface WatchProvider {
-  display_priority: number;
-  logo_path: string;
-  provider_name: string;
-  provider_id: number;
-}
-
-export interface WatchProvidersApi {
-  results: Array<WatchProvider>;
 }
 
 export type SwipeDirection = "left" | "right";

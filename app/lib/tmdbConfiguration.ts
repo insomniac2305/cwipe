@@ -6,6 +6,8 @@ import {
   WatchRegionsApi,
   WatchProvidersApi,
   WatchProvider,
+  Genre,
+  GenreApi,
 } from "@/app/lib/definitions";
 
 const fetchOptions = {
@@ -51,6 +53,19 @@ export async function getRegions(): Promise<Region[]> {
         native_name: "Germany",
       },
     ];
+  }
+}
+
+export async function getGenres(language: string): Promise<Genre[]> {
+  const response = await fetch(
+    `${process.env.TMDB_API_URL}/genre/movie/list?language=${language}`,
+    fetchOptions,
+  );
+  if (response.ok) {
+    const genreData: GenreApi = await response.json();
+    return genreData.genres;
+  } else {
+    throw new Error("Error while fetching genres");
   }
 }
 

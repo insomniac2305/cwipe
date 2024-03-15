@@ -44,7 +44,10 @@ export default function FormStep({
 
   return (
     <motion.div
-      className={clsx(currentStep !== index && "absolute top-0")}
+      className={clsx(
+        "h-full w-full",
+        currentStep !== index && "absolute top-0",
+      )}
       initial={false}
       variants={variants}
       animate={animation}

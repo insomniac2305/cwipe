@@ -48,8 +48,8 @@ export default function StepForm({
 
   return (
     <StepFormContext.Provider value={{ currentStep, validationErrors }}>
-      <form action={handleSubmit} className="flex flex-col gap-8">
-        <div className="relative flex items-center justify-center gap-2">
+      <form action={handleSubmit} className="flex h-full w-full flex-col gap-8">
+        <div className="relative flex flex-none items-center justify-center gap-2">
           <Button
             isIconOnly
             className="absolute left-0"
@@ -69,9 +69,9 @@ export default function StepForm({
           />
         </div>
 
-        <div className="relative">{children}</div>
+        <div className="relative flex-1 overflow-hidden">{children}</div>
 
-        <div className="flex items-center justify-center">
+        <div className="flex flex-none items-center justify-center">
           <Button color="primary" type="submit">
             {hasNextStep ? "Next" : "Submit"}
           </Button>

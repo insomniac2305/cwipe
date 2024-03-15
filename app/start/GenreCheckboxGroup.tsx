@@ -1,9 +1,8 @@
-import { getGenres } from "@/app/lib/tmdbConfiguration";
+import { Genre } from "@/app/lib/definitions";
 import GenreCheckbox from "@/app/start/GenreCheckbox";
 import { CheckboxGroup } from "@nextui-org/react";
 
-export async function GenreCheckboxGroup({ language }: { language: string }) {
-  const genres = await getGenres(language);
+export async function GenreCheckboxGroup({ genres }: { genres: Genre[] }) {
   return (
     <CheckboxGroup
       label="Select your favorite movie Genres"

@@ -1,8 +1,10 @@
-import { getRegions, getLanguages } from "@/app/lib/tmdbConfiguration";
-import { StepForm } from "@/app/components/StepForm";
-import { GenreFormStep } from "./GenreFormStep";
-import { WatchProviderFormStep } from "./WatchProviderFormStep";
-import { LocalizationFormStep } from "./LocalizationFormStep";
+import {
+  getRegions,
+  getLanguages,
+  getWatchProviders,
+  getGenres,
+} from "@/app/lib/tmdbConfiguration";
+import { StartForm } from "./StartForm";
 
 export default async function Start({
   searchParams,
@@ -18,22 +20,21 @@ export default async function Start({
   const language = searchParams.lang;
   const region = searchParams.region;
 
+  const watchProviders = await getWatchProviders(
+    language || "en",
+    region || "DE",
+  );
+  const genres = await getGenres(language || "en");
+
   return (
     <main className="flex h-dvh items-center justify-center overflow-hidden">
       <div className="h-full w-full p-8 md:max-h-[40rem] md:max-w-screen-md">
-        <StepForm action={undefined} stepCount={3} validationSteps={[]}>
-          <LocalizationFormStep
-            index={0}
-            languages={languages}
-            regions={regions}
-          />
-          <WatchProviderFormStep
-            index={1}
-            language={language}
-            region={region}
-          />
-          <GenreFormStep index={2} language={language} />
-        </StepForm>
+        <StartForm
+          languages={languages}
+          regions={regions}
+          watchProviders={watchProviders}
+          genres={genres}
+        />
       </div>
     </main>
   );

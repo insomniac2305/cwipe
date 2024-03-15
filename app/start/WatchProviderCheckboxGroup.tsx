@@ -1,15 +1,12 @@
-import { getWatchProviders } from "@/app/lib/tmdbConfiguration";
+import { WatchProvider } from "@/app/lib/definitions";
 import WatchProviderCheckbox from "@/app/start/WatchProviderCheckbox";
 import { CheckboxGroup } from "@nextui-org/react";
 
 export async function WatchProviderCheckboxGroup({
-  language,
-  region,
+  watchProviders,
 }: {
-  language: string;
-  region: string;
+  watchProviders: WatchProvider[];
 }) {
-  const watchProviders = await getWatchProviders(language, region);
   return (
     <CheckboxGroup
       label="Select your streaming providers"

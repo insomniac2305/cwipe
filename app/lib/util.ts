@@ -1,3 +1,5 @@
+import { ZodType } from "zod";
+
 export function getInitials(name: string, maxLength = 3) {
   const splitName = name.split(" ");
   let initials = "";
@@ -35,3 +37,12 @@ export const matchRoutes = (
   }
   return false;
 };
+
+export function validateFormData(formData: FormData, formDataSchema: ZodType) {
+  const formDataObject: { [key: string]: FormDataEntryValue } = {};
+  for (const [key, value] of formData.entries()) {
+    formDataObject[key] = value;
+  }
+
+  return formDataSchema.safeParse(formDataObject);
+}

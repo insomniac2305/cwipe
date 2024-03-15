@@ -98,24 +98,9 @@ export interface MovieDetails {
     results: {
       [countryCode: string]: {
         link: string;
-        flatrate?: Array<{
-          logo_path: string;
-          provider_id: number;
-          provider_name: string;
-          display_priority: number;
-        }>;
-        rent?: Array<{
-          logo_path: string;
-          provider_id: number;
-          provider_name: string;
-          display_priority: number;
-        }>;
-        buy?: Array<{
-          logo_path: string;
-          provider_id: number;
-          provider_name: string;
-          display_priority: number;
-        }>;
+        flatrate?: Array<WatchProvider>;
+        rent?: Array<WatchProvider>;
+        buy?: Array<WatchProvider>;
       };
     };
   };
@@ -169,3 +154,9 @@ export interface SwipeCardRef {
   swipe: (direction: SwipeDirection, shouldHandleSwipe?: boolean) => void;
   undoSwipe: () => void;
 }
+export type FlattenedValidationErrors = {
+  formErrors: string[];
+  fieldErrors: {
+    [field: string]: string[] | undefined;
+  };
+};

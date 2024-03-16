@@ -39,9 +39,17 @@ export const matchRoutes = (
 };
 
 export function validateFormData(formData: FormData, formDataSchema: ZodType) {
-  const formDataObject: { [key: string]: FormDataEntryValue } = {};
+  const formDataObject: {
+    [key: string]: FormDataEntryValue | Array<FormDataEntryValue>;
+  } = {};
   for (const [key, value] of formData.entries()) {
-    formDataObject[key] = value;
+    if (!formDataObject[key]) {
+      formDataObject[key] = value;
+    } else if (formDataObject[key] instanceof Array) {
+      (formDataObject[key] as Array<FormDataEntryValue>).push(value);
+    } else {
+      formDataObject[key] = [formDataObject[key] as FormDataEntryValue, value];
+    }
   }
 
   return formDataSchema.safeParse(formDataObject);

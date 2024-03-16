@@ -5,7 +5,13 @@ import { Select, SelectItem, Selection } from "@nextui-org/react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 
-export function LanguageSelect({ languages }: { languages: Language[] }) {
+export function LanguageSelect({
+  languages,
+  errors,
+}: {
+  languages: Language[];
+  errors?: string[];
+}) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -35,12 +41,15 @@ export function LanguageSelect({ languages }: { languages: Language[] }) {
   return (
     <Select
       name="language"
-      items={languages}
       label="Language"
       placeholder="Select your language"
+      description="Used to fetch movie details and posters"
+      items={languages}
+      selectionMode="single"
       selectedKeys={selection}
       onSelectionChange={handleSelect}
-      description="Used to fetch movie details and posters"
+      isInvalid={!!errors}
+      errorMessage={errors}
     >
       {(language) => (
         <SelectItem key={language.iso_639_1} value={language.iso_639_1}>

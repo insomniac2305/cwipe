@@ -5,7 +5,13 @@ import { Select, SelectItem, Selection } from "@nextui-org/react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 
-export function RegionSelect({ regions }: { regions: Region[] }) {
+export function RegionSelect({
+  regions,
+  errors,
+}: {
+  regions: Region[];
+  errors?: string[];
+}) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -35,12 +41,15 @@ export function RegionSelect({ regions }: { regions: Region[] }) {
   return (
     <Select
       name="region"
-      items={regions}
       label="Region"
       placeholder="Select your region"
+      description="Determines available streaming providers"
+      items={regions}
+      selectionMode="single"
       selectedKeys={selection}
       onSelectionChange={handleSelect}
-      description="Determines available streaming providers"
+      isInvalid={!!errors}
+      errorMessage={errors}
     >
       {(region) => (
         <SelectItem key={region.iso_3166_1} value={region.iso_3166_1}>

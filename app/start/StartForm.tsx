@@ -4,7 +4,11 @@ import { StepForm } from "@/app/components/StepForm";
 import { GenreFormStep } from "./GenreFormStep";
 import { WatchProviderFormStep } from "./WatchProviderFormStep";
 import { LocalizationFormStep } from "./LocalizationFormStep";
-import { LocalizationSchema } from "@/app/start/validation";
+import {
+  GenresSchema,
+  LocalizationSchema,
+  WatchProvidersSchema,
+} from "@/app/start/validation";
 import { Genre, Language, Region, WatchProvider } from "@/app/lib/definitions";
 
 export function StartForm({
@@ -22,7 +26,7 @@ export function StartForm({
     <StepForm
       action={undefined}
       stepCount={3}
-      validationSteps={[LocalizationSchema]}
+      validationSteps={[LocalizationSchema, WatchProvidersSchema, GenresSchema]}
     >
       <LocalizationFormStep index={0} languages={languages} regions={regions} />
       <WatchProviderFormStep index={1} watchProviders={watchProviders} />

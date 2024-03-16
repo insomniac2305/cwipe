@@ -3,7 +3,7 @@ import { Skeleton } from "@nextui-org/react";
 export function LoadingSkeleton() {
   return (
     <>
-      <div className="flex items-center">
+      <div className="my-4 flex items-center">
         <Skeleton className="h-3 w-64 rounded-full" />
       </div>
       <div className="flex flex-wrap justify-center gap-4">

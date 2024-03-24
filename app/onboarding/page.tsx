@@ -6,7 +6,7 @@ import {
 } from "@/app/lib/tmdbConfiguration";
 import { StartForm } from "./StartForm";
 
-export default async function Start({
+export default async function Onboarding({
   searchParams,
 }: {
   searchParams: { lang: string; region: string };

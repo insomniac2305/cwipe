@@ -1,5 +1,5 @@
 import { Genre } from "@/app/lib/definitions";
-import GenreCheckbox from "@/app/start/GenreCheckbox";
+import GenreCheckbox from "@/app/onboarding/GenreCheckbox";
 import { CheckboxGroup } from "@nextui-org/react";
 import clsx from "clsx";
 import { memo } from "react";

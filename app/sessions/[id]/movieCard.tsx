@@ -1,5 +1,5 @@
 import { Movie, SwipeCardRef, SwipeDirection } from "@/app/lib/definitions";
-import SwipeCard from "@/app/match/swipeCard";
+import SwipeCard from "@/app/sessions/[id]/swipeCard";
 import { Divider, ScrollShadow, Link } from "@nextui-org/react";
 import clsx from "clsx";
 import NextImage from "next/image";
@@ -66,7 +66,7 @@ export default function MovieCard({
         >
           <div className="absolute top-[calc(100%-10rem)] flex h-full w-full flex-col bg-gradient-to-b from-transparent via-default-50/90 via-[4rem] to-default-50 to-[7rem] transition-all">
             <div className="flex h-40 w-full flex-col justify-end gap-2 pb-3">
-              <h1 className="font-heading w-full overflow-hidden text-ellipsis whitespace-nowrap px-6 text-2xl">
+              <h1 className="w-full overflow-hidden text-ellipsis whitespace-nowrap px-6 font-heading text-2xl">
                 {movie.title}
               </h1>
               <GenreList genres={movie.genres}></GenreList>
@@ -95,7 +95,7 @@ export default function MovieCard({
               >
                 {movie.watch_providers?.flatrate && (
                   <>
-                    <h2 className="font-heading mb-1 mt-4 text-xl">
+                    <h2 className="mb-1 mt-4 font-heading text-xl">
                       Available on
                     </h2>
                     <WatchProviderList
@@ -105,12 +105,12 @@ export default function MovieCard({
                   </>
                 )}
 
-                <h2 className="font-heading mb-1 mt-4 text-xl">Description</h2>
+                <h2 className="mb-1 mt-4 font-heading text-xl">Description</h2>
                 <p className="text-base leading-snug text-gray-200">
                   {movie.overview}
                 </p>
 
-                <h2 className="font-heading mb-1 mt-4 text-xl">Cast</h2>
+                <h2 className="mb-1 mt-4 font-heading text-xl">Cast</h2>
                 <ActorList actors={movie.cast} movieId={movie.id} />
               </div>
             </div>

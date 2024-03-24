@@ -1,5 +1,5 @@
 import { WatchProvider } from "@/app/lib/definitions";
-import WatchProviderCheckbox from "@/app/start/WatchProviderCheckbox";
+import WatchProviderCheckbox from "@/app/onboarding/WatchProviderCheckbox";
 import { CheckboxGroup } from "@nextui-org/react";
 import clsx from "clsx";
 import { memo } from "react";

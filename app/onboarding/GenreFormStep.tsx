@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { GenreCheckboxGroup } from "@/app/start/GenreCheckboxGroup";
+import { GenreCheckboxGroup } from "@/app/onboarding/GenreCheckboxGroup";
 import { FormStep, StepFormContext } from "@/app/components/StepForm";
 import { ScrollShadow } from "@nextui-org/react";
 import { Genre } from "@/app/lib/definitions";

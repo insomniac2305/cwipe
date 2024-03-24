@@ -8,9 +8,9 @@ import {
   GenresSchema,
   LocalizationSchema,
   WatchProvidersSchema,
-} from "@/app/start/validation";
+} from "@/app/onboarding/validation";
 import { Genre, Language, Region, WatchProvider } from "@/app/lib/definitions";
-import { submitUserOnboarding } from "@/app/start/actions";
+import { submitUserOnboarding } from "@/app/onboarding/actions";
 
 export function StartForm({
   languages,

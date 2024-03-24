@@ -1,5 +1,5 @@
 CREATE TABLE users (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id public.xid PRIMARY KEY DEFAULT xid(),
   name VARCHAR(255) NOT NULL,
   email VARCHAR(255) NOT NULL UNIQUE,
   email_verified BOOLEAN DEFAULT false,
@@ -9,8 +9,8 @@ CREATE TABLE users (
 );
 
 CREATE TABLE accounts (
-  id SERIAL PRIMARY KEY,
-  user_id UUID NOT NULL REFERENCES users(id),
+  id public.xid PRIMARY KEY DEFAULT xid(),
+  user_id public.xid NOT NULL REFERENCES users(id),
   provider_id VARCHAR(255) NOT NULL,
   provider_type VARCHAR(255) NOT NULL,
   provider_account_id VARCHAR(255) NOT NULL,
@@ -24,7 +24,7 @@ CREATE TABLE accounts (
 );
 
 CREATE TABLE user_preferences (
-  user_id UUID PRIMARY KEY,
+  user_id public.xid PRIMARY KEY,
   providers INTEGER[],
   genres INTEGER[],
   language VARCHAR(5),
@@ -34,3 +34,15 @@ CREATE TABLE user_preferences (
   REFERENCES users(id)
   ON DELETE CASCADE
 );
+
+CREATE TABLE sessions (
+  id public.xid PRIMARY KEY DEFAULT xid(),
+  providers INTEGER[],
+  genres INTEGER[]
+)
+
+CREATE TABLE sessions_users (
+  user_id public.xid NOT NULL REFERENCES users(id),
+  session_id public.xid NOT NULL REFERENCES sessions(id),
+  PRIMARY KEY(user_id, session_id)
+)

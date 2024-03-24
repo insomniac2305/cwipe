@@ -1,11 +1,38 @@
 "use client";
 import { Button, Progress } from "@nextui-org/react";
-import { FormHTMLAttributes, ReactNode, useState } from "react";
+import { ReactNode, useState } from "react";
 import { FaChevronLeft } from "react-icons/fa6";
 import { ZodType } from "zod";
 import { validateFormData } from "@/app/lib/util";
-import { FlattenedValidationErrors } from "@/app/lib/definitions";
 import { StepFormContext } from "@/app/components/StepForm";
+import { useFormState, useFormStatus } from "react-dom";
+import { FlattenedValidationErrors, FormState } from "@/app/lib/definitions";
+
+function SubmitButton({ hasNextStep }: { hasNextStep: boolean }) {
+  const { pending } = useFormStatus();
+  return (
+    <Button color="primary" type="submit" isLoading={!hasNextStep && pending}>
+      {hasNextStep ? "Next" : "Submit"}
+    </Button>
+  );
+}
+
+function FormProgress({
+  currentStep,
+  stepCount,
+  hasNextStep,
+}: {
+  currentStep: number;
+  stepCount: number;
+  hasNextStep: boolean;
+}) {
+  const { pending } = useFormStatus();
+
+  const progress =
+    !hasNextStep && pending ? 100 : (currentStep / stepCount) * 100;
+
+  return <Progress aria-label="Progress" className="px-12" value={progress} />;
+}
 
 export default function StepForm({
   action,
@@ -13,11 +40,15 @@ export default function StepForm({
   validationSteps,
   children,
 }: {
-  action: FormHTMLAttributes<HTMLFormElement>["action"];
+  action: (
+    state: FormState | undefined,
+    formData: FormData,
+  ) => Promise<FormState | undefined>;
   stepCount: number;
   validationSteps: ZodType[];
   children: ReactNode;
 }) {
+  const [state, formAction] = useFormState(action, undefined);
   const [currentStep, setCurrentStep] = useState(0);
   const [validationErrors, setValidationErrors] =
     useState<FlattenedValidationErrors>();
@@ -42,12 +73,17 @@ export default function StepForm({
       setCurrentStep((prev) => prev + 1);
     } else {
       if (typeof action !== "function") return;
-      action(formData);
+      formAction(formData);
     }
   };
 
   return (
-    <StepFormContext.Provider value={{ currentStep, validationErrors }}>
+    <StepFormContext.Provider
+      value={{
+        currentStep,
+        validationErrors: validationErrors || state?.errors,
+      }}
+    >
       <form action={handleSubmit} className="flex h-full w-full flex-col gap-8">
         <div className="relative flex flex-none items-center justify-center gap-2">
           <Button
@@ -62,19 +98,17 @@ export default function StepForm({
           >
             <FaChevronLeft />
           </Button>
-          <Progress
-            aria-label="Progress"
-            className="px-12"
-            value={(currentStep / stepCount) * 100}
+          <FormProgress
+            stepCount={stepCount}
+            currentStep={currentStep}
+            hasNextStep={hasNextStep}
           />
         </div>
 
         <div className="relative flex-1 overflow-hidden">{children}</div>
 
         <div className="flex flex-none items-center justify-center">
-          <Button color="primary" type="submit">
-            {hasNextStep ? "Next" : "Submit"}
-          </Button>
+          <SubmitButton hasNextStep={hasNextStep}></SubmitButton>
         </div>
       </form>
     </StepFormContext.Provider>

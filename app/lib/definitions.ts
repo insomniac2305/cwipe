@@ -160,3 +160,6 @@ export type FlattenedValidationErrors = {
     [field: string]: string[] | undefined;
   };
 };
+export interface FormState {
+  errors?: FlattenedValidationErrors;
+}

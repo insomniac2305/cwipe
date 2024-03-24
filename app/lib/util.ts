@@ -1,4 +1,4 @@
-import { ZodType } from "zod";
+import { ZodType, ZodTypeDef } from "zod";
 
 export function getInitials(name: string, maxLength = 3) {
   const splitName = name.split(" ");
@@ -38,7 +38,10 @@ export const matchRoutes = (
   return false;
 };
 
-export function validateFormData(formData: FormData, formDataSchema: ZodType) {
+export function validateFormData<Output, Input>(
+  formData: FormData,
+  formDataSchema: ZodType<Output, ZodTypeDef, Input>,
+) {
   const formDataObject: {
     [key: string]: FormDataEntryValue | Array<FormDataEntryValue>;
   } = {};
@@ -53,4 +56,8 @@ export function validateFormData(formData: FormData, formDataSchema: ZodType) {
   }
 
   return formDataSchema.safeParse(formDataObject);
+}
+
+export function composePostgresArray(array: unknown[]) {
+  return JSON.stringify(array).replace("[", "{").replace("]", "}");
 }

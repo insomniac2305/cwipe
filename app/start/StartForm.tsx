@@ -10,6 +10,7 @@ import {
   WatchProvidersSchema,
 } from "@/app/start/validation";
 import { Genre, Language, Region, WatchProvider } from "@/app/lib/definitions";
+import { submitUserOnboarding } from "@/app/start/actions";
 
 export function StartForm({
   languages,
@@ -24,7 +25,7 @@ export function StartForm({
 }) {
   return (
     <StepForm
-      action={undefined}
+      action={submitUserOnboarding}
       stepCount={3}
       validationSteps={[LocalizationSchema, WatchProvidersSchema, GenresSchema]}
     >

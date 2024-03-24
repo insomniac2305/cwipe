@@ -6,15 +6,18 @@ export const LocalizationSchema = z.object({
 });
 
 export const WatchProvidersSchema = z.object({
-  providers: z.union([
-    z.coerce.number().gt(0),
+  providers: z.preprocess(
+    (val) => (Array.isArray(val) ? val : [val]),
     z.array(z.coerce.number().gt(0)).nonempty(),
-  ]),
+  ),
 });
 
 export const GenresSchema = z.object({
-  genres: z.union([
-    z.coerce.number().gt(0),
+  genres: z.preprocess(
+    (val) => (Array.isArray(val) ? val : [val]),
     z.array(z.coerce.number().gt(0)).nonempty(),
-  ]),
+  ),
 });
+
+export const onboardingSchema =
+  LocalizationSchema.and(WatchProvidersSchema).and(GenresSchema);

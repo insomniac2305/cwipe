@@ -35,14 +35,15 @@ CREATE TABLE user_preferences (
   ON DELETE CASCADE
 );
 
-CREATE TABLE sessions (
+CREATE TABLE match_sessions (
   id public.xid PRIMARY KEY DEFAULT xid(),
   providers INTEGER[],
-  genres INTEGER[]
-)
+  genres INTEGER[],
+  is_started BOOLEAN DEFAULT false
+);
 
-CREATE TABLE sessions_users (
+CREATE TABLE match_sessions_users (
   user_id public.xid NOT NULL REFERENCES users(id),
-  session_id public.xid NOT NULL REFERENCES sessions(id),
-  PRIMARY KEY(user_id, session_id)
-)
+  match_session_id public.xid NOT NULL REFERENCES match_sessions(id),
+  PRIMARY KEY(user_id, match_session_id)
+);

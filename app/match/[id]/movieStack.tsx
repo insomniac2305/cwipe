@@ -1,8 +1,8 @@
 "use client";
 
 import { Movie } from "@/app/lib/definitions";
-import { rateMovie, undoMovieRating } from "@/app/sessions/[id]/actions";
-import MovieCard from "@/app/sessions/[id]/movieCard";
+import { rateMovie, undoMovieRating } from "@/app/match/[id]/actions";
+import MovieCard from "@/app/match/[id]/movieCard";
 import { Button } from "@nextui-org/react";
 import { useState } from "react";
 import {

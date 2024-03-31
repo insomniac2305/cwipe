@@ -1,4 +1,3 @@
-import Error from "@/app/components/Error";
 import { auth } from "@/app/lib/auth";
 import Lobby from "@/app/match/[id]/Lobby";
 import {
@@ -17,35 +16,22 @@ export default async function MatchSession({
   const session = await auth();
   const userId = session?.user?.id as string;
 
-  if (matchSession.error !== undefined)
-    return <Error>{matchSession.error}</Error>;
-
-  const isJoined = matchSession.data.userIds.includes(userId);
-  const isStarted = matchSession.data.isStarted;
+  const isUserJoined = matchSession.userIds.includes(userId);
+  const isSessionStarted = matchSession.isStarted;
 
   switch (true) {
-    case !isStarted && !isJoined: {
-      const { error } = await addUserToMatchSession(
-        matchSession.data.id,
-        userId,
-      );
-      if (error) {
-        return <Error>{error}</Error>;
-      }
-      matchSession.data.userIds.push(userId);
+    case !isSessionStarted && !isUserJoined: {
+      await addUserToMatchSession(matchSession.id, userId);
+      matchSession.userIds.push(userId);
       //fall through
     }
-    case !isStarted && isJoined:
-      return <Lobby matchSession={matchSession.data} />;
-    case isStarted && !isJoined:
-      return (
-        <Error>
-          {
-            "The host has already started this matching session! Please go back to create a new one."
-          }
-        </Error>
+    case !isSessionStarted && isUserJoined:
+      return <Lobby matchSession={matchSession} />;
+    case isSessionStarted && !isUserJoined:
+      throw new Error(
+        "The host has already started this matching session! Please go back to create a new one.",
       );
-    case isStarted && isJoined: {
+    case isSessionStarted && isUserJoined: {
       const movies = await getMovies();
       return <MovieStack movies={movies} />;
     }

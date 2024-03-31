@@ -164,10 +164,6 @@ export interface FormState {
   errors?: FlattenedValidationErrors;
 }
 
-export type FetchResult<T> =
-  | { data: T; error: undefined }
-  | { data: undefined; error: string };
-
 export type MatchSession = {
   id: string;
   providers: number[];

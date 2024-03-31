@@ -1,9 +1,10 @@
 "use server";
 
-import { auth } from "@/app/lib/auth";
-import { FetchResult, MatchSession } from "@/app/lib/definitions";
+import { MatchSession } from "@/app/lib/definitions";
 import { DiscoverMovies, Movie, MovieDetails } from "@/app/lib/definitions";
 import { sql } from "@vercel/postgres";
+import { notFound } from "next/navigation";
+import { unstable_noStore as noStore } from "next/cache";
 
 const fetchOptions = {
   method: "GET",
@@ -14,59 +15,38 @@ const fetchOptions = {
   next: { revalidate: 3600 },
 };
 
-export async function getMatchSession(
-  id: string,
-): Promise<FetchResult<MatchSession>> {
-  const session = await auth();
-  if (!session?.user?.id) throw new Error("Unauthorized");
-
-  try {
-    const matchSessionData = await sql`
+export async function getMatchSession(id: string): Promise<MatchSession> {
+  noStore();
+  const matchSessionData = await sql`
       SELECT id, providers, genres, is_started
       FROM match_sessions
       WHERE id = ${id}`;
 
-    const sessionUsersData = await sql`
+  if (matchSessionData.rowCount < 1) notFound();
+
+  const sessionUsersData = await sql`
       SELECT user_id
       FROM match_sessions_users
       WHERE match_session_id = ${id}`;
 
-    const sessionUserIds = sessionUsersData.rows.map((row) => row.user_id);
+  const sessionUserIds = sessionUsersData.rows.map((row) => row.user_id);
 
-    const matchSession = {
-      id: matchSessionData.rows[0].id,
-      providers: matchSessionData.rows[0].providers,
-      genres: matchSessionData.rows[0].genres,
-      userIds: sessionUserIds,
-      isStarted: matchSessionData.rows[0].is_started,
-    };
-
-    return { data: matchSession, error: undefined };
-  } catch (error) {
-    console.error(error);
-
-    return {
-      data: undefined,
-      error: "Error while fetching match session data",
-    };
-  }
+  return {
+    id: matchSessionData.rows[0].id,
+    providers: matchSessionData.rows[0].providers,
+    genres: matchSessionData.rows[0].genres,
+    userIds: sessionUserIds,
+    isStarted: matchSessionData.rows[0].is_started,
+  };
 }
 
 export async function addUserToMatchSession(
   matchSessionId: string,
   userId: string,
 ) {
-  try {
-    sql`
+  sql`
       INSERT INTO match_sessions_users(user_id, match_session_id)
       VALUES (${userId}, ${matchSessionId})`;
-
-    return { error: undefined };
-  } catch (error) {
-    return {
-      error: "Error while joining match session, please try again.",
-    };
-  }
 
   // const userPreferenceData = await sql`
   //   SELECT providers, genres

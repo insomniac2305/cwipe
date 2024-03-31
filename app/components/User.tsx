@@ -1,32 +1,31 @@
 import { getInitials } from "@/app/lib/util";
-import { User } from "@nextui-org/react";
+import { User as NextUIUser } from "@nextui-org/react";
 
-export function Actor({
+export function User({
   name,
-  role,
+  description,
   imageSrc,
 }: {
   name: string;
-  role: string;
+  description?: string;
   imageSrc?: string;
 }) {
   return (
-    <User
+    <NextUIUser
       avatarProps={{
         className: "h-20 w-20",
         classNames: {
           name: "text-3xl font-medium",
         },
         getInitials: getInitials,
-        src:
-          imageSrc &&
-          `${process.env.NEXT_PUBLIC_TMDB_IMAGE_BASE_URL}/w185/${imageSrc}`,
+        src: imageSrc,
       }}
       name={name}
-      description={role}
+      description={description}
       classNames={{
         base: "flex flex-col items-center",
         wrapper: "text-center",
+        name: "text-center w-20",
         description: "w-20 overflow-hidden text-ellipsis whitespace-nowrap",
       }}
     />

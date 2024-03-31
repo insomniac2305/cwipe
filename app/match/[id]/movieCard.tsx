@@ -7,7 +7,7 @@ import NextImage from "next/image";
 import { useEffect, useRef } from "react";
 import { HiMiniStar } from "react-icons/hi2";
 import { Genre } from "@/app/components/Genre";
-import { Actor } from "@/app/components/Actor";
+import { User } from "@/app/components/User";
 import { LogoImage } from "@/app/components/LogoImage";
 
 export default function MovieCard({
@@ -154,11 +154,11 @@ function ActorList({
     >
       {actors.map((actor) => {
         return (
-          <Actor
+          <User
             key={movieId.toString() + actor.cast_id.toString()}
             name={actor.name}
-            role={actor.character}
-            imageSrc={actor.profile_path}
+            description={actor.character}
+            imageSrc={`${process.env.NEXT_PUBLIC_TMDB_IMAGE_BASE_URL}/w185/${actor.profile_path}`}
           />
         );
       })}

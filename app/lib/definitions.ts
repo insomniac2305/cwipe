@@ -1,3 +1,5 @@
+import { User } from "next-auth";
+
 export interface Language {
   iso_639_1: string;
   english_name: string;
@@ -168,6 +170,6 @@ export type MatchSession = {
   id: string;
   providers: number[];
   genres: number[];
-  userIds: string[];
+  users: User[];
   isStarted: boolean;
 };

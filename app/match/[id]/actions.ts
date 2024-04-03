@@ -31,11 +31,18 @@ export async function getMatchSession(id: string): Promise<MatchSession> {
 
   const sessionUserIds = sessionUsersData.rows.map((row) => row.user_id);
 
+  const userData = await sql.query(
+    ` SELECT id, name, email, image 
+      FROM users 
+      WHERE id = ANY($1)`,
+    [sessionUserIds],
+  );
+
   return {
     id: matchSessionData.rows[0].id,
     providers: matchSessionData.rows[0].providers,
     genres: matchSessionData.rows[0].genres,
-    userIds: sessionUserIds,
+    users: userData.rows,
     isStarted: matchSessionData.rows[0].is_started,
   };
 }

@@ -6,6 +6,7 @@ import {
   addUserToMatchSession,
 } from "@/app/match/[id]/actions";
 import MovieStack from "@/app/match/[id]/movieStack";
+import { User } from "next-auth";
 
 export default async function MatchSession({
   params,
@@ -16,13 +17,13 @@ export default async function MatchSession({
   const session = await auth();
   const userId = session?.user?.id as string;
 
-  const isUserJoined = matchSession.userIds.includes(userId);
+  const isUserJoined = !!matchSession.users.find((user) => user.id === userId);
   const isSessionStarted = matchSession.isStarted;
 
   switch (true) {
     case !isSessionStarted && !isUserJoined: {
       await addUserToMatchSession(matchSession.id, userId);
-      matchSession.userIds.push(userId);
+      matchSession.users.push(session?.user as User);
       //fall through
     }
     case !isSessionStarted && isUserJoined:

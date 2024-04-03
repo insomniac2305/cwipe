@@ -26,8 +26,12 @@ export default function Lobby({
       <div className="flex h-full w-full flex-col overflow-auto p-8 md:max-h-[40rem] md:max-w-screen-md">
         <h1 className="font-heading text-2xl">Lobby</h1>
         <div className="flex flex-auto flex-wrap items-start gap-2 py-4">
-          {matchSession.userIds.map((id, index) => (
-            <User key={id} name={`User ${index}`} />
+          {matchSession.users.map((user, index) => (
+            <User
+              key={user.id}
+              name={user.name || `User #${index}`}
+              imageSrc={user.image || undefined}
+            />
           ))}
           <div className="flex flex-col gap-2">
             <Button

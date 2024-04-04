@@ -5,6 +5,7 @@ import { DiscoverMovies, Movie, MovieDetails } from "@/app/lib/definitions";
 import { sql } from "@vercel/postgres";
 import { notFound } from "next/navigation";
 import { unstable_noStore as noStore } from "next/cache";
+import { composePostgresArray } from "@/app/lib/util";
 
 const fetchOptions = {
   method: "GET",
@@ -54,23 +55,42 @@ export async function addUserToMatchSession(
   sql`
       INSERT INTO match_sessions_users(user_id, match_session_id)
       VALUES (${userId}, ${matchSessionId})`;
+}
 
-  // const userPreferenceData = await sql`
-  //   SELECT providers, genres
-  //   FROM user_preferences
-  //   WHERE user_id = ${userId}
-  // `;
+export async function startMatchSession(id: string) {
+  const sessionUsersData = await sql`
+      SELECT user_id
+      FROM match_sessions_users
+      WHERE match_session_id = ${id}`;
 
-  // const combinedProviders = [
-  //   ...new Set([
-  //     ...matchSession.providers,
-  //     ...userPreferenceData.rows[0].providers,
-  //   ]),
-  // ];
+  const sessionUserIds = sessionUsersData.rows.map((row) => row.user_id);
 
-  // const combinedGenres = [
-  //   ...new Set([...matchSession.genres, ...userPreferenceData.rows[0].genres]),
-  // ];
+  const userPreferenceData = await sql.query(
+    ` SELECT providers, genres
+      FROM user_preferences
+      WHERE user_id = ANY($1)`,
+    [sessionUserIds],
+  );
+
+  const providersSet = new Set<number>();
+  const genresSet = new Set<number>();
+
+  userPreferenceData.rows.forEach((preference) => {
+    preference.providers.forEach((provider: number) => {
+      providersSet.add(provider);
+    });
+    preference.genres.forEach((genre: number) => {
+      genresSet.add(genre);
+    });
+  });
+
+  const providers = composePostgresArray(Array.from(providersSet));
+  const genres = composePostgresArray(Array.from(genresSet));
+
+  await sql`
+    UPDATE match_sessions
+    SET providers = ${providers}, genres = ${genres}, is_started = true
+    WHERE id = ${id}`;
 }
 
 export async function getMovies() {

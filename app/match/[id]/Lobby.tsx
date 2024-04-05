@@ -5,17 +5,27 @@ import { MatchSession } from "@/app/lib/definitions";
 import { Button } from "@nextui-org/react";
 import { ShareButton } from "@/app/match/[id]/ShareButton";
 import useSWR from "swr";
-import { getMatchSession } from "@/app/match/[id]/actions";
+import { getMatchSession, startMatchSession } from "@/app/match/[id]/actions";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function Lobby({
   matchSession,
 }: {
   matchSession: MatchSession;
 }) {
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
   const { data } = useSWR(matchSession.id, getMatchSession, {
     refreshInterval: 10000,
     fallbackData: matchSession,
   });
+
+  const start = async () => {
+    setIsLoading(true);
+    await startMatchSession(matchSession.id);
+    router.refresh();
+  };
 
   return (
     <main className="flex h-dvh items-center justify-center overflow-hidden">
@@ -32,7 +42,9 @@ export default function Lobby({
           <ShareButton id={matchSession.id} />
         </div>
         <div className="flex justify-center">
-          <Button color="primary">Start matching</Button>
+          <Button color="primary" onPress={start} isLoading={isLoading}>
+            Start matching
+          </Button>
         </div>
       </div>
     </main>

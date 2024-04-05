@@ -6,7 +6,7 @@ import { Button } from "@nextui-org/react";
 import { ShareButton } from "@/app/match/[id]/ShareButton";
 import useSWR from "swr";
 import { getMatchSession, startMatchSession } from "@/app/match/[id]/actions";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
 export default function Lobby({
@@ -26,6 +26,12 @@ export default function Lobby({
     await startMatchSession(matchSession.id);
     router.refresh();
   };
+
+  useEffect(() => {
+    if (data.isStarted) {
+      router.refresh();
+    }
+  }, [data.isStarted, router]);
 
   return (
     <main className="flex h-dvh items-center justify-center overflow-hidden">

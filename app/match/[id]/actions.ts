@@ -16,6 +16,16 @@ const fetchOptions = {
   next: { revalidate: 3600 },
 };
 
+async function getMatchSessionUserIds(id: string) {
+  const sessionUsersData = await sql`
+      SELECT user_id
+      FROM match_sessions_users
+      WHERE match_session_id = ${id}`;
+
+  const sessionUserIds = sessionUsersData.rows.map((row) => row.user_id);
+  return sessionUserIds;
+}
+
 export async function getMatchSession(id: string): Promise<MatchSession> {
   noStore();
   const matchSessionData = await sql`
@@ -25,12 +35,7 @@ export async function getMatchSession(id: string): Promise<MatchSession> {
 
   if (matchSessionData.rowCount < 1) notFound();
 
-  const sessionUsersData = await sql`
-      SELECT user_id
-      FROM match_sessions_users
-      WHERE match_session_id = ${id}`;
-
-  const sessionUserIds = sessionUsersData.rows.map((row) => row.user_id);
+  const sessionUserIds = await getMatchSessionUserIds(id);
 
   const userData = await sql.query(
     ` SELECT id, name, email, image 
@@ -52,18 +57,13 @@ export async function addUserToMatchSession(
   matchSessionId: string,
   userId: string,
 ) {
-  sql`
+  await sql`
       INSERT INTO match_sessions_users(user_id, match_session_id)
       VALUES (${userId}, ${matchSessionId})`;
 }
 
 export async function startMatchSession(id: string) {
-  const sessionUsersData = await sql`
-      SELECT user_id
-      FROM match_sessions_users
-      WHERE match_session_id = ${id}`;
-
-  const sessionUserIds = sessionUsersData.rows.map((row) => row.user_id);
+  const sessionUserIds = await getMatchSessionUserIds(id);
 
   const userPreferenceData = await sql.query(
     ` SELECT providers, genres

@@ -110,27 +110,37 @@ export async function getMovies(matchSessionId: string, page: number) {
   const { providers, genres } = matchSessionPreferenceData.rows[0];
   const { language, region } = userPreferenceData.rows[0];
 
-  const searchParams = new URLSearchParams();
-  searchParams.append("include_adult", "false");
-  searchParams.append("include_video", "false");
-  searchParams.append("language", language || "en-US");
-  searchParams.append("watch_region", region || "DE");
-  searchParams.append("sort_by", "popularity.desc");
-  searchParams.append("page", page.toString());
-  searchParams.append("with_watch_providers", providers?.join("|"));
-  searchParams.append("with_genres", genres?.join("|"));
+  const searchParams = composeDiscoverSearchParams({
+    language,
+    region,
+    page,
+    providers,
+    genres,
+  });
 
-  const response = await fetch(
+  const discoverMovieResponse = await fetch(
     `${process.env.TMDB_API_URL}discover/movie?${searchParams.toString()}`,
     fetchOptions,
   );
-  const discoveredMovies: DiscoverMovies = await response.json();
+  const discoveredMovies: DiscoverMovies = await discoverMovieResponse.json();
+
+  const userMoviesData = await sql`
+      SELECT user_id, movie_id, is_liked
+      FROM users_movies
+      WHERE user_id = ${userId}`;
+
+  const userMovieIds = userMoviesData.rows.map(
+    (userMovie) => userMovie.movie_id,
+  );
+  const unratedMovies = discoveredMovies.results.filter(
+    (movie) => !userMovieIds.includes(movie.id),
+  );
 
   const movies: Array<Movie> = await Promise.all(
-    discoveredMovies.results.map(async (movie) => {
+    unratedMovies.map(async (movie) => {
+      const detailSearchParams = composeDetailSearchParams(language);
       const detailResponse = await fetch(
-        process.env.TMDB_API_URL +
-          `movie/${movie.id}?append_to_response=credits%2Cwatch%2Fproviders&language=de-DE`,
+        `${process.env.TMDB_API_URL}movie/${movie.id}?${detailSearchParams.toString()}`,
         fetchOptions,
       );
       const movieData: MovieDetails = await detailResponse.json();
@@ -139,7 +149,7 @@ export async function getMovies(matchSessionId: string, page: number) {
         title: movieData.title,
         poster_path: movieData.poster_path,
         genres: movieData.genres,
-        watch_providers: movieData["watch/providers"].results["DE"],
+        watch_providers: movieData["watch/providers"].results[region || "DE"],
         vote_average: movieData.vote_average,
         release_date: movieData.release_date,
         runtime: movieData.runtime,
@@ -157,8 +167,8 @@ export async function rateMovie(id: number, isLiked: boolean) {
   const userId = session?.user?.id;
 
   await sql`
-      INSERT INTO users_movies(user_id, movie_id, is_liked)
-      VALUES(${userId}, ${id}, ${isLiked})`;
+  INSERT INTO users_movies(user_id, movie_id, is_liked)
+  VALUES(${userId}, ${id}, ${isLiked})`;
 }
 
 export async function undoMovieRating(id: number) {
@@ -166,6 +176,38 @@ export async function undoMovieRating(id: number) {
   const userId = session?.user?.id;
 
   await sql`
-      DELETE FROM users_movies
-      WHERE user_id = ${userId} AND movie_id = ${id}`;
+  DELETE FROM users_movies
+  WHERE user_id = ${userId} AND movie_id = ${id}`;
+}
+
+function composeDetailSearchParams(language: string) {
+  const detailSearchParams = new URLSearchParams();
+  detailSearchParams.append("append_to_response", "credits,watch/providers");
+  detailSearchParams.append("language", language || "en-US");
+  return detailSearchParams;
+}
+
+function composeDiscoverSearchParams({
+  language,
+  region,
+  page,
+  providers,
+  genres,
+}: {
+  language: string;
+  region: string;
+  page: number;
+  providers: number[];
+  genres: number[];
+}) {
+  const searchParams = new URLSearchParams();
+  searchParams.append("include_adult", "false");
+  searchParams.append("include_video", "false");
+  searchParams.append("language", language || "en-US");
+  searchParams.append("watch_region", region || "DE");
+  searchParams.append("sort_by", "popularity.desc");
+  searchParams.append("page", page.toString());
+  searchParams.append("with_watch_providers", providers?.join("|"));
+  searchParams.append("with_genres", genres?.join("|"));
+  return searchParams;
 }

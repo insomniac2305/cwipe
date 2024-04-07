@@ -33,7 +33,7 @@ export default async function MatchSession({
         "The host has already started this matching session! Please go back to create a new one.",
       );
     case isSessionStarted && isUserJoined: {
-      const movies = await getMovies();
+      const movies = await getMovies(matchSession.id, 1);
       return <MovieStack movies={movies} />;
     }
   }

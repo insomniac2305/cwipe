@@ -3,7 +3,7 @@
 import { MatchSession } from "@/app/lib/definitions";
 import { DiscoverMovies, Movie, MovieDetails } from "@/app/lib/definitions";
 import { sql } from "@vercel/postgres";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { unstable_noStore as noStore } from "next/cache";
 import { composePostgresArray } from "@/app/lib/util";
 import { auth } from "@/app/lib/auth";
@@ -90,10 +90,38 @@ export async function startMatchSession(id: string) {
     WHERE id = ${id}`;
 }
 
-export async function getMovies() {
+export async function getMovies(matchSessionId: string, page: number) {
+  const matchSessionPreferenceData = await sql`
+      SELECT providers, genres
+      FROM match_sessions
+      WHERE id = ${matchSessionId}`;
+
+  if (matchSessionPreferenceData.rowCount < 1) notFound();
+
+  const session = await auth();
+  const userId = session?.user?.id;
+  const userPreferenceData = await sql`
+      SELECT language, region
+      FROM user_preferences
+      WHERE user_id = ${userId}`;
+
+  if (userPreferenceData.rowCount < 1) redirect("/onboarding");
+
+  const { providers, genres } = matchSessionPreferenceData.rows[0];
+  const { language, region } = userPreferenceData.rows[0];
+
+  const searchParams = new URLSearchParams();
+  searchParams.append("include_adult", "false");
+  searchParams.append("include_video", "false");
+  searchParams.append("language", language || "en-US");
+  searchParams.append("watch_region", region || "DE");
+  searchParams.append("sort_by", "popularity.desc");
+  searchParams.append("page", page.toString());
+  searchParams.append("with_watch_providers", providers?.join("|"));
+  searchParams.append("with_genres", genres?.join("|"));
+
   const response = await fetch(
-    process.env.TMDB_API_URL +
-      "discover/movie?include_adult=false&include_video=false&language=de-DE&page=1&sort_by=popularity.desc",
+    `${process.env.TMDB_API_URL}discover/movie?${searchParams.toString()}`,
     fetchOptions,
   );
   const discoveredMovies: DiscoverMovies = await response.json();

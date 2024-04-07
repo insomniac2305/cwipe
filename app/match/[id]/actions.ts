@@ -168,7 +168,9 @@ export async function rateMovie(id: number, isLiked: boolean) {
 
   await sql`
   INSERT INTO users_movies(user_id, movie_id, is_liked)
-  VALUES(${userId}, ${id}, ${isLiked})`;
+  VALUES(${userId}, ${id}, ${isLiked})
+  ON CONFLICT (user_id, movie_id)
+  DO UPDATE SET is_liked = ${isLiked}`;
 }
 
 export async function undoMovieRating(id: number) {

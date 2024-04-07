@@ -18,7 +18,7 @@ export default async function MatchSession({
   const userId = session?.user?.id as string;
 
   const isUserJoined = !!matchSession.users.find((user) => user.id === userId);
-  const isSessionStarted = matchSession.isStarted;
+  const isSessionStarted = matchSession.is_started;
 
   switch (true) {
     case !isSessionStarted && !isUserJoined: {

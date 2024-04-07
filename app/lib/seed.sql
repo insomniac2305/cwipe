@@ -45,5 +45,6 @@ CREATE TABLE match_sessions (
 CREATE TABLE match_sessions_users (
   user_id public.xid NOT NULL REFERENCES users(id),
   match_session_id public.xid NOT NULL REFERENCES match_sessions(id),
+  is_host BOOLEAN DEFAULT false,
   PRIMARY KEY(user_id, match_session_id)
 );

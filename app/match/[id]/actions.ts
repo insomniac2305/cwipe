@@ -6,6 +6,7 @@ import { sql } from "@vercel/postgres";
 import { notFound } from "next/navigation";
 import { unstable_noStore as noStore } from "next/cache";
 import { composePostgresArray } from "@/app/lib/util";
+import { auth } from "@/app/lib/auth";
 
 const fetchOptions = {
   method: "GET",
@@ -16,16 +17,6 @@ const fetchOptions = {
   next: { revalidate: 3600 },
 };
 
-async function getMatchSessionUserIds(id: string) {
-  const sessionUsersData = await sql`
-      SELECT user_id
-      FROM match_sessions_users
-      WHERE match_session_id = ${id}`;
-
-  const sessionUserIds = sessionUsersData.rows.map((row) => row.user_id);
-  return sessionUserIds;
-}
-
 export async function getMatchSession(id: string): Promise<MatchSession> {
   noStore();
   const matchSessionData = await sql`
@@ -35,21 +26,19 @@ export async function getMatchSession(id: string): Promise<MatchSession> {
 
   if (matchSessionData.rowCount < 1) notFound();
 
-  const sessionUserIds = await getMatchSessionUserIds(id);
-
-  const userData = await sql.query(
-    ` SELECT id, name, email, image 
-      FROM users 
-      WHERE id = ANY($1)`,
-    [sessionUserIds],
-  );
+  const userData = await sql`
+      SELECT u.id, msu.is_host, u.name, u.image
+      FROM match_sessions_users msu
+      INNER JOIN users u
+      ON msu.user_id = u.id
+      WHERE msu.match_session_id = ${id}`;
 
   return {
     id: matchSessionData.rows[0].id,
     providers: matchSessionData.rows[0].providers,
     genres: matchSessionData.rows[0].genres,
     users: userData.rows,
-    isStarted: matchSessionData.rows[0].is_started,
+    is_started: matchSessionData.rows[0].is_started,
   };
 }
 
@@ -63,14 +52,22 @@ export async function addUserToMatchSession(
 }
 
 export async function startMatchSession(id: string) {
-  const sessionUserIds = await getMatchSessionUserIds(id);
+  const session = await auth();
 
-  const userPreferenceData = await sql.query(
-    ` SELECT providers, genres
-      FROM user_preferences
-      WHERE user_id = ANY($1)`,
-    [sessionUserIds],
-  );
+  const userPreferenceData = await sql`
+      SELECT u.id, up.providers, up.genres, msu.is_host
+      FROM users u
+      INNER JOIN user_preferences up
+      ON u.id = up.user_id
+      INNER JOIN match_sessions_users msu
+      ON u.id = msu.user_id
+      WHERE msu.match_session_id = ${id}`;
+
+  const isUserHost = userPreferenceData.rows.find(
+    (user) => user.id === session?.user?.id,
+  )?.is_host;
+
+  if (!isUserHost) throw new Error("Only the host can start the match session");
 
   const providersSet = new Set<number>();
   const genresSet = new Set<number>();

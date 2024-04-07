@@ -166,10 +166,14 @@ export interface FormState {
   errors?: FlattenedValidationErrors;
 }
 
+export interface MatchSessionUser extends User {
+  is_host?: boolean;
+}
+
 export type MatchSession = {
   id: string;
   providers: number[];
   genres: number[];
-  users: User[];
-  isStarted: boolean;
+  users: MatchSessionUser[];
+  is_started: boolean;
 };

@@ -48,3 +48,10 @@ CREATE TABLE match_sessions_users (
   is_host BOOLEAN DEFAULT false,
   PRIMARY KEY(user_id, match_session_id)
 );
+
+CREATE TABLE users_movies (
+  user_id public.xid NOT NULL REFERENCES users(id),
+  movie_id INTEGER NOT NULL,
+  is_liked BOOLEAN NOT NULL,
+  PRIMARY KEY(user_id, movie_id)
+)

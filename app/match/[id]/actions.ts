@@ -57,7 +57,7 @@ export async function startMatchSession(id: string) {
   const userPreferenceData = await sql`
       SELECT u.id, up.providers, up.genres, msu.is_host
       FROM users u
-      INNER JOIN user_preferences up
+      LEFT JOIN user_preferences up
       ON u.id = up.user_id
       INNER JOIN match_sessions_users msu
       ON u.id = msu.user_id
@@ -73,10 +73,10 @@ export async function startMatchSession(id: string) {
   const genresSet = new Set<number>();
 
   userPreferenceData.rows.forEach((preference) => {
-    preference.providers.forEach((provider: number) => {
+    preference.providers?.forEach((provider: number) => {
       providersSet.add(provider);
     });
-    preference.genres.forEach((genre: number) => {
+    preference.genres?.forEach((genre: number) => {
       genresSet.add(genre);
     });
   });
@@ -125,11 +125,19 @@ export async function getMovies() {
 }
 
 export async function rateMovie(id: number, isLiked: boolean) {
-  // To Do
-  return { id, isLiked };
+  const session = await auth();
+  const userId = session?.user?.id;
+
+  await sql`
+      INSERT INTO users_movies(user_id, movie_id, is_liked)
+      VALUES(${userId}, ${id}, ${isLiked})`;
 }
 
 export async function undoMovieRating(id: number) {
-  // To Do
-  return { id };
+  const session = await auth();
+  const userId = session?.user?.id;
+
+  await sql`
+      DELETE FROM users_movies
+      WHERE user_id = ${userId} AND movie_id = ${id}`;
 }

@@ -28,9 +28,13 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={clsx(schibstedGrotesk.variable, suezOne.variable, "dark")}
+      className={clsx(
+        schibstedGrotesk.variable,
+        suezOne.variable,
+        "overscroll-y-none dark",
+      )}
     >
-      <body>
+      <body className="overscroll-y-none">
         <Providers>{children}</Providers>
       </body>
     </html>

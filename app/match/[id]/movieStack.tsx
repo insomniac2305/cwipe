@@ -15,68 +15,37 @@ import {
 const RENDER_LIMIT = 3;
 
 export default function MovieStack({ movies }: { movies: Array<Movie> }) {
-  const [ratedMovies, setRatedMovies] = useState<
-    Array<Movie & { isLiked?: boolean }>
-  >([]);
+  const [ratedMovies, setRatedMovies] =
+    useState<Array<Movie & { isLiked?: boolean }>>(movies);
   const [isInfoVisible, setIsInfoVisible] = useState(false);
 
   const toggleInfo = () => {
     setIsInfoVisible((prevState) => !prevState);
   };
 
-  const handleRateMovie = (movie: Movie | undefined, isLiked: boolean) => {
+  const handleRateMovie = (movie: Movie | undefined, isLiked?: boolean) => {
     if (!movie) return;
     setIsInfoVisible(false);
 
-    const ratedIndex = ratedMovies.findIndex(
-      (findMovie) => findMovie.id === movie.id,
-    );
-
-    if (ratedIndex > -1) {
-      const updatedMovies = ratedMovies.map((mapMovie) => {
-        if (mapMovie.id === movie.id) {
-          return { ...mapMovie, isLiked };
-        } else {
-          return mapMovie;
-        }
-      });
-
-      setRatedMovies(updatedMovies);
-    } else {
-      setRatedMovies((prevState) => [...prevState, { ...movie, isLiked }]);
-    }
-
-    rateMovie(movie.id, isLiked);
-  };
-
-  const handleUndoRating = (id?: number) => {
-    if (!id) return;
-    setIsInfoVisible(false);
-
-    const updatedMovies = ratedMovies.map((movie) => {
-      if (movie.id === id) {
-        return { ...movie, isLiked: undefined };
+    const updatedMovies = ratedMovies.map((mapMovie) => {
+      if (mapMovie.id === movie.id) {
+        return { ...mapMovie, isLiked };
       } else {
-        return movie;
+        return mapMovie;
       }
     });
 
     setRatedMovies(updatedMovies);
-    undoMovieRating(id);
+
+    isLiked !== undefined
+      ? rateMovie(movie.id, isLiked)
+      : undoMovieRating(movie.id);
   };
 
-  const renderedMovies = [...ratedMovies];
-  const renderedMovieIds = renderedMovies.map((movie) => movie.id);
-  movies.forEach((movie) => {
-    if (!renderedMovieIds.includes(movie.id)) {
-      renderedMovies.push({ ...movie, isLiked: undefined });
-    }
-  });
-
-  const currentMovieIndex = renderedMovies.findIndex(
+  const currentMovieIndex = ratedMovies.findIndex(
     (movie) => movie.isLiked === undefined,
   );
-  const nextRatedMovie = renderedMovies[currentMovieIndex];
+  const nextRatedMovie = ratedMovies[currentMovieIndex];
   const lastRatedMovie = ratedMovies.findLast(
     (movie) => movie.isLiked !== undefined,
   );
@@ -84,14 +53,14 @@ export default function MovieStack({ movies }: { movies: Array<Movie> }) {
   return (
     <div className="relative h-dvh w-dvw overflow-hidden">
       <div className="relative h-[calc(100%-4.5rem)] overflow-hidden">
-        {renderedMovies.map(
+        {ratedMovies.map(
           (movie, index) =>
             index <= currentMovieIndex + RENDER_LIMIT && (
               <MovieCard
                 key={movie.id}
                 movie={movie}
                 onRateMovie={handleRateMovie}
-                zIndex={renderedMovies.length - index}
+                zIndex={ratedMovies.length - index}
                 isLiked={movie.isLiked}
                 isInfoVisible={isInfoVisible && movie.id === nextRatedMovie?.id}
               />
@@ -102,7 +71,7 @@ export default function MovieStack({ movies }: { movies: Array<Movie> }) {
         <SwipeButtonRow
           onLike={handleRateMovie.bind(null, nextRatedMovie, true)}
           onDislike={handleRateMovie.bind(null, nextRatedMovie, false)}
-          onUndoRating={handleUndoRating.bind(null, lastRatedMovie?.id)}
+          onUndoRating={handleRateMovie.bind(null, lastRatedMovie, undefined)}
           onToggleInfo={toggleInfo}
         />
       </div>

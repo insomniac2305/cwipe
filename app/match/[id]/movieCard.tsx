@@ -111,7 +111,7 @@ export default function MovieCard({
                 </p>
 
                 <h2 className="mb-1 mt-4 font-heading text-xl">Cast</h2>
-                <ActorList actors={movie.cast} movieId={movie.id} />
+                <ActorList actors={movie.cast} />
               </div>
             </div>
           </div>
@@ -139,13 +139,7 @@ function GenreList({ genres }: { genres: Movie["genres"] }) {
   );
 }
 
-function ActorList({
-  movieId,
-  actors,
-}: {
-  movieId: number;
-  actors: Movie["cast"];
-}) {
+function ActorList({ actors }: { actors: Movie["cast"] }) {
   return (
     <ScrollShadow
       orientation="horizontal"
@@ -155,7 +149,7 @@ function ActorList({
       {actors.map((actor) => {
         return (
           <User
-            key={movieId.toString() + actor.cast_id.toString()}
+            key={actor.credit_id}
             name={actor.name}
             description={actor.character}
             imageSrc={

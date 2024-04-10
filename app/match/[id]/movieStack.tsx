@@ -1,10 +1,15 @@
 "use client";
 
-import { Movie } from "@/app/lib/definitions";
-import { rateMovie, undoMovieRating } from "@/app/match/[id]/actions";
+import { MatchSession, Movie } from "@/app/lib/definitions";
+import { TMDB_PAGE_LIMIT } from "@/app/lib/tmdbConfiguration";
+import {
+  getMovies,
+  rateMovie,
+  undoMovieRating,
+} from "@/app/match/[id]/actions";
 import MovieCard from "@/app/match/[id]/movieCard";
-import { Button } from "@nextui-org/react";
-import { useState } from "react";
+import { Button, Spinner } from "@nextui-org/react";
+import { useEffect, useRef, useState } from "react";
 import {
   HiArrowUturnLeft,
   HiHandThumbDown,
@@ -13,11 +18,59 @@ import {
 } from "react-icons/hi2";
 
 const RENDER_LIMIT = 3;
+const FETCH_NEXT_PAGE_LIMIT = 5;
 
-export default function MovieStack({ movies }: { movies: Array<Movie> }) {
+export default function MovieStack({
+  matchSession,
+  movies,
+}: {
+  matchSession: MatchSession;
+  movies: Array<Movie>;
+}) {
   const [ratedMovies, setRatedMovies] =
     useState<Array<Movie & { isLiked?: boolean }>>(movies);
+  const [page, setPage] = useState(1);
+  const isLoading = useRef(false);
   const [isInfoVisible, setIsInfoVisible] = useState(false);
+
+  const currentMovieIndex = ratedMovies.findIndex(
+    (movie) => movie.isLiked === undefined,
+  );
+  const nextRatedMovie = ratedMovies[currentMovieIndex];
+  const lastRatedMovie = ratedMovies.findLast(
+    (movie) => movie.isLiked !== undefined,
+  );
+  const shouldFetchNextMovies =
+    currentMovieIndex > ratedMovies.length - FETCH_NEXT_PAGE_LIMIT;
+
+  useEffect(() => {
+    const fetchNextMoviePage = async () => {
+      isLoading.current = true;
+      let fetchedPageCount = 0;
+      let fetchedMovies: Movie[] = [];
+      try {
+        while (
+          fetchedMovies.length < FETCH_NEXT_PAGE_LIMIT &&
+          page + fetchedPageCount <= TMDB_PAGE_LIMIT
+        ) {
+          const nextMoviePage = await getMovies(
+            matchSession.id,
+            page + fetchedPageCount + 1,
+          );
+          fetchedMovies = [...fetchedMovies, ...nextMoviePage];
+          fetchedPageCount++;
+        }
+      } finally {
+        setRatedMovies((prev) => [...prev, ...fetchedMovies]);
+        setPage((prev) => prev + fetchedPageCount);
+        isLoading.current = false;
+      }
+    };
+
+    if (!isLoading.current && shouldFetchNextMovies) {
+      fetchNextMoviePage();
+    }
+  }, [shouldFetchNextMovies, matchSession.id, page, ratedMovies.length]);
 
   const toggleInfo = () => {
     setIsInfoVisible((prevState) => !prevState);
@@ -37,18 +90,10 @@ export default function MovieStack({ movies }: { movies: Array<Movie> }) {
 
     setRatedMovies(updatedMovies);
 
-    isLiked !== undefined
-      ? rateMovie(movie.id, isLiked)
-      : undoMovieRating(movie.id);
+    isLiked === undefined
+      ? undoMovieRating(movie.id)
+      : rateMovie(movie.id, isLiked);
   };
-
-  const currentMovieIndex = ratedMovies.findIndex(
-    (movie) => movie.isLiked === undefined,
-  );
-  const nextRatedMovie = ratedMovies[currentMovieIndex];
-  const lastRatedMovie = ratedMovies.findLast(
-    (movie) => movie.isLiked !== undefined,
-  );
 
   return (
     <div className="relative h-dvh w-dvw overflow-hidden">
@@ -66,6 +111,15 @@ export default function MovieStack({ movies }: { movies: Array<Movie> }) {
               />
             ),
         )}
+        <div className="absolute top-0 flex h-full w-full items-center justify-center">
+          {!nextRatedMovie && (
+            <Spinner
+              size="lg"
+              color="primary"
+              label="Loading next recommendations"
+            />
+          )}
+        </div>
       </div>
       <div className="absolute bottom-0 w-full">
         <SwipeButtonRow
@@ -73,6 +127,7 @@ export default function MovieStack({ movies }: { movies: Array<Movie> }) {
           onDislike={handleRateMovie.bind(null, nextRatedMovie, false)}
           onUndoRating={handleRateMovie.bind(null, lastRatedMovie, undefined)}
           onToggleInfo={toggleInfo}
+          isDisabled={!nextRatedMovie}
         />
       </div>
     </div>
@@ -84,11 +139,13 @@ function SwipeButtonRow({
   onDislike,
   onUndoRating,
   onToggleInfo,
+  isDisabled,
 }: {
   onLike: () => void;
   onDislike: () => void;
   onUndoRating: () => void;
   onToggleInfo: () => void;
+  isDisabled?: boolean;
 }) {
   return (
     <div className="flex w-full items-center justify-evenly bg-default-50 p-4 pt-2">
@@ -99,6 +156,7 @@ function SwipeButtonRow({
         variant="flat"
         onPress={onUndoRating}
         isIconOnly
+        isDisabled={isDisabled}
       >
         <HiArrowUturnLeft />
       </Button>
@@ -110,6 +168,7 @@ function SwipeButtonRow({
         color="secondary"
         onPress={onDislike}
         isIconOnly
+        isDisabled={isDisabled}
       >
         <HiHandThumbDown />
       </Button>
@@ -121,6 +180,7 @@ function SwipeButtonRow({
         color="primary"
         onPress={onLike}
         isIconOnly
+        isDisabled={isDisabled}
       >
         <HiHandThumbUp />
       </Button>
@@ -131,6 +191,7 @@ function SwipeButtonRow({
         variant="flat"
         onPress={onToggleInfo}
         isIconOnly
+        isDisabled={isDisabled}
       >
         <HiInformationCircle />
       </Button>

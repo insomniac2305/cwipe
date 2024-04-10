@@ -34,7 +34,7 @@ export default async function MatchSession({
       );
     case isSessionStarted && isUserJoined: {
       const movies = await getMovies(matchSession.id, 1);
-      return <MovieStack movies={movies} />;
+      return <MovieStack matchSession={matchSession} movies={movies} />;
     }
   }
 }

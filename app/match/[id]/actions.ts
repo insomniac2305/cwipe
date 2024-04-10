@@ -7,15 +7,7 @@ import { notFound, redirect } from "next/navigation";
 import { unstable_noStore as noStore } from "next/cache";
 import { composePostgresArray } from "@/app/lib/util";
 import { auth } from "@/app/lib/auth";
-
-const fetchOptions = {
-  method: "GET",
-  headers: {
-    accept: "application/json",
-    Authorization: "Bearer " + process.env.TMDB_API_TOKEN,
-  },
-  next: { revalidate: 3600 },
-};
+import { TMDB_PAGE_LIMIT, fetchOptions } from "@/app/lib/tmdbConfiguration";
 
 export async function getMatchSession(id: string): Promise<MatchSession> {
   noStore();
@@ -91,6 +83,8 @@ export async function startMatchSession(id: string) {
 }
 
 export async function getMovies(matchSessionId: string, page: number) {
+  if (page > TMDB_PAGE_LIMIT) return []; //No more data due to TMDB page limit
+
   const matchSessionPreferenceData = await sql`
       SELECT providers, genres
       FROM match_sessions

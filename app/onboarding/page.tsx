@@ -3,7 +3,7 @@ import {
   getLanguages,
   getWatchProviders,
   getGenres,
-} from "@/app/lib/tmdbConfiguration";
+} from "@/app/lib/tmdbActions";
 import { StartForm } from "./StartForm";
 
 export default async function Onboarding({

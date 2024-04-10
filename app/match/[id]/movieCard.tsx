@@ -158,7 +158,10 @@ function ActorList({
             key={movieId.toString() + actor.cast_id.toString()}
             name={actor.name}
             description={actor.character}
-            imageSrc={`${process.env.NEXT_PUBLIC_TMDB_IMAGE_BASE_URL}/w185/${actor.profile_path}`}
+            imageSrc={
+              actor.profile_path &&
+              `${process.env.NEXT_PUBLIC_TMDB_IMAGE_BASE_URL}/w185/${actor.profile_path}`
+            }
           />
         );
       })}

@@ -129,12 +129,27 @@ export async function getMovies(matchSessionId: string, page: number) {
   const unratedMovies = discoveredMovies.results.filter(
     (movie) => !userMovieIds.includes(movie.id),
   );
+  const unratedMovieIds = unratedMovies.map((movie) => movie.id);
 
-  const movies: Array<Movie> = await Promise.all(
-    unratedMovies.map(async (movie) => {
+  const movies: Array<Movie> = await getMovieDetails(
+    unratedMovieIds,
+    language,
+    region,
+  );
+
+  return movies;
+}
+
+async function getMovieDetails(
+  movieIds: number[],
+  language: string,
+  region: string,
+): Promise<Movie[]> {
+  return await Promise.all(
+    movieIds.map(async (movieId) => {
       const detailSearchParams = composeDetailSearchParams(language);
       const detailResponse = await fetch(
-        `${process.env.TMDB_API_URL}movie/${movie.id}?${detailSearchParams.toString()}`,
+        `${process.env.TMDB_API_URL}movie/${movieId}?${detailSearchParams.toString()}`,
         fetchOptions,
       );
       const movieData: MovieDetails = await detailResponse.json();
@@ -152,8 +167,6 @@ export async function getMovies(matchSessionId: string, page: number) {
       };
     }),
   );
-
-  return movies;
 }
 
 export async function rateMovie(id: number, isLiked: boolean) {
@@ -174,6 +187,41 @@ export async function undoMovieRating(id: number) {
   await sql`
   DELETE FROM users_movies
   WHERE user_id = ${userId} AND movie_id = ${id}`;
+}
+
+export async function getMatches(matchSessionId: string) {
+  const session = await auth();
+  const userId = session?.user?.id;
+  const userPreferenceData = await sql`
+      SELECT language, region
+      FROM user_preferences
+      WHERE user_id = ${userId}`;
+
+  const { language, region } = userPreferenceData.rows[0];
+
+  const matchedMovieData = await sql`
+      SELECT um.movie_id
+      FROM users_movies um
+      INNER JOIN match_sessions_users msu
+      ON um.user_id = msu.user_id
+      WHERE um.is_liked = true 
+      AND msu.match_session_id = ${matchSessionId}
+      GROUP BY um.movie_id
+      HAVING COUNT(um.movie_id) = (
+          SELECT COUNT(user_id) 
+          FROM match_sessions_users 
+          WHERE match_session_id = ${matchSessionId})
+      ORDER BY MAX(um.rated_at) DESC`;
+
+  const matchedMovieIds = matchedMovieData.rows.map((match) => match.movie_id);
+
+  const matchedMovies: Array<Movie> = await getMovieDetails(
+    matchedMovieIds,
+    language,
+    region,
+  );
+
+  return matchedMovies;
 }
 
 function composeDetailSearchParams(language: string) {

@@ -53,5 +53,6 @@ CREATE TABLE users_movies (
   user_id public.xid NOT NULL REFERENCES users(id),
   movie_id INTEGER NOT NULL,
   is_liked BOOLEAN NOT NULL,
+  rated_at TIMESTAMP DEFAULT NOW(),
   PRIMARY KEY(user_id, movie_id)
 )

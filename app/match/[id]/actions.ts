@@ -189,7 +189,7 @@ export async function undoMovieRating(id: number) {
   WHERE user_id = ${userId} AND movie_id = ${id}`;
 }
 
-export async function getMatches(matchSessionId: string) {
+export async function getMatches(matchSessionId: string, from?: Date) {
   const session = await auth();
   const userId = session?.user?.id;
   const userPreferenceData = await sql`
@@ -211,6 +211,7 @@ export async function getMatches(matchSessionId: string) {
           SELECT COUNT(user_id) 
           FROM match_sessions_users 
           WHERE match_session_id = ${matchSessionId})
+      AND MAX(um.rated_at) > ${from ? from.toISOString() : new Date(0).toISOString()}
       ORDER BY MAX(um.rated_at) DESC`;
 
   const matchedMovieIds = matchedMovieData.rows.map((match) => match.movie_id);

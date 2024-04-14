@@ -3,6 +3,7 @@
 import { MatchSession, Movie } from "@/app/lib/definitions";
 import { TMDB_PAGE_LIMIT } from "@/app/lib/tmdbConfiguration";
 import {
+  getMatches,
   getMovies,
   rateMovie,
   undoMovieRating,
@@ -11,6 +12,7 @@ import MovieCard from "@/app/match/[id]/MovieCard";
 import { Spinner } from "@nextui-org/react";
 import { useEffect, useRef, useState } from "react";
 import { SwipeButtonRow } from "./SwipeButtonRow";
+import useSWR from "swr";
 
 const RENDER_LIMIT = 3;
 const FETCH_NEXT_PAGE_LIMIT = 5;
@@ -27,6 +29,22 @@ export default function MovieStack({
   const [page, setPage] = useState(1);
   const isLoading = useRef(false);
   const [isInfoVisible, setIsInfoVisible] = useState(false);
+  const [lastMatchRequestDate, setLastMatchRequestDate] = useState<Date>();
+
+  const matchesFetcher = ([, matchSessionId]: [
+    key: string,
+    matchSessionId: string,
+  ]) => {
+    const fetcher = getMatches(matchSessionId, lastMatchRequestDate);
+    setLastMatchRequestDate(new Date());
+    return fetcher;
+  };
+
+  const { data: matches, mutate: mutateMatches } = useSWR(
+    ["match/matches", matchSession.id],
+    matchesFetcher,
+    { refreshInterval: 10000 },
+  );
 
   const currentMovieIndex = ratedMovies.findIndex(
     (movie) => movie.isLiked === undefined,
@@ -67,11 +85,18 @@ export default function MovieStack({
     }
   }, [shouldFetchNextMovies, matchSession.id, page, ratedMovies.length]);
 
+  useEffect(() => {
+    console.log(matches);
+  }, [matches]);
+
   const toggleInfo = () => {
     setIsInfoVisible((prevState) => !prevState);
   };
 
-  const handleRateMovie = (movie: Movie | undefined, isLiked?: boolean) => {
+  const handleRateMovie = async (
+    movie: Movie | undefined,
+    isLiked?: boolean,
+  ) => {
     if (!movie) return;
     setIsInfoVisible(false);
 
@@ -86,8 +111,10 @@ export default function MovieStack({
     setRatedMovies(updatedMovies);
 
     isLiked === undefined
-      ? undoMovieRating(movie.id)
-      : rateMovie(movie.id, isLiked);
+      ? await undoMovieRating(movie.id)
+      : await rateMovie(movie.id, isLiked);
+
+    mutateMatches();
   };
 
   return (

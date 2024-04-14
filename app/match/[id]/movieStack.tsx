@@ -9,10 +9,11 @@ import {
   undoMovieRating,
 } from "@/app/match/[id]/actions";
 import MovieCard from "@/app/match/[id]/MovieCard";
-import { Spinner } from "@nextui-org/react";
+import { Spinner, useDisclosure } from "@nextui-org/react";
 import { useEffect, useRef, useState } from "react";
 import { SwipeButtonRow } from "./SwipeButtonRow";
 import useSWR from "swr";
+import MatchModal from "@/app/match/[id]/MatchModal";
 
 const RENDER_LIMIT = 3;
 const FETCH_NEXT_PAGE_LIMIT = 5;
@@ -30,6 +31,11 @@ export default function MovieStack({
   const isLoading = useRef(false);
   const [isInfoVisible, setIsInfoVisible] = useState(false);
   const [lastMatchRequestDate, setLastMatchRequestDate] = useState<Date>();
+  const {
+    isOpen: isMatchOpen,
+    onOpen: onMatchOpen,
+    onOpenChange: onMatchOpenChange,
+  } = useDisclosure();
 
   const matchesFetcher = ([, matchSessionId]: [
     key: string,
@@ -43,7 +49,7 @@ export default function MovieStack({
   const { data: matches, mutate: mutateMatches } = useSWR(
     ["match/matches", matchSession.id],
     matchesFetcher,
-    { refreshInterval: 10000 },
+    { refreshInterval: 10000, isPaused: () => isMatchOpen },
   );
 
   const currentMovieIndex = ratedMovies.findIndex(
@@ -86,8 +92,10 @@ export default function MovieStack({
   }, [shouldFetchNextMovies, matchSession.id, page, ratedMovies.length]);
 
   useEffect(() => {
-    console.log(matches);
-  }, [matches]);
+    if (matches?.length && matches.length > 0) {
+      onMatchOpen();
+    }
+  }, [matches, onMatchOpen]);
 
   const toggleInfo = () => {
     setIsInfoVisible((prevState) => !prevState);
@@ -152,6 +160,11 @@ export default function MovieStack({
           isDisabled={!nextRatedMovie}
         />
       </div>
+      <MatchModal
+        matches={matches}
+        isOpen={isMatchOpen}
+        onOpenChange={onMatchOpenChange}
+      />
     </div>
   );
 }

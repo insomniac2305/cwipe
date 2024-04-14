@@ -173,11 +173,13 @@ export async function rateMovie(id: number, isLiked: boolean) {
   const session = await auth();
   const userId = session?.user?.id;
 
+  const ratedAt = new Date().toISOString();
+
   await sql`
-  INSERT INTO users_movies(user_id, movie_id, is_liked)
-  VALUES(${userId}, ${id}, ${isLiked})
+  INSERT INTO users_movies(user_id, movie_id, is_liked, rated_at)
+  VALUES(${userId}, ${id}, ${isLiked}, ${ratedAt})
   ON CONFLICT (user_id, movie_id)
-  DO UPDATE SET is_liked = ${isLiked}`;
+  DO UPDATE SET is_liked = ${isLiked}, rated_at = ${ratedAt}`;
 }
 
 export async function undoMovieRating(id: number) {

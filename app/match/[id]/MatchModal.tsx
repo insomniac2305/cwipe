@@ -2,12 +2,17 @@ import { Movie } from "@/app/lib/definitions";
 import {
   Button,
   Image,
+  Link,
   Modal,
   ModalBody,
   ModalContent,
   ModalFooter,
   ModalHeader,
 } from "@nextui-org/react";
+import NextImage from "next/image";
+// import { usePathname } from "next/navigation";
+import { FaExternalLinkAlt } from "react-icons/fa";
+// import { FaList } from "react-icons/fa6";
 
 export default function MatchModal({
   matches,
@@ -18,6 +23,7 @@ export default function MatchModal({
   isOpen: boolean;
   onOpenChange: (isOpen: boolean) => void;
 }) {
+  // const pathname = usePathname();
   return (
     <Modal
       isOpen={isOpen}
@@ -32,32 +38,50 @@ export default function MatchModal({
             <ModalHeader className="font-heading text-2xl font-normal">
               Congrats, you got a match!
             </ModalHeader>
-            <ModalBody>
+            <ModalBody className="gap-6">
               {matches?.map((match) => (
-                <div className="mb-2 flex flex-col items-center" key={match.id}>
-                  <h2 className="mb-2 font-heading text-xl">{match.title}</h2>
-                  <Image
-                    width={200}
-                    src={
-                      process.env.NEXT_PUBLIC_TMDB_IMAGE_BASE_URL +
-                      "/original" +
-                      match.poster_path
-                    }
-                    alt={match.title}
-                    draggable={false}
-                  />
+                <div className="flex flex-col items-center" key={match.id}>
+                  <Link href={match.watch_providers?.link} isExternal>
+                    <Image
+                      as={NextImage}
+                      width={200}
+                      height={300}
+                      src={
+                        process.env.NEXT_PUBLIC_TMDB_IMAGE_BASE_URL +
+                        "/original" +
+                        match.poster_path
+                      }
+                      alt={match.title}
+                      draggable={false}
+                    />
+                  </Link>
+                  <h2 className="mt-1 text-center font-heading text-lg">
+                    {match.title}
+                  </h2>
                 </div>
               ))}
             </ModalBody>
             <ModalFooter>
               <Button color="default" variant="flat" onPress={onClose}>
-                Keep matching
+                Close
               </Button>
-              <Button color="secondary" variant="flat" onPress={onClose}>
+              {/* <Button
+                as={Link}
+                endContent={<FaList />}
+                color="secondary"
+                variant="flat"
+                href={pathname + "/matches"}
+              >
                 All matches
-              </Button>
-              <Button color="primary" onPress={onClose}>
-                Watch movie
+              </Button> */}
+              <Button
+                as={Link}
+                endContent={<FaExternalLinkAlt />}
+                color="primary"
+                href={matches && matches[0].watch_providers?.link}
+                isExternal
+              >
+                Watch
               </Button>
             </ModalFooter>
           </>

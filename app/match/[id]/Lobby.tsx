@@ -19,10 +19,14 @@ export default function Lobby({
   const { data: session } = useSession();
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
-  const { data } = useSWR(matchSession.id, getMatchSession, {
-    refreshInterval: 10000,
-    fallbackData: matchSession,
-  });
+  const { data } = useSWR(
+    ["match/lobby", matchSession.id],
+    matchSessionFetcher,
+    {
+      refreshInterval: 10000,
+      fallbackData: matchSession,
+    },
+  );
 
   const isUserHost = data.users.find(
     (user) => user.id === session?.user?.id,
@@ -77,4 +81,11 @@ export default function Lobby({
       </div>
     </main>
   );
+}
+
+function matchSessionFetcher([, matchSessionId]: [
+  key: string,
+  matchSessionId: string,
+]) {
+  return getMatchSession(matchSessionId);
 }

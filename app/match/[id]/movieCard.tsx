@@ -1,5 +1,5 @@
 import { Movie, SwipeCardRef, SwipeDirection } from "@/app/lib/definitions";
-import SwipeCard from "@/app/match/[id]/swipeCard";
+import SwipeCard from "@/app/match/[id]/SwipeCard";
 import { Divider, ScrollShadow, Link } from "@nextui-org/react";
 import clsx from "clsx";
 import NextImage from "next/image";

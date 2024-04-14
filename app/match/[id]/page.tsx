@@ -5,7 +5,7 @@ import {
   getMatchSession,
   addUserToMatchSession,
 } from "@/app/match/[id]/actions";
-import MovieStack from "@/app/match/[id]/movieStack";
+import MovieStack from "@/app/match/[id]/MovieStack";
 import { User } from "next-auth";
 
 export default async function MatchSession({

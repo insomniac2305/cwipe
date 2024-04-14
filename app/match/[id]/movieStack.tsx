@@ -7,7 +7,7 @@ import {
   rateMovie,
   undoMovieRating,
 } from "@/app/match/[id]/actions";
-import MovieCard from "@/app/match/[id]/movieCard";
+import MovieCard from "@/app/match/[id]/MovieCard";
 import { Button, Spinner } from "@nextui-org/react";
 import { useEffect, useRef, useState } from "react";
 import {

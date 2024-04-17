@@ -61,3 +61,22 @@ export function validateFormData<Output, Input>(
 export function composePostgresArray(array: unknown[]) {
   return JSON.stringify(array).replace("[", "{").replace("]", "}");
 }
+
+export function filterUniqueObjectArray<T, PropertyName extends string>(
+  array: ({ [P in PropertyName]: unknown } & T)[],
+  uniqueProperty: PropertyName,
+) {
+  const result = [];
+  const map = new Map();
+
+  for (const item of array) {
+    if (!map.has(item[uniqueProperty])) {
+      map.set(item[uniqueProperty], true);
+      result.push({
+        ...item,
+      });
+    }
+  }
+
+  return result;
+}

@@ -13,6 +13,7 @@ import { useEffect, useRef, useState } from "react";
 import { SwipeButtonRow } from "./SwipeButtonRow";
 import MatchModal from "@/app/match/[id]/MatchModal";
 import useMatches from "@/app/match/[id]/useMatches";
+import { filterUniqueObjectArray } from "@/app/lib/util";
 
 const RENDER_LIMIT = 3;
 const FETCH_NEXT_PAGE_LIMIT = 5;
@@ -64,7 +65,9 @@ export default function MovieStack({
           fetchedPageCount++;
         }
       } finally {
-        setRatedMovies((prev) => [...prev, ...fetchedMovies]);
+        setRatedMovies((prev) =>
+          filterUniqueObjectArray([...prev, ...fetchedMovies], "id"),
+        );
         setPage((prev) => prev + fetchedPageCount);
         isLoading.current = false;
       }

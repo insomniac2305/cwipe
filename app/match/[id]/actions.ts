@@ -37,10 +37,11 @@ export async function getMatchSession(id: string): Promise<MatchSession> {
 export async function addUserToMatchSession(
   matchSessionId: string,
   userId: string,
+  isHost?: boolean,
 ) {
   await sql`
-      INSERT INTO match_sessions_users(user_id, match_session_id)
-      VALUES (${userId}, ${matchSessionId})`;
+      INSERT INTO match_sessions_users(user_id, match_session_id, is_host)
+      VALUES (${userId}, ${matchSessionId}, ${!!isHost})`;
 }
 
 export async function startMatchSession(id: string) {

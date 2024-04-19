@@ -9,7 +9,17 @@ export async function signInAnonymous(
   formData: FormData,
 ) {
   try {
-    await signIn("credentials", formData);
+    const options = {
+      name: formData.get("name"),
+      redirectTo: DEFAULT_LOGIN_REDIRECT,
+    };
+
+    const callbackUrl = formData.get("callbackUrl");
+    if (typeof callbackUrl === "string" && URL.canParse(callbackUrl)) {
+      options.redirectTo = callbackUrl;
+    }
+
+    await signIn("credentials", options);
   } catch (error) {
     if (error instanceof AuthError) {
       return "Something went wrong.";
@@ -18,6 +28,6 @@ export async function signInAnonymous(
   }
 }
 
-export async function signInWithGoogle() {
-  await signIn("google", { redirectTo: DEFAULT_LOGIN_REDIRECT });
+export async function signInWithGoogle(callbackUrl?: string) {
+  await signIn("google", { redirectTo: callbackUrl || DEFAULT_LOGIN_REDIRECT });
 }

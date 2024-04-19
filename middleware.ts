@@ -27,7 +27,9 @@ export default auth((req) => {
   }
 
   if (!isLoggedIn && !isPublicRoute) {
-    return NextResponse.redirect(new URL("/login", nextUrl));
+    const redirectTarget = new URL("/login", nextUrl);
+    redirectTarget.searchParams.append("callbackUrl", nextUrl.href);
+    return NextResponse.redirect(redirectTarget);
   }
 });
 

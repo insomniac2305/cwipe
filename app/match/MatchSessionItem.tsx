@@ -24,11 +24,21 @@ export function MatchSessionItem({
         ))}
       </AvatarGroup>
       <Chip
-        color={matchSession.is_started ? "success" : "default"}
+        color={
+          matchSession.is_started
+            ? matchSession.match_count > 0
+              ? "success"
+              : "primary"
+            : "default"
+        }
         size="sm"
         variant="flat"
       >
-        {matchSession.is_started ? "Started" : "Not started"}
+        {matchSession.is_started
+          ? matchSession.match_count > 0
+            ? `${matchSession.match_count} Matches`
+            : "Started"
+          : "Not started"}
       </Chip>
     </Button>
   );

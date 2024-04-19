@@ -12,9 +12,12 @@ import { TMDB_PAGE_LIMIT, fetchOptions } from "@/app/lib/tmdbConfiguration";
 export async function getMatchSession(id: string): Promise<MatchSession> {
   noStore();
   const matchSessionData = await sql`
-      SELECT id, providers, genres, is_started
-      FROM match_sessions
-      WHERE id = ${id}`;
+  SELECT id, providers, genres, is_started, COUNT(msm.movie_id) as match_count
+  FROM match_sessions ms
+  INNER JOIN match_session_matches msm
+  ON ms.id = msm.match_session_id
+  WHERE ms.id = ${id}
+  GROUP BY ms.id, ms.providers, ms.genres, ms.is_started`;
 
   if (matchSessionData.rowCount < 1) notFound();
 
@@ -31,6 +34,7 @@ export async function getMatchSession(id: string): Promise<MatchSession> {
     genres: matchSessionData.rows[0].genres,
     users: userData.rows,
     is_started: matchSessionData.rows[0].is_started,
+    match_count: matchSessionData.rows[0].match_count,
   };
 }
 
@@ -203,19 +207,11 @@ export async function getMatches(matchSessionId: string, from?: Date) {
   const { language, region } = userPreferenceData.rows[0];
 
   const matchedMovieData = await sql`
-      SELECT um.movie_id
-      FROM users_movies um
-      INNER JOIN match_sessions_users msu
-      ON um.user_id = msu.user_id
-      WHERE um.is_liked = true 
-      AND msu.match_session_id = ${matchSessionId}
-      GROUP BY um.movie_id
-      HAVING COUNT(um.movie_id) = (
-          SELECT COUNT(user_id) 
-          FROM match_sessions_users 
-          WHERE match_session_id = ${matchSessionId})
-      AND MAX(um.rated_at) > ${from ? from.toISOString() : new Date(0).toISOString()}
-      ORDER BY MAX(um.rated_at) DESC`;
+      SELECT movie_id
+      FROM match_session_matches
+      WHERE match_session_id = ${matchSessionId}
+      AND last_rated_at > ${from ? from.toISOString() : new Date(0).toISOString()}
+      ORDER BY last_rated_at DESC`;
 
   const matchedMovieIds = matchedMovieData.rows.map((match) => match.movie_id);
 

@@ -31,10 +31,13 @@ export async function getMatchSessions(): Promise<MatchSession[]> {
   const userId = session?.user?.id;
 
   const matchSessionData = await sql`
-      SELECT id, providers, genres, is_started
-      FROM match_sessions ms
-      INNER JOIN match_sessions_users msu
-      ON ms.id = msu.match_session_id and msu.user_id = ${userId}`;
+  SELECT id, providers, genres, is_started, COUNT(msm.movie_id) as match_count
+  FROM match_sessions ms
+  INNER JOIN match_sessions_users msu
+  ON ms.id = msu.match_session_id and msu.user_id = ${userId}
+  INNER JOIN match_session_matches msm
+  ON ms.id = msm.match_session_id
+  GROUP BY ms.id, ms.providers, ms.genres, ms.is_started`;
 
   const matchSessions = await Promise.all(
     matchSessionData.rows.map(async (row) => {
@@ -51,6 +54,7 @@ export async function getMatchSessions(): Promise<MatchSession[]> {
         genres: row.genres,
         users: userData.rows,
         is_started: row.is_started,
+        match_count: row.match_count,
       };
     }),
   );

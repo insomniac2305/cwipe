@@ -56,3 +56,16 @@ CREATE TABLE users_movies (
   rated_at TIMESTAMP DEFAULT NOW(),
   PRIMARY KEY(user_id, movie_id)
 )
+
+CREATE VIEW match_session_matches
+AS
+SELECT msu.match_session_id, um.movie_id, MAX(um.rated_at) last_rated_at
+FROM users_movies um
+INNER JOIN match_sessions_users msu
+ON um.user_id = msu.user_id
+WHERE um.is_liked = true 
+GROUP BY msu.match_session_id, um.movie_id
+HAVING COUNT(um.movie_id) = (
+  SELECT COUNT(user_id) 
+  FROM match_sessions_users 
+  WHERE match_session_id = msu.match_session_id)

@@ -176,4 +176,5 @@ export type MatchSession = {
   genres: number[];
   users: MatchSessionUser[];
   is_started: boolean;
+  match_count: number;
 };

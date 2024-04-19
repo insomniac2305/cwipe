@@ -3,30 +3,31 @@
 import { MatchSession } from "@/app/lib/definitions";
 import { DiscoverMovies, Movie, MovieDetails } from "@/app/lib/definitions";
 import { sql } from "@vercel/postgres";
-import { notFound, redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 import { unstable_noStore as noStore } from "next/cache";
-import { composePostgresArray } from "@/app/lib/util";
 import { auth } from "@/app/lib/auth";
 import { TMDB_PAGE_LIMIT, fetchOptions } from "@/app/lib/tmdbConfiguration";
 
 export async function getMatchSession(id: string): Promise<MatchSession> {
   noStore();
   const matchSessionData = await sql`
-  SELECT id, providers, genres, is_started, COUNT(msm.movie_id) as match_count
-  FROM match_sessions ms
-  INNER JOIN match_session_matches msm
-  ON ms.id = msm.match_session_id
-  WHERE ms.id = ${id}
-  GROUP BY ms.id, ms.providers, ms.genres, ms.is_started`;
+    SELECT ms.id, msp.providers, msp.genres, ms.is_started, COUNT(msm.movie_id) as match_count
+    FROM match_sessions ms
+    INNER JOIN match_session_matches msm
+    ON ms.id = msm.match_session_id
+    INNER JOIN match_session_preferences msp
+    ON ms.id = msp.match_session_id
+    WHERE ms.id = ${id}
+    GROUP BY ms.id, msp.providers, msp.genres, ms.is_started`;
 
   if (matchSessionData.rowCount < 1) notFound();
 
   const userData = await sql`
-      SELECT u.id, msu.is_host, u.name, u.image
-      FROM match_sessions_users msu
-      INNER JOIN users u
-      ON msu.user_id = u.id
-      WHERE msu.match_session_id = ${id}`;
+    SELECT u.id, msu.is_host, u.name, u.image
+    FROM match_sessions_users msu
+    INNER JOIN users u
+    ON msu.user_id = u.id
+    WHERE msu.match_session_id = ${id}`;
 
   return {
     id: matchSessionData.rows[0].id,
@@ -51,39 +52,18 @@ export async function addUserToMatchSession(
 export async function startMatchSession(id: string) {
   const session = await auth();
 
-  const userPreferenceData = await sql`
-      SELECT u.id, up.providers, up.genres, msu.is_host
-      FROM users u
-      LEFT JOIN user_preferences up
-      ON u.id = up.user_id
-      INNER JOIN match_sessions_users msu
-      ON u.id = msu.user_id
-      WHERE msu.match_session_id = ${id}`;
+  const userHostData = await sql`
+      SELECT is_host
+      FROM match_sessions_users
+      WHERE match_session_id = ${id} AND user_id = ${session?.user?.id}`;
 
-  const isUserHost = userPreferenceData.rows.find(
-    (user) => user.id === session?.user?.id,
-  )?.is_host;
+  const isUserHost = userHostData.rows[0].is_host;
 
   if (!isUserHost) throw new Error("Only the host can start the match session");
 
-  const providersSet = new Set<number>();
-  const genresSet = new Set<number>();
-
-  userPreferenceData.rows.forEach((preference) => {
-    preference.providers?.forEach((provider: number) => {
-      providersSet.add(provider);
-    });
-    preference.genres?.forEach((genre: number) => {
-      genresSet.add(genre);
-    });
-  });
-
-  const providers = composePostgresArray(Array.from(providersSet));
-  const genres = composePostgresArray(Array.from(genresSet));
-
   await sql`
     UPDATE match_sessions
-    SET providers = ${providers}, genres = ${genres}, is_started = true
+    SET is_started = true
     WHERE id = ${id}`;
 }
 
@@ -91,23 +71,21 @@ export async function getMovies(matchSessionId: string, page: number) {
   if (page > TMDB_PAGE_LIMIT) return []; //No more data due to TMDB page limit
 
   const matchSessionPreferenceData = await sql`
-      SELECT providers, genres
-      FROM match_sessions
-      WHERE id = ${matchSessionId}`;
+      SELECT providers, genres, region
+      FROM match_session_preferences
+      WHERE match_session_id = ${matchSessionId}`;
 
   if (matchSessionPreferenceData.rowCount < 1) notFound();
 
   const session = await auth();
   const userId = session?.user?.id;
-  const userPreferenceData = await sql`
-      SELECT language, region
+  const userLanguageData = await sql`
+      SELECT language
       FROM user_preferences
       WHERE user_id = ${userId}`;
 
-  if (userPreferenceData.rowCount < 1) redirect("/onboarding");
-
-  const { providers, genres } = matchSessionPreferenceData.rows[0];
-  const { language, region } = userPreferenceData.rows[0];
+  const { providers, genres, region } = matchSessionPreferenceData.rows[0];
+  const { language } = userLanguageData.rows[0];
 
   const searchParams = composeDiscoverSearchParams({
     language,

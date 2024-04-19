@@ -37,8 +37,6 @@ CREATE TABLE user_preferences (
 
 CREATE TABLE match_sessions (
   id public.xid PRIMARY KEY DEFAULT xid(),
-  providers INTEGER[],
-  genres INTEGER[],
   is_started BOOLEAN DEFAULT false
 );
 
@@ -69,3 +67,19 @@ HAVING COUNT(um.movie_id) = (
   SELECT COUNT(user_id) 
   FROM match_sessions_users 
   WHERE match_session_id = msu.match_session_id)
+
+CREATE VIEW match_session_preferences
+AS
+SELECT ms.id as match_session_id, ARRAY_AGG(DISTINCT p) as providers, ARRAY_AGG(DISTINCT g) as genres, MAX(host.language) as language, MAX(host.region) as region
+FROM match_sessions ms
+LEFT JOIN match_sessions_users msu
+ON ms.id = msu.match_session_id
+LEFT JOIN user_preferences up
+ON msu.user_id = up.user_id
+LEFT JOIN UNNEST(up.providers) as p
+ON true
+LEFT JOIN UNNEST(up.genres) as g
+ON true
+LEFT JOIN user_preferences host
+ON msu.user_id = host.user_id and msu.is_host = true
+GROUP BY ms.id

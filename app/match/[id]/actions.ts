@@ -13,9 +13,9 @@ export async function getMatchSession(id: string): Promise<MatchSession> {
   const matchSessionData = await sql`
     SELECT ms.id, msp.providers, msp.genres, ms.is_started, COUNT(msm.movie_id) as match_count
     FROM match_sessions ms
-    INNER JOIN match_session_matches msm
+    LEFT JOIN match_session_matches msm
     ON ms.id = msm.match_session_id
-    INNER JOIN match_session_preferences msp
+    LEFT JOIN match_session_preferences msp
     ON ms.id = msp.match_session_id
     WHERE ms.id = ${id}
     GROUP BY ms.id, msp.providers, msp.genres, ms.is_started`;

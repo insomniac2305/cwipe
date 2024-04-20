@@ -6,7 +6,7 @@ import {
   CardHeader,
   Divider,
 } from "@nextui-org/react";
-import { LoginForm } from "./LoginForm";
+import LoginForm from "./LoginForm";
 import GoogleSignInButton from "./GoogleSignInButton";
 import { BrandLogo } from "@/app/components/Brand";
 

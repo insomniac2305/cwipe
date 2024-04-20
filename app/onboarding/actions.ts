@@ -8,6 +8,26 @@ import { onboardingSchema } from "./validation";
 import { sql } from "@vercel/postgres";
 import { composePostgresArray } from "../lib/util";
 
+export async function verifyOnboardingComplete(userId: string | undefined) {
+  if (!userId) return false;
+  try {
+    const userPreferenceData = await sql`
+      SELECT providers, genres, language, region 
+      FROM user_preferences 
+      WHERE user_id = ${userId}`;
+
+    if (userPreferenceData.rowCount < 1) return false;
+
+    const { providers, genres, language, region } = userPreferenceData.rows[0];
+
+    if (!providers || !genres || !language || !region) return false;
+  } catch (error) {
+    return false;
+  }
+
+  return true;
+}
+
 export async function submitUserOnboarding(
   prevState: FormState | undefined,
   formData: FormData,

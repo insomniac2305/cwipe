@@ -1,7 +1,6 @@
 "use server";
 
 import { signIn } from "@/app/lib/auth";
-import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 import { AuthError } from "next-auth";
 
 export async function signInAnonymous(
@@ -11,12 +10,14 @@ export async function signInAnonymous(
   try {
     const options = {
       name: formData.get("name"),
-      redirectTo: DEFAULT_LOGIN_REDIRECT,
+      redirectTo: "/onboarding",
     };
 
     const callbackUrl = formData.get("callbackUrl");
-    if (typeof callbackUrl === "string" && URL.canParse(callbackUrl)) {
-      options.redirectTo = callbackUrl;
+    if (typeof callbackUrl === "string") {
+      const searchParams = new URLSearchParams();
+      searchParams.append("callbackUrl", callbackUrl);
+      options.redirectTo = `/onboarding?${searchParams.toString()}`;
     }
 
     await signIn("credentials", options);
@@ -29,5 +30,10 @@ export async function signInAnonymous(
 }
 
 export async function signInWithGoogle(callbackUrl?: string) {
-  await signIn("google", { redirectTo: callbackUrl || DEFAULT_LOGIN_REDIRECT });
+  const searchParams = new URLSearchParams();
+  searchParams.append("skip", "true");
+  if (callbackUrl) searchParams.append("callbackUrl", callbackUrl);
+  const redirectTo = `/onboarding?${searchParams.toString()}`;
+
+  await signIn("google", { redirectTo });
 }

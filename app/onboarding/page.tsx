@@ -5,12 +5,31 @@ import {
   getGenres,
 } from "@/app/lib/tmdbActions";
 import { StartForm } from "./StartForm";
+import { auth } from "@/app/lib/auth";
+import { verifyOnboardingComplete } from "@/app/onboarding/actions";
+import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
+import { redirect } from "next/navigation";
 
 export default async function Onboarding({
   searchParams,
 }: {
-  searchParams: { lang: string; region: string };
+  searchParams: {
+    lang: string;
+    region: string;
+    skip: string;
+    callbackUrl: string;
+  };
 }) {
+  const shouldSkip = searchParams.skip === "true";
+
+  if (shouldSkip) {
+    const session = await auth();
+    const userId = session?.user?.id;
+    const isOnboardingComplete = await verifyOnboardingComplete(userId);
+    const callbackUrl = searchParams.callbackUrl || DEFAULT_LOGIN_REDIRECT;
+    if (isOnboardingComplete) redirect(callbackUrl);
+  }
+
   const languages = await getLanguages();
   const regions = await getRegions();
 

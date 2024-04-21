@@ -4,9 +4,10 @@ import { auth } from "@/app/lib/auth";
 import { FormState } from "@/app/lib/definitions";
 import { validateFormData } from "@/app/lib/util";
 import { redirect } from "next/navigation";
-import { onboardingSchema } from "./validation";
+import { onboardingSchema } from "@/app/onboarding/validation";
 import { sql } from "@vercel/postgres";
-import { composePostgresArray } from "../lib/util";
+import { composePostgresArray } from "@/app/lib/util";
+import { createMatchSession } from "@/app/match/actions";
 
 export async function verifyOnboardingComplete(userId: string | undefined) {
   if (!userId) return false;
@@ -59,5 +60,14 @@ export async function submitUserOnboarding(
     };
   }
 
-  redirect("/match");
+  const callbackUrl = formData.get("callbackUrl");
+  if (
+    typeof callbackUrl === "string" &&
+    callbackUrl !== "" &&
+    URL.canParse(callbackUrl, process.env.NEXT_PUBLIC_URL)
+  ) {
+    redirect(callbackUrl);
+  }
+
+  await createMatchSession();
 }

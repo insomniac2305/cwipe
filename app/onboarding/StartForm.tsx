@@ -17,11 +17,13 @@ export function StartForm({
   regions,
   genres,
   watchProviders,
+  callbackUrl,
 }: {
   languages: Language[];
   regions: Region[];
   watchProviders: WatchProvider[];
   genres: Genre[];
+  callbackUrl?: string;
 }) {
   return (
     <StepForm
@@ -32,6 +34,7 @@ export function StartForm({
       <LocalizationFormStep index={0} languages={languages} regions={regions} />
       <WatchProviderFormStep index={1} watchProviders={watchProviders} />
       <GenreFormStep index={2} genres={genres} />
+      <input type="hidden" name="callbackUrl" value={callbackUrl} />
     </StepForm>
   );
 }

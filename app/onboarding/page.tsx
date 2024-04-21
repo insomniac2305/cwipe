@@ -14,10 +14,10 @@ export default async function Onboarding({
   searchParams,
 }: {
   searchParams: {
-    lang: string;
-    region: string;
-    skip: string;
-    callbackUrl: string;
+    lang?: string;
+    region?: string;
+    skip?: string;
+    callbackUrl?: string;
   };
 }) {
   const shouldSkip = searchParams.skip === "true";
@@ -53,6 +53,7 @@ export default async function Onboarding({
           regions={regions}
           watchProviders={watchProviders}
           genres={genres}
+          callbackUrl={searchParams.callbackUrl}
         />
       </div>
     </main>

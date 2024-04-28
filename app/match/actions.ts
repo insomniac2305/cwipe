@@ -36,9 +36,9 @@ export async function getMatchSessions(): GetResult<MatchSession[]> {
       FROM match_sessions ms
       INNER JOIN match_sessions_users msu
       ON ms.id = msu.match_session_id and msu.user_id = ${userId}
-      INNER JOIN match_session_matches msm
+      LEFT JOIN match_session_matches msm
       ON ms.id = msm.match_session_id
-      INNER JOIN match_session_preferences msp
+      LEFT JOIN match_session_preferences msp
       ON ms.id = msp.match_session_id
       GROUP BY ms.id, msp.providers, msp.genres, ms.is_started`;
 

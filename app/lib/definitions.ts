@@ -178,3 +178,14 @@ export type MatchSession = {
   is_started: boolean;
   match_count: number;
 };
+
+export type GetResult<T> = Promise<
+  | {
+      data: T;
+      error?: undefined;
+    }
+  | {
+      data?: undefined;
+      error: { message: string };
+    }
+>;

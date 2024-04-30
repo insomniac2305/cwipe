@@ -7,6 +7,8 @@ import { Providers } from "@/app/providers";
 const schibstedGrotesk = Schibsted_Grotesk({
   subsets: ["latin"],
   variable: "--font-sans",
+  display: "swap",
+  adjustFontFallback: false,
 });
 const suezOne = Suez_One({
   weight: "400",

@@ -1,7 +1,7 @@
 import { MatchSessionItem } from "@/app/match/MatchSessionItem";
-import { createMatchSession, getMatchSessions } from "@/app/match/actions";
-import { Button } from "@nextui-org/react";
+import { getMatchSessions } from "@/app/match/actions";
 import { ErrorMessage } from "../components/ErrorMessage";
+import { CreateMatchSessionForm } from "./CreateMatchSessionForm";
 
 export default async function Match() {
   const { data: matchSessions, error } = await getMatchSessions();
@@ -28,11 +28,9 @@ export default async function Match() {
             </ul>
           )}
         </div>
-        <form className="self-center" action={createMatchSession}>
-          <Button color="primary" type="submit">
-            Start session
-          </Button>
-        </form>
+        <div className="self-center">
+          <CreateMatchSessionForm />
+        </div>
       </div>
     </main>
   );

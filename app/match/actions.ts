@@ -10,18 +10,24 @@ export async function createMatchSession() {
   const session = await auth();
   const userId = session?.user?.id;
 
-  if (!userId) return;
+  if (!userId) return { error: { message: "Unauthorized" } };
 
-  const matchSessionData = await sql`
-  INSERT INTO match_sessions (is_started)
-  VALUES (false)
-  RETURNING id`;
+  let id;
 
-  const id = matchSessionData.rows[0].id;
+  try {
+    const matchSessionData = await sql`
+    INSERT INTO match_sessions (is_started)
+    VALUES (false)
+    RETURNING id`;
 
-  if (!id) return;
+    id = matchSessionData.rows[0].id;
 
-  await addUserToMatchSession(id, userId, true);
+    if (!id) throw new Error();
+
+    await addUserToMatchSession(id, userId, true);
+  } catch (error) {
+    return { error: { message: "Error creating match session" } };
+  }
 
   redirect(`/match/${id}`);
 }

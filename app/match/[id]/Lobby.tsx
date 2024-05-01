@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { FaCrown } from "react-icons/fa6";
 import { useSession } from "next-auth/react";
+import { ErrorMessage } from "@/app/components/ErrorMessage";
 
 export default function Lobby({
   matchSession,
@@ -19,7 +20,7 @@ export default function Lobby({
   const { data: session } = useSession();
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
-  const { data } = useSWR(
+  const { data, error } = useSWR(
     ["match/lobby", matchSession.id],
     matchSessionFetcher,
     {
@@ -68,7 +69,8 @@ export default function Lobby({
           ))}
           <ShareButton id={matchSession.id} />
         </div>
-        <div className="flex justify-center">
+        <div className="flex flex-col items-center gap-4">
+          {error && <ErrorMessage>{error.message}</ErrorMessage>}
           <Button
             color={isUserHost ? "primary" : "default"}
             onPress={start}
@@ -83,9 +85,15 @@ export default function Lobby({
   );
 }
 
-function matchSessionFetcher([, matchSessionId]: [
+async function matchSessionFetcher([, matchSessionId]: [
   key: string,
   matchSessionId: string,
 ]) {
-  return getMatchSession(matchSessionId);
+  const { data, error } = await getMatchSession(matchSessionId);
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return data;
 }

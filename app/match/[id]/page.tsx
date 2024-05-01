@@ -13,14 +13,17 @@ export default async function MatchSession({
 }: {
   params: { id: string };
 }) {
-  const matchSession = await getMatchSession(params.id);
+  const { data: matchSession, error } = await getMatchSession(params.id);
   const session = await auth();
   const userId = session?.user?.id as string;
 
-  const isUserJoined = !!matchSession.users.find((user) => user.id === userId);
-  const isSessionStarted = matchSession.is_started;
+  const isUserJoined = !!matchSession?.users.find((user) => user.id === userId);
+  const isSessionStarted = matchSession?.is_started;
 
   switch (true) {
+    case !!error: {
+      throw new Error(error.message);
+    }
     case !isSessionStarted && !isUserJoined: {
       await addUserToMatchSession(matchSession.id, userId);
       matchSession.users.push(session?.user as User);

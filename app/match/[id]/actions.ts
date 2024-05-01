@@ -1,6 +1,6 @@
 "use server";
 
-import { MatchSession } from "@/app/lib/definitions";
+import { GetResult, MatchSession } from "@/app/lib/definitions";
 import { DiscoverMovies, Movie, MovieDetails } from "@/app/lib/definitions";
 import { sql } from "@vercel/postgres";
 import { notFound } from "next/navigation";
@@ -8,35 +8,46 @@ import { unstable_noStore as noStore } from "next/cache";
 import { auth } from "@/app/lib/auth";
 import { TMDB_PAGE_LIMIT, fetchOptions } from "@/app/lib/tmdbConfiguration";
 
-export async function getMatchSession(id: string): Promise<MatchSession> {
+export async function getMatchSession(id: string): GetResult<MatchSession> {
   noStore();
-  const matchSessionData = await sql`
-    SELECT ms.id, msp.providers, msp.genres, ms.is_started, COUNT(msm.movie_id) as match_count
-    FROM match_sessions ms
-    LEFT JOIN match_session_matches msm
-    ON ms.id = msm.match_session_id
-    LEFT JOIN match_session_preferences msp
-    ON ms.id = msp.match_session_id
-    WHERE ms.id = ${id}
-    GROUP BY ms.id, msp.providers, msp.genres, ms.is_started`;
+  let isNotFound = false;
+  try {
+    const matchSessionData = await sql`
+      SELECT ms.id, msp.providers, msp.genres, ms.is_started, COUNT(msm.movie_id) as match_count
+      FROM match_sessions ms
+      LEFT JOIN match_session_matches msm
+      ON ms.id = msm.match_session_id
+      LEFT JOIN match_session_preferences msp
+      ON ms.id = msp.match_session_id
+      WHERE ms.id = ${id}
+      GROUP BY ms.id, msp.providers, msp.genres, ms.is_started`;
 
-  if (matchSessionData.rowCount < 1) notFound();
+    if (matchSessionData.rowCount < 1) {
+      isNotFound = true;
+      notFound();
+    }
 
-  const userData = await sql`
-    SELECT u.id, msu.is_host, u.name, u.image
-    FROM match_sessions_users msu
-    INNER JOIN users u
-    ON msu.user_id = u.id
-    WHERE msu.match_session_id = ${id}`;
+    const userData = await sql`
+      SELECT u.id, msu.is_host, u.name, u.image
+      FROM match_sessions_users msu
+      INNER JOIN users u
+      ON msu.user_id = u.id
+      WHERE msu.match_session_id = ${id}`;
 
-  return {
-    id: matchSessionData.rows[0].id,
-    providers: matchSessionData.rows[0].providers,
-    genres: matchSessionData.rows[0].genres,
-    users: userData.rows,
-    is_started: matchSessionData.rows[0].is_started,
-    match_count: matchSessionData.rows[0].match_count,
-  };
+    const matchSession = {
+      id: matchSessionData.rows[0].id,
+      providers: matchSessionData.rows[0].providers,
+      genres: matchSessionData.rows[0].genres,
+      users: userData.rows,
+      is_started: matchSessionData.rows[0].is_started,
+      match_count: matchSessionData.rows[0].match_count,
+    };
+
+    return { data: matchSession };
+  } catch (error) {
+    if (isNotFound) throw error;
+    return { error: { message: "Error loading match session" } };
+  }
 }
 
 export async function addUserToMatchSession(

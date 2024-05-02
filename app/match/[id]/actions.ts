@@ -69,20 +69,29 @@ export async function addUserToMatchSession(
 
 export async function startMatchSession(id: string) {
   const session = await auth();
+  let isUserHost = false;
+  try {
+    const userHostData = await sql`
+        SELECT is_host
+        FROM match_sessions_users
+        WHERE match_session_id = ${id} AND user_id = ${session?.user?.id}`;
 
-  const userHostData = await sql`
-      SELECT is_host
-      FROM match_sessions_users
-      WHERE match_session_id = ${id} AND user_id = ${session?.user?.id}`;
+    isUserHost = userHostData.rows[0].is_host;
+    if (!isUserHost) throw new Error();
 
-  const isUserHost = userHostData.rows[0].is_host;
-
-  if (!isUserHost) throw new Error("Only the host can start the match session");
-
-  await sql`
-    UPDATE match_sessions
-    SET is_started = true
-    WHERE id = ${id}`;
+    await sql`
+      UPDATE match_sessions
+      SET is_started = true
+      WHERE id = ${id}`;
+  } catch (error) {
+    return {
+      error: {
+        message: isUserHost
+          ? "Error starting match session"
+          : "Only the host can start the match session",
+      },
+    };
+  }
 }
 
 export async function getMovies(matchSessionId: string, page: number) {

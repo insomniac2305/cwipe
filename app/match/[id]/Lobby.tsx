@@ -20,7 +20,8 @@ export default function Lobby({
   const { data: session } = useSession();
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
-  const { data, error } = useSWR(
+  const [startError, setStartError] = useState<string>();
+  const { data, error: fetchError } = useSWR(
     ["match/lobby", matchSession.id],
     matchSessionFetcher,
     {
@@ -35,7 +36,12 @@ export default function Lobby({
 
   const start = async () => {
     setIsLoading(true);
-    await startMatchSession(matchSession.id);
+    const startSessionResult = await startMatchSession(matchSession.id);
+    if (startSessionResult?.error) {
+      setStartError(startSessionResult.error.message);
+      setIsLoading(false);
+      return;
+    }
     router.refresh();
   };
 
@@ -44,6 +50,8 @@ export default function Lobby({
       router.refresh();
     }
   }, [data.is_started, router]);
+
+  const error = startError || fetchError;
 
   return (
     <main className="flex h-dvh items-center justify-center overflow-hidden">
@@ -70,7 +78,7 @@ export default function Lobby({
           <ShareButton id={matchSession.id} />
         </div>
         <div className="flex flex-col items-center gap-4">
-          {error && <ErrorMessage>{error.message}</ErrorMessage>}
+          {error && <ErrorMessage>{error}</ErrorMessage>}
           <Button
             color={isUserHost ? "primary" : "default"}
             onPress={start}

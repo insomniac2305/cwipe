@@ -155,7 +155,8 @@ async function getMovieDetails(
   language: string,
   region: string,
 ): Promise<Movie[]> {
-  return await Promise.all(
+  //TODO: Add retry for failed fetches due to network errors (ECONNRESET)
+  const results = await Promise.allSettled(
     movieIds.map(async (movieId) => {
       const detailSearchParams = composeDetailSearchParams(language);
       const detailResponse = await fetch(
@@ -177,6 +178,11 @@ async function getMovieDetails(
       };
     }),
   );
+  const resolvedMovies = results
+    .filter((result) => result.status === "fulfilled")
+    .map((result) => (result as PromiseFulfilledResult<Movie>).value);
+
+  return resolvedMovies;
 }
 
 export async function rateMovie(id: number, isLiked: boolean) {

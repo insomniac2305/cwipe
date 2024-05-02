@@ -52,12 +52,19 @@ export async function getMatchSession(id: string): GetResult<MatchSession> {
 
 export async function addUserToMatchSession(
   matchSessionId: string,
-  userId: string,
   isHost?: boolean,
 ) {
-  await sql`
-      INSERT INTO match_sessions_users(user_id, match_session_id, is_host)
-      VALUES (${userId}, ${matchSessionId}, ${!!isHost})`;
+  const session = await auth();
+  const userId = session?.user?.id;
+
+  try {
+    if (!userId) throw new Error();
+    await sql`
+        INSERT INTO match_sessions_users(user_id, match_session_id, is_host)
+        VALUES (${userId}, ${matchSessionId}, ${!!isHost})`;
+  } catch (error) {
+    return { error: { message: "Error adding user to session" } };
+  }
 }
 
 export async function startMatchSession(id: string) {

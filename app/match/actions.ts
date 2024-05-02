@@ -24,7 +24,8 @@ export async function createMatchSession() {
 
     if (!id) throw new Error();
 
-    await addUserToMatchSession(id, userId, true);
+    const addUserResult = await addUserToMatchSession(id, true);
+    if (addUserResult?.error) throw new Error();
   } catch (error) {
     return { error: { message: "Error creating match session" } };
   }

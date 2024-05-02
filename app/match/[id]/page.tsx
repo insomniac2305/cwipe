@@ -25,7 +25,8 @@ export default async function MatchSession({
       throw new Error(error.message);
     }
     case !isSessionStarted && !isUserJoined: {
-      await addUserToMatchSession(matchSession.id, userId);
+      const addUserResult = await addUserToMatchSession(matchSession.id);
+      if (addUserResult?.error) throw new Error(addUserResult.error.message);
       matchSession.users.push(session?.user as User);
       //fall through
     }

@@ -263,6 +263,7 @@ function composeDiscoverSearchParams({
   searchParams.append("sort_by", "popularity.desc");
   searchParams.append("page", page.toString());
   searchParams.append("with_watch_providers", providers?.join("|"));
+  searchParams.append("with_watch_monetization_types", "flatrate|free|ads");
   searchParams.append("with_genres", genres?.join("|"));
   return searchParams;
 }

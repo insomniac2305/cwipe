@@ -38,7 +38,8 @@ export default async function MatchSession({
       );
     case isSessionStarted && isUserJoined: {
       const movies = await getMovies(matchSession.id, 1);
-      return <MovieStack matchSession={matchSession} movies={movies} />;
+      if (movies.error) throw new Error(movies.error.message);
+      return <MovieStack matchSession={matchSession} movies={movies.data} />;
     }
   }
 }

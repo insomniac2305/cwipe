@@ -94,60 +94,68 @@ export async function startMatchSession(id: string) {
   }
 }
 
-export async function getMovies(matchSessionId: string, page: number) {
-  if (page > TMDB_PAGE_LIMIT) return []; //No more data due to TMDB page limit
+export async function getMovies(
+  matchSessionId: string,
+  page: number,
+): GetResult<Movie[]> {
+  if (page > TMDB_PAGE_LIMIT)
+    return { error: { message: "Reached TMDB page limit" } };
 
-  const matchSessionPreferenceData = await sql`
-      SELECT providers, genres, region
-      FROM match_session_preferences
-      WHERE match_session_id = ${matchSessionId}`;
+  try {
+    const matchSessionPreferenceData = await sql`
+        SELECT providers, genres, region
+        FROM match_session_preferences
+        WHERE match_session_id = ${matchSessionId}`;
 
-  if (matchSessionPreferenceData.rowCount < 1) notFound();
+    if (matchSessionPreferenceData.rowCount < 1) notFound();
 
-  const session = await auth();
-  const userId = session?.user?.id;
-  const userLanguageData = await sql`
-      SELECT language
-      FROM user_preferences
-      WHERE user_id = ${userId}`;
+    const session = await auth();
+    const userId = session?.user?.id;
+    const userLanguageData = await sql`
+        SELECT language
+        FROM user_preferences
+        WHERE user_id = ${userId}`;
 
-  const { providers, genres, region } = matchSessionPreferenceData.rows[0];
-  const { language } = userLanguageData.rows[0];
+    const { providers, genres, region } = matchSessionPreferenceData.rows[0];
+    const { language } = userLanguageData.rows[0];
 
-  const searchParams = composeDiscoverSearchParams({
-    language,
-    region,
-    page,
-    providers,
-    genres,
-  });
+    const searchParams = composeDiscoverSearchParams({
+      language,
+      region,
+      page,
+      providers,
+      genres,
+    });
 
-  const discoverMovieResponse = await fetch(
-    `${process.env.TMDB_API_URL}discover/movie?${searchParams.toString()}`,
-    fetchOptions,
-  );
-  const discoveredMovies: DiscoverMovies = await discoverMovieResponse.json();
+    const discoverMovieResponse = await fetch(
+      `${process.env.TMDB_API_URL}discover/movie?${searchParams.toString()}`,
+      fetchOptions,
+    );
+    const discoveredMovies: DiscoverMovies = await discoverMovieResponse.json();
 
-  const userMoviesData = await sql`
-      SELECT user_id, movie_id, is_liked
-      FROM users_movies
-      WHERE user_id = ${userId}`;
+    const userMoviesData = await sql`
+        SELECT user_id, movie_id, is_liked
+        FROM users_movies
+        WHERE user_id = ${userId}`;
 
-  const userMovieIds = userMoviesData.rows.map(
-    (userMovie) => userMovie.movie_id,
-  );
-  const unratedMovies = discoveredMovies.results.filter(
-    (movie) => !userMovieIds.includes(movie.id),
-  );
-  const unratedMovieIds = unratedMovies.map((movie) => movie.id);
+    const userMovieIds = userMoviesData.rows.map(
+      (userMovie) => userMovie.movie_id,
+    );
+    const unratedMovies = discoveredMovies.results.filter(
+      (movie) => !userMovieIds.includes(movie.id),
+    );
+    const unratedMovieIds = unratedMovies.map((movie) => movie.id);
 
-  const movies: Array<Movie> = await getMovieDetails(
-    unratedMovieIds,
-    language,
-    region,
-  );
+    const movies: Array<Movie> = await getMovieDetails(
+      unratedMovieIds,
+      language,
+      region,
+    );
 
-  return movies;
+    return { data: movies };
+  } catch (error) {
+    return { error: { message: "Error loading movies" } };
+  }
 }
 
 async function getMovieDetails(

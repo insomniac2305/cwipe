@@ -2,11 +2,7 @@
 
 import { MatchSession, Movie } from "@/app/lib/definitions";
 import { TMDB_PAGE_LIMIT } from "@/app/lib/tmdbConfiguration";
-import {
-  getMovies,
-  rateMovie,
-  undoMovieRating,
-} from "@/app/match/[id]/actions";
+import { getMovies, rateMovie } from "@/app/match/[id]/actions";
 import MovieCard from "@/app/match/[id]/MovieCard";
 import { Button, Spinner, useDisclosure } from "@nextui-org/react";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -31,7 +27,7 @@ export default function MovieStack({
 
   const [page, setPage] = useState(1);
   const isLoading = useRef(false);
-  const [error, setError] = useState<string>();
+  const [error, setError] = useState<{ message: string; retry: () => void }>();
   const [isInfoVisible, setIsInfoVisible] = useState(false);
   const {
     isOpen: isMatchOpen,
@@ -73,8 +69,11 @@ export default function MovieStack({
           fetchedMovies.length < FETCH_NEXT_PAGE_LIMIT &&
           page + fetchedPageCount <= TMDB_PAGE_LIMIT;
       }
-    } catch (error) {
-      setError(error instanceof Error ? error.message : "Something went wrong");
+    } catch (e) {
+      setError({
+        message: e instanceof Error ? e.message : "Something went wrong",
+        retry: fetchNextMoviePage,
+      });
     } finally {
       setRatedMovies((prev) =>
         filterUniqueObjectArray([...prev, ...fetchedMovies], "id"),
@@ -106,6 +105,7 @@ export default function MovieStack({
   ) => {
     if (!movie) return;
     setIsInfoVisible(false);
+    setError(undefined);
 
     const updatedMovies = ratedMovies.map((mapMovie) => {
       if (mapMovie.id === movie.id) {
@@ -117,11 +117,16 @@ export default function MovieStack({
 
     setRatedMovies(updatedMovies);
 
-    isLiked === undefined
-      ? await undoMovieRating(movie.id)
-      : await rateMovie(movie.id, isLiked);
+    const response = await rateMovie(movie.id, isLiked);
 
-    mutateMatches();
+    if (response?.error) {
+      setError({
+        message: "Error rating movie",
+        retry: handleRateMovie.bind(null, movie, isLiked),
+      });
+    } else {
+      mutateMatches();
+    }
   };
 
   return (
@@ -153,8 +158,8 @@ export default function MovieStack({
           )}
           {!!error && (
             <div className="flex flex-col items-center gap-6">
-              <ErrorMessage>{error}</ErrorMessage>
-              <Button onPress={fetchNextMoviePage} size="lg" color="primary">
+              <ErrorMessage>{error.message}</ErrorMessage>
+              <Button onPress={error.retry} size="lg" color="primary">
                 Retry
               </Button>
             </div>
@@ -167,7 +172,7 @@ export default function MovieStack({
           onDislike={handleRateMovie.bind(null, nextRatedMovie, false)}
           onUndoRating={handleRateMovie.bind(null, lastRatedMovie, undefined)}
           onToggleInfo={toggleInfo}
-          isDisabled={!nextRatedMovie}
+          isDisabled={!nextRatedMovie || !!error}
         />
       </div>
       <MatchModal

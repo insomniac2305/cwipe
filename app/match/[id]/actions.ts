@@ -199,26 +199,27 @@ async function getMovieDetails(
   return resolvedMovies;
 }
 
-export async function rateMovie(id: number, isLiked: boolean) {
+export async function rateMovie(id: number, isLiked?: boolean) {
   const session = await auth();
   const userId = session?.user?.id;
 
-  const ratedAt = new Date().toISOString();
+  try {
+    if (isLiked === undefined) {
+      await sql`
+      DELETE FROM users_movies
+      WHERE user_id = ${userId} AND movie_id = ${id}`;
+    } else {
+      const ratedAt = new Date().toISOString();
 
-  await sql`
-  INSERT INTO users_movies(user_id, movie_id, is_liked, rated_at)
-  VALUES(${userId}, ${id}, ${isLiked}, ${ratedAt})
-  ON CONFLICT (user_id, movie_id)
-  DO UPDATE SET is_liked = ${isLiked}, rated_at = ${ratedAt}`;
-}
-
-export async function undoMovieRating(id: number) {
-  const session = await auth();
-  const userId = session?.user?.id;
-
-  await sql`
-  DELETE FROM users_movies
-  WHERE user_id = ${userId} AND movie_id = ${id}`;
+      await sql`
+      INSERT INTO users_movies(user_id, movie_id, is_liked, rated_at)
+      VALUES(${userId}, ${id}, ${isLiked}, ${ratedAt})
+      ON CONFLICT (user_id, movie_id)
+      DO UPDATE SET is_liked = ${isLiked}, rated_at = ${ratedAt}`;
+    }
+  } catch (error) {
+    return { error: { message: "Error rating movie" } };
+  }
 }
 
 export async function getMatches(matchSessionId: string, from?: Date) {

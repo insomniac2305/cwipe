@@ -101,13 +101,18 @@ export async function getMovies(
   if (page > TMDB_PAGE_LIMIT)
     return { error: { message: "Reached TMDB page limit" } };
 
+  let isNotFound = false;
+
   try {
     const matchSessionPreferenceData = await sql`
         SELECT providers, genres, region
         FROM match_session_preferences
         WHERE match_session_id = ${matchSessionId}`;
 
-    if (matchSessionPreferenceData.rowCount < 1) notFound();
+    if (matchSessionPreferenceData.rowCount < 1) {
+      isNotFound = true;
+      notFound();
+    }
 
     const session = await auth();
     const userId = session?.user?.id;
@@ -154,6 +159,7 @@ export async function getMovies(
 
     return { data: movies };
   } catch (error) {
+    if (isNotFound) throw error;
     return { error: { message: "Error loading movies" } };
   }
 }

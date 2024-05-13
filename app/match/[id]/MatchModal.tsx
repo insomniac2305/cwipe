@@ -1,3 +1,4 @@
+import { ErrorMessage } from "@/app/components/ErrorMessage";
 import { Movie } from "@/app/lib/definitions";
 import {
   Button,
@@ -18,10 +19,12 @@ export default function MatchModal({
   matches,
   isOpen,
   onOpenChange,
+  error,
 }: {
   matches: Movie[] | undefined;
   isOpen: boolean;
   onOpenChange: (isOpen: boolean) => void;
+  error: { message: string };
 }) {
   // const pathname = usePathname();
   return (
@@ -36,31 +39,37 @@ export default function MatchModal({
         {(onClose) => (
           <>
             <ModalHeader className="font-heading text-2xl font-normal">
-              Congrats, you got a match!
+              {error ? "There was an error" : "Congrats, you got a match!"}
             </ModalHeader>
-            <ModalBody className="gap-6">
-              {matches?.map((match) => (
-                <div className="flex flex-col items-center" key={match.id}>
-                  <Link href={match.watch_providers?.link} isExternal>
-                    <Image
-                      as={NextImage}
-                      width={200}
-                      height={300}
-                      src={
-                        process.env.NEXT_PUBLIC_TMDB_IMAGE_BASE_URL +
-                        "/original" +
-                        match.poster_path
-                      }
-                      alt={match.title}
-                      draggable={false}
-                    />
-                  </Link>
-                  <h2 className="mt-1 text-center font-heading text-lg">
-                    {match.title}
-                  </h2>
-                </div>
-              ))}
-            </ModalBody>
+            {error ? (
+              <div className="ml-5">
+                <ErrorMessage>{error.message}</ErrorMessage>
+              </div>
+            ) : (
+              <ModalBody className="gap-6">
+                {matches?.map((match) => (
+                  <div className="flex flex-col items-center" key={match.id}>
+                    <Link href={match.watch_providers?.link} isExternal>
+                      <Image
+                        as={NextImage}
+                        width={200}
+                        height={300}
+                        src={
+                          process.env.NEXT_PUBLIC_TMDB_IMAGE_BASE_URL +
+                          "/original" +
+                          match.poster_path
+                        }
+                        alt={match.title}
+                        draggable={false}
+                      />
+                    </Link>
+                    <h2 className="mt-1 text-center font-heading text-lg">
+                      {match.title}
+                    </h2>
+                  </div>
+                ))}
+              </ModalBody>
+            )}
             <ModalFooter>
               <Button color="default" variant="flat" onPress={onClose}>
                 Close
@@ -74,15 +83,17 @@ export default function MatchModal({
               >
                 All matches
               </Button> */}
-              <Button
-                as={Link}
-                endContent={<FaExternalLinkAlt />}
-                color="primary"
-                href={matches && matches[0].watch_providers?.link}
-                isExternal
-              >
-                Watch
-              </Button>
+              {!error && (
+                <Button
+                  as={Link}
+                  endContent={<FaExternalLinkAlt />}
+                  color="primary"
+                  href={matches && matches[0].watch_providers?.link}
+                  isExternal
+                >
+                  Watch
+                </Button>
+              )}
             </ModalFooter>
           </>
         )}

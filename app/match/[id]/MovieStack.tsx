@@ -34,7 +34,11 @@ export default function MovieStack({
     onOpen: onMatchOpen,
     onOpenChange: onMatchOpenChange,
   } = useDisclosure();
-  const { matches, mutateMatches } = useMatches(matchSession.id, isMatchOpen);
+  const {
+    matches,
+    mutateMatches,
+    error: matchError,
+  } = useMatches(matchSession.id, isMatchOpen);
 
   const currentMovieIndex = ratedMovies.findIndex(
     (movie) => movie.isLiked === undefined,
@@ -179,6 +183,7 @@ export default function MovieStack({
         matches={matches}
         isOpen={isMatchOpen}
         onOpenChange={onMatchOpenChange}
+        error={matchError}
       />
     </div>
   );

@@ -222,32 +222,41 @@ export async function rateMovie(id: number, isLiked?: boolean) {
   }
 }
 
-export async function getMatches(matchSessionId: string, from?: Date) {
+export async function getMatches(
+  matchSessionId: string,
+  from?: Date,
+): GetResult<Movie[]> {
   const session = await auth();
   const userId = session?.user?.id;
-  const userPreferenceData = await sql`
-      SELECT language, region
-      FROM user_preferences
-      WHERE user_id = ${userId}`;
+  try {
+    const userPreferenceData = await sql`
+        SELECT language, region
+        FROM user_preferences
+        WHERE user_id = ${userId}`;
 
-  const { language, region } = userPreferenceData.rows[0];
+    const { language, region } = userPreferenceData.rows[0];
 
-  const matchedMovieData = await sql`
-      SELECT movie_id
-      FROM match_session_matches
-      WHERE match_session_id = ${matchSessionId}
-      AND last_rated_at > ${from ? from.toISOString() : new Date(0).toISOString()}
-      ORDER BY last_rated_at DESC`;
+    const matchedMovieData = await sql`
+        SELECT movie_id
+        FROM match_session_matches
+        WHERE match_session_id = ${matchSessionId}
+        AND last_rated_at > ${from ? from.toISOString() : new Date(0).toISOString()}
+        ORDER BY last_rated_at DESC`;
 
-  const matchedMovieIds = matchedMovieData.rows.map((match) => match.movie_id);
+    const matchedMovieIds = matchedMovieData.rows.map(
+      (match) => match.movie_id,
+    );
 
-  const matchedMovies: Movie[] = await getMovieDetails(
-    matchedMovieIds,
-    language,
-    region,
-  );
+    const matchedMovies: Movie[] = await getMovieDetails(
+      matchedMovieIds,
+      language,
+      region,
+    );
 
-  return matchedMovies;
+    return { data: matchedMovies };
+  } catch (error) {
+    return { error: { message: "Error loading matches" } };
+  }
 }
 
 function composeDetailSearchParams(language: string) {

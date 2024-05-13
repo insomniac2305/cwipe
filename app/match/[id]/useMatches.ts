@@ -8,17 +8,25 @@ export default function useMatches(
 ) {
   const [lastMatchRequestDate, setLastMatchRequestDate] = useState<Date>();
 
-  const matchesFetcher = ([, id]: [key: string, id: string]) => {
-    const fetcher = getMatches(id, lastMatchRequestDate);
+  const matchesFetcher = async ([, id]: [key: string, id: string]) => {
+    const result = await getMatches(id, lastMatchRequestDate);
+
+    if (result.error) {
+      throw new Error(result.error.message);
+    }
+
     setLastMatchRequestDate(new Date());
-    return fetcher;
+    return result.data;
   };
 
-  const { data: matches, mutate: mutateMatches } = useSWR(
-    ["match/matches", matchSessionId],
-    matchesFetcher,
-    { refreshInterval: 10000, isPaused: () => !!isRefreshPaused },
-  );
+  const {
+    data: matches,
+    mutate: mutateMatches,
+    error,
+  } = useSWR(["match/matches", matchSessionId], matchesFetcher, {
+    refreshInterval: 10000,
+    isPaused: () => !!isRefreshPaused,
+  });
 
-  return { matches, mutateMatches };
+  return { matches, mutateMatches, error };
 }

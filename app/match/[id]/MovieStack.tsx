@@ -20,7 +20,7 @@ export default function MovieStack({
   movies,
 }: {
   matchSession: MatchSession;
-  movies: Array<Movie>;
+  movies: Movie[];
 }) {
   const [ratedMovies, setRatedMovies] =
     useState<Array<Movie & { isLiked?: boolean }>>(movies);

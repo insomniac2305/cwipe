@@ -151,7 +151,7 @@ export async function getMovies(
     );
     const unratedMovieIds = unratedMovies.map((movie) => movie.id);
 
-    const movies: Array<Movie> = await getMovieDetails(
+    const movies: Movie[] = await getMovieDetails(
       unratedMovieIds,
       language,
       region,
@@ -241,7 +241,7 @@ export async function getMatches(matchSessionId: string, from?: Date) {
 
   const matchedMovieIds = matchedMovieData.rows.map((match) => match.movie_id);
 
-  const matchedMovies: Array<Movie> = await getMovieDetails(
+  const matchedMovies: Movie[] = await getMovieDetails(
     matchedMovieIds,
     language,
     region,

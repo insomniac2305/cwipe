@@ -43,13 +43,13 @@ export function validateFormData<Output, Input>(
   formDataSchema: ZodType<Output, ZodTypeDef, Input>,
 ) {
   const formDataObject: {
-    [key: string]: FormDataEntryValue | Array<FormDataEntryValue>;
+    [key: string]: FormDataEntryValue | FormDataEntryValue[];
   } = {};
   for (const [key, value] of formData.entries()) {
     if (!formDataObject[key]) {
       formDataObject[key] = value;
     } else if (formDataObject[key] instanceof Array) {
-      (formDataObject[key] as Array<FormDataEntryValue>).push(value);
+      (formDataObject[key] as FormDataEntryValue[]).push(value);
     } else {
       formDataObject[key] = [formDataObject[key] as FormDataEntryValue, value];
     }

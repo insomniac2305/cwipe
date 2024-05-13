@@ -13,7 +13,7 @@ export interface Region {
 }
 
 export interface WatchRegionsApi {
-  results: Array<Region>;
+  results: Region[];
 }
 
 export interface WatchProvider {
@@ -24,7 +24,7 @@ export interface WatchProvider {
 }
 
 export interface WatchProvidersApi {
-  results: Array<WatchProvider>;
+  results: WatchProvider[];
 }
 
 export interface Genre {
@@ -33,7 +33,7 @@ export interface Genre {
 }
 
 export interface GenreApi {
-  genres: Array<Genre>;
+  genres: Genre[];
 }
 
 export interface DiscoverMovies {
@@ -41,7 +41,7 @@ export interface DiscoverMovies {
   results: Array<{
     adult: boolean;
     backdrop_path: string;
-    genre_ids: Array<number>;
+    genre_ids: number[];
     id: number;
     original_language: string;
     original_title: string;
@@ -63,7 +63,7 @@ export interface MovieDetails {
   backdrop_path: string;
   belongs_to_collection: string;
   budget: number;
-  genres: Array<Genre>;
+  genres: Genre[];
   homepage: string;
   id: number;
   imdb_id: string;
@@ -100,9 +100,9 @@ export interface MovieDetails {
     results: {
       [countryCode: string]: {
         link: string;
-        flatrate?: Array<WatchProvider>;
-        rent?: Array<WatchProvider>;
-        buy?: Array<WatchProvider>;
+        flatrate?: WatchProvider[];
+        rent?: WatchProvider[];
+        buy?: WatchProvider[];
       };
     };
   };
@@ -138,7 +138,7 @@ export interface MovieDetails {
 }
 
 export interface Movie {
-  genres: Array<Genre>;
+  genres: Genre[];
   id: number;
   overview: string;
   poster_path: string;

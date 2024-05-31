@@ -11,6 +11,7 @@ import { useRouter } from "next/navigation";
 import { FaCrown } from "react-icons/fa6";
 import { useSession } from "next-auth/react";
 import { ErrorMessage } from "@/app/components/ErrorMessage";
+import { MobileBackButton } from "@/app/components/MobileBackButton";
 
 export default function Lobby({
   matchSession,
@@ -55,8 +56,11 @@ export default function Lobby({
 
   return (
     <main className="flex h-dvh items-center justify-center overflow-hidden">
-      <div className="flex h-full w-full flex-col overflow-auto p-8 md:max-h-[40rem] md:max-w-screen-md">
-        <h1 className="font-heading text-2xl">Lobby</h1>
+      <div className="flex h-full w-full flex-col overflow-auto p-8">
+        <div className="flex items-center gap-4">
+          <MobileBackButton targetView="aside" />
+          <h1 className="font-heading text-2xl">Lobby</h1>
+        </div>
         <div className="grid flex-auto grid-cols-[repeat(auto-fill,minmax(5rem,1fr))] content-start justify-items-center gap-2 py-4">
           {data.users.map((user, index) => (
             <Badge

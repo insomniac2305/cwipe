@@ -1,8 +1,8 @@
 import React from "react";
-import { Link, Chip, Button, AvatarGroup, Avatar } from "@nextui-org/react";
+import { Chip, AvatarGroup, Avatar } from "@nextui-org/react";
 import { MatchSession } from "@/app/lib/definitions";
-import { FaPlay } from "react-icons/fa6";
 import { auth } from "@/app/lib/auth";
+import { ContinueMatchButton } from "./ContinueMatchButton";
 
 export async function MatchSessionItem({
   matchSession,
@@ -51,15 +51,7 @@ export async function MatchSessionItem({
               : "Started"
             : "Not started"}
         </Chip>
-        <Button
-          isIconOnly
-          variant="flat"
-          as={Link}
-          href={`match/${matchSession.id}`}
-          aria-description="Continue"
-        >
-          <FaPlay />
-        </Button>
+        <ContinueMatchButton id={matchSession.id} />
       </div>
     </li>
   );

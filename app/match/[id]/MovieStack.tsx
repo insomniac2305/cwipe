@@ -11,6 +11,7 @@ import MatchModal from "@/app/match/[id]/MatchModal";
 import useMatches from "@/app/match/[id]/useMatches";
 import { filterUniqueObjectArray } from "@/app/lib/util";
 import { ErrorMessage } from "@/app/components/ErrorMessage";
+import { MobileBackButton } from "../../components/MobileBackButton";
 
 const RENDER_LIMIT = 3;
 const FETCH_NEXT_PAGE_LIMIT = 5;
@@ -24,21 +25,23 @@ export default function MovieStack({
 }) {
   const [ratedMovies, setRatedMovies] =
     useState<Array<Movie & { isLiked?: boolean }>>(movies);
-
   const [page, setPage] = useState(1);
-  const isLoading = useRef(false);
   const [error, setError] = useState<{ message: string; retry: () => void }>();
-  const [isInfoVisible, setIsInfoVisible] = useState(false);
+  const isLoading = useRef(false);
+
   const {
     isOpen: isMatchOpen,
     onOpen: onMatchOpen,
     onOpenChange: onMatchOpenChange,
   } = useDisclosure();
+
   const {
     matches,
     mutateMatches,
     error: matchError,
   } = useMatches(matchSession.id, isMatchOpen);
+
+  const [isInfoVisible, setIsInfoVisible] = useState(false);
 
   const currentMovieIndex = ratedMovies.findIndex(
     (movie) => movie.isLiked === undefined,
@@ -134,8 +137,11 @@ export default function MovieStack({
   };
 
   return (
-    <div className="relative h-dvh w-dvw overflow-hidden">
-      <div className="relative h-[calc(100%-4.5rem)] overflow-hidden">
+    <div className="relative h-dvh w-full overflow-hidden">
+      <div className="absolute left-2 top-2 z-10">
+        <MobileBackButton targetView="aside" />
+      </div>
+      <div className="relative z-0 h-[calc(100%-4.5rem)] overflow-hidden">
         {!error &&
           ratedMovies.map(
             (movie, index) =>

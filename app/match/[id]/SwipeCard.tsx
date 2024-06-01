@@ -190,15 +190,15 @@ export default forwardRef<SwipeCardRef, Props>(function SwipeCard(
   return (
     <Card
       ref={ref}
-      radius="none"
       className={clsx(
-        "absolute top-0 h-full w-full",
+        "absolute top-0 h-full w-full rounded-none xl:rounded-2xl",
         isSwiping ? "cursor-grabbing" : "cursor-grab",
+        !isSwiping && swipeDirection ? "opacity-0" : "opacity-100",
         isSwipeDone ? "invisible" : "visible",
       )}
       style={{
         zIndex: zIndex,
-        transitionProperty: isSwiping ? "none" : "transform",
+        transitionProperty: isSwiping ? "none" : "transform, opacity",
         transform: isSwiping
           ? `translate(
               ${pointer.x - renderProps.originalX - renderProps.offsetX}px, 

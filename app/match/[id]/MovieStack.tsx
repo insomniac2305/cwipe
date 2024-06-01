@@ -137,11 +137,11 @@ export default function MovieStack({
   };
 
   return (
-    <div className="relative h-dvh w-full overflow-hidden">
+    <div className="relative h-dvh w-full xl:flex xl:items-center xl:justify-center">
       <div className="absolute left-2 top-2 z-10">
         <MobileBackButton targetView="aside" />
       </div>
-      <div className="relative z-0 h-[calc(100%-4.5rem)] overflow-hidden">
+      <div className="relative z-0 h-[calc(100%-4.5rem)] w-full xl:mb-20 xl:h-5/6 xl:w-11/12">
         {!error &&
           ratedMovies.map(
             (movie, index) =>
@@ -176,7 +176,7 @@ export default function MovieStack({
           )}
         </div>
       </div>
-      <div className="absolute bottom-0 w-full">
+      <div className="absolute bottom-0 flex w-full items-center justify-center xl:bottom-6">
         <SwipeButtonRow
           onLike={handleRateMovie.bind(null, nextRatedMovie, true)}
           onDislike={handleRateMovie.bind(null, nextRatedMovie, false)}

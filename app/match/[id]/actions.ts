@@ -182,6 +182,7 @@ async function getMovieDetails(
         id: movieData.id,
         title: movieData.title,
         poster_path: movieData.poster_path,
+        backdrop_path: movieData.backdrop_path,
         genres: movieData.genres,
         watch_providers: movieData["watch/providers"].results[region || "DE"],
         vote_average: movieData.vote_average,

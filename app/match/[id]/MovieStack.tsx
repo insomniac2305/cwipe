@@ -98,7 +98,7 @@ export default function MovieStack({
 
   useEffect(() => {
     if (matches?.length && matches.length > 0) {
-      onMatchOpen();
+      // onMatchOpen();
     }
   }, [matches, onMatchOpen]);
 

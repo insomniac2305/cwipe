@@ -142,6 +142,7 @@ export interface Movie {
   id: number;
   overview: string;
   poster_path: string;
+  backdrop_path: string;
   release_date: string;
   runtime: number;
   title: string;

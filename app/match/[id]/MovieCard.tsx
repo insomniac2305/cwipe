@@ -66,8 +66,8 @@ export default function MovieCard({
             )}
           >
             <div className="absolute top-[calc(100%-10rem)] flex h-full w-full flex-col bg-gradient-to-b from-transparent via-default-50/90 via-[4rem] to-default-50 to-[7rem] transition-all xl:static xl:bg-none">
-              <div className="flex h-40 w-full flex-col justify-end gap-2 pb-3">
-                <h1 className="w-full overflow-hidden text-ellipsis whitespace-nowrap px-6 font-heading text-2xl">
+              <div className="flex h-40 w-full flex-col justify-end gap-2 pb-3 xl:mt-10 xl:h-fit">
+                <h1 className="line-clamp-2 w-full text-ellipsis px-6 font-heading text-2xl xl:line-clamp-none xl:text-4xl">
                   {movie.title}
                 </h1>
                 <GenreList genres={movie.genres}></GenreList>

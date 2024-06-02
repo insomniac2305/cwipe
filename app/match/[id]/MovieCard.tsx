@@ -117,12 +117,12 @@ export default function MovieCard({
               </div>
             </div>
           </div>
-          <div className="flex h-full w-full items-center justify-center xl:w-1/2">
+          <div className="-z-10 flex h-full w-full items-center justify-center xl:z-0 xl:w-1/2">
             <div className="relative h-full w-full overflow-hidden xl:h-3/4 xl:w-5/6 xl:max-w-lg xl:rounded-xl">
               <NextImage
                 src={`${process.env.NEXT_PUBLIC_TMDB_IMAGE_BASE_URL}/original${movie.poster_path}`}
                 fill={true}
-                className="-z-10 h-full w-full object-cover opacity-0 transition-opacity duration-500 xl:z-0"
+                className="h-full w-full object-cover opacity-0 transition-opacity duration-500"
                 onLoad={(e) =>
                   ((e.target as HTMLImageElement).style.opacity = "1")
                 }

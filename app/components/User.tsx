@@ -25,7 +25,7 @@ export function User({
       classNames={{
         base: "flex flex-col items-center",
         wrapper: "text-center",
-        name: "text-center w-20",
+        name: "text-center w-20 flex justify-center",
         description: "w-20 overflow-hidden text-ellipsis whitespace-nowrap",
       }}
     />

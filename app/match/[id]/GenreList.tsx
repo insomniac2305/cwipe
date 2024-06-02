@@ -6,8 +6,7 @@ export function GenreList({ genres }: { genres: Movie["genres"] }) {
   return (
     <ScrollShadow
       orientation="horizontal"
-      hideScrollBar
-      className="cancel-card-swipe mx-6 flex gap-2"
+      className="cancel-card-swipe mx-6 flex gap-2 scrollbar-hide hover:scrollbar-default xl:flex-wrap"
     >
       {genres.map((genre) => {
         return (

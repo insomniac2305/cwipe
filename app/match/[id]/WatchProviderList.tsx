@@ -12,8 +12,7 @@ export function WatchProviderList({
   return (
     <ScrollShadow
       orientation="horizontal"
-      hideScrollBar
-      className="flex items-start gap-2"
+      className="flex items-start gap-2 scrollbar-hide hover:scrollbar-default"
     >
       {watchProviders.flatrate?.map((watchProvider) => {
         return (

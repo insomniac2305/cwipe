@@ -10,7 +10,7 @@ export function GenreList({ genres }: { genres: Movie["genres"] }) {
     >
       {genres.map((genre) => {
         return (
-          <Genre key={genre.id} id={genre.id}>
+          <Genre key={genre.id} id={genre.id} isResponsive>
             {genre.name}
           </Genre>
         );

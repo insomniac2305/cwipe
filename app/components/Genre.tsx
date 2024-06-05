@@ -6,12 +6,14 @@ export function Genre({
   id,
   isSelected,
   isFocused,
+  isResponsive,
   size,
   children,
 }: {
   id: number;
   isSelected?: boolean;
   isFocused?: boolean;
+  isResponsive?: boolean;
   size?: "sm" | "md" | "lg";
   children: React.ReactNode;
 }) {
@@ -21,12 +23,18 @@ export function Genre({
     <Chip
       className={clsx(
         "transition-background",
+        isResponsive && " xl:h-7 xl:text-sm",
         isFocused && "outline outline-2 outline-primary",
       )}
+      classNames={{ content: clsx(isResponsive && "xl:pl-1") }}
       variant={isSelected ? "solid" : "flat"}
       size={size || "sm"}
       color={isSelected ? "primary" : "default"}
-      startContent={<Icon className="mx-1 text-base" />}
+      startContent={
+        <Icon
+          className={clsx("mx-1 text-base", isResponsive && "xl:text-lg")}
+        />
+      }
     >
       {children}
     </Chip>

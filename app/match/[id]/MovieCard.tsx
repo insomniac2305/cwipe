@@ -50,7 +50,7 @@ export default function MovieCard({
         zIndex={zIndex}
         isActive={!isInfoVisible}
       >
-        <div className="relative flex h-full w-full xl:bg-default-50/80">
+        <div className="relative flex h-full w-full select-none xl:bg-default-50/80">
           <NextImage
             src={`${process.env.NEXT_PUBLIC_TMDB_IMAGE_BASE_URL}/original${movie.backdrop_path}`}
             fill={true}
@@ -61,19 +61,19 @@ export default function MovieCard({
           />
           <div
             className={clsx(
-              "absolute top-0 h-full w-full p-0 transition-transform duration-300 xl:static xl:h-auto xl:w-1/2  ",
+              "absolute top-0 h-full w-full p-0 transition-transform duration-300 xl:static xl:h-auto xl:w-1/2",
               isInfoVisible && "-translate-y-1/2 xl:-translate-y-0",
             )}
           >
-            <div className="absolute top-[calc(100%-10rem)] flex h-full w-full flex-col bg-gradient-to-b from-transparent via-default-50/90 via-[4rem] to-default-50 to-[7rem] transition-all xl:static xl:bg-none">
+            <div className="absolute top-[calc(100%-10rem)] flex h-full w-full flex-col bg-gradient-to-b from-transparent via-default-50/90 via-[4rem] to-default-50 to-[7rem] transition-all xl:static xl:justify-center xl:bg-none">
               <div className="flex h-40 w-full flex-col justify-end gap-2 pb-3 xl:mt-10 xl:h-fit">
                 <h1 className="line-clamp-2 w-full text-ellipsis px-6 font-heading text-2xl xl:line-clamp-none xl:text-4xl">
                   {movie.title}
                 </h1>
                 <GenreList genres={movie.genres}></GenreList>
-                <div className="flex gap-2 px-6 text-sm text-gray-200">
+                <div className="flex gap-2 px-6 text-sm text-gray-200 xl:text-base">
                   <div>
-                    <HiMiniStar className="relative top-[1px] inline align-baseline" />{" "}
+                    <HiMiniStar className="relative top-[1px] inline align-baseline xl:top-[2px] xl:text-lg" />{" "}
                     {movie.vote_average.toFixed(1)}
                   </div>
                   <Divider orientation="vertical" />
@@ -84,7 +84,7 @@ export default function MovieCard({
               </div>
               <div
                 className={clsx(
-                  "h-1/2 bg-default-50 px-6 pb-6 xl:h-full xl:overflow-y-auto xl:bg-transparent",
+                  "mb-6 h-1/2 bg-default-50 px-6 xl:h-fit xl:overflow-y-auto xl:bg-transparent",
                   isInfoVisible && "overflow-y-auto",
                 )}
               >

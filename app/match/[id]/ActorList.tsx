@@ -6,7 +6,7 @@ export function ActorList({ actors }: { actors: Movie["cast"] }) {
   return (
     <ScrollShadow
       orientation="horizontal"
-      className="flex items-start gap-4 scrollbar-hide hover:scrollbar-default"
+      className="flex items-start gap-4 pb-[15px] scrollbar-hide hover:pb-0 hover:scrollbar-default"
     >
       {actors.map((actor) => {
         return (

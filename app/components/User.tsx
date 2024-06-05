@@ -19,6 +19,7 @@ export function User({
         },
         getInitials: getInitials,
         src: imageSrc,
+        imgProps: { draggable: false },
       }}
       name={name}
       description={description}

@@ -1,10 +1,12 @@
 import MatchLayout from "@/app/match/MatchLayout";
-import { MatchSessionList } from "@/app/match/MatchSessionList";
+import { MatchSessionSidebar } from "@/app/match/MatchSessionSidebar";
 
 export default async function Match({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  return <MatchLayout sidebar={<MatchSessionList />}>{children}</MatchLayout>;
+  return (
+    <MatchLayout sidebar={<MatchSessionSidebar />}>{children}</MatchLayout>
+  );
 }

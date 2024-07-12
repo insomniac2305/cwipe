@@ -17,7 +17,7 @@ export async function MatchSessionItem({
   );
 
   return (
-    <li className="flex w-full min-w-80 items-center gap-2 rounded-2xl bg-content1 p-4">
+    <li className="flex w-full min-w-80 items-center gap-2 rounded-2xl bg-content2 p-4 shadow-lg">
       <div className="flex flex-1 justify-start">
         {displayedUsers.length > 0 ? (
           <AvatarGroup max={2}>

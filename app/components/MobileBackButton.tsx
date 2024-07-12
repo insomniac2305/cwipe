@@ -12,7 +12,7 @@ export function MobileBackButton({ targetView }: { targetView: LayoutArea }) {
     <Button
       isIconOnly
       variant="flat"
-      className="md:hidden"
+      // className="md:hidden"
       onPress={() => setMobileView(targetView)}
       aria-description="Back"
     >

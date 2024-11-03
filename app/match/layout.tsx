@@ -12,7 +12,12 @@ export default async function Match({
   const session = await auth();
   const userId = session?.user?.id;
   const isOnboardingComplete = await verifyOnboardingComplete(userId);
-  if (!isOnboardingComplete) redirect("/onboarding");
+
+  if (!isOnboardingComplete) {
+    const searchParams = new URLSearchParams();
+    searchParams.append("callbackUrl", "/match");
+    redirect(`/onboarding?${searchParams.toString()}`);
+  }
 
   return (
     <MatchLayout sidebar={<MatchSessionSidebar />}>{children}</MatchLayout>

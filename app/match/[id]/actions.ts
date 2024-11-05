@@ -22,7 +22,7 @@ export async function getMatchSession(id: string): GetResult<MatchSession> {
       WHERE ms.id = ${id}
       GROUP BY ms.id, msp.providers, msp.genres, ms.is_started`;
 
-    if (matchSessionData.rowCount < 1) {
+    if (matchSessionData.rowCount && matchSessionData.rowCount < 1) {
       isNotFound = true;
       notFound();
     }
@@ -109,7 +109,10 @@ export async function getMovies(
         FROM match_session_preferences
         WHERE match_session_id = ${matchSessionId}`;
 
-    if (matchSessionPreferenceData.rowCount < 1) {
+    if (
+      matchSessionPreferenceData.rowCount &&
+      matchSessionPreferenceData.rowCount < 1
+    ) {
       isNotFound = true;
       notFound();
     }

@@ -17,7 +17,8 @@ export async function verifyOnboardingComplete(userId: string | undefined) {
       FROM user_preferences 
       WHERE user_id = ${userId}`;
 
-    if (userPreferenceData.rowCount < 1) return false;
+    if (userPreferenceData.rowCount && userPreferenceData.rowCount < 1)
+      return false;
 
     const { providers, genres, language, region } = userPreferenceData.rows[0];
 

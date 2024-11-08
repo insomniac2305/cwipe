@@ -1,14 +1,20 @@
 "use client";
 
-import { LayoutArea } from "@/app/lib/definitions";
 import clsx from "clsx";
 import { usePathname } from "next/navigation";
 import { createContext, useState } from "react";
 
-export const MobileViewContext = createContext<{
-  mobileView: LayoutArea;
-  setMobileView: (area: LayoutArea) => void;
-}>({ mobileView: "aside", setMobileView: () => {} });
+export const LayoutContext = createContext<{
+  isAsideVisible: boolean;
+  isDetailsVisible: boolean;
+  toggleAside: () => void;
+  toggleDetails: () => void;
+}>({
+  isAsideVisible: true,
+  isDetailsVisible: false,
+  toggleAside: () => {},
+  toggleDetails: () => {},
+});
 
 export default function MatchLayout({
   sidebar,
@@ -18,25 +24,44 @@ export default function MatchLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
-  const [mobileView, setMobileView] = useState<"aside" | "main">(
-    pathname === "/match" ? "aside" : "main",
+  const [isAsideVisible, setIsAsideVisible] = useState<boolean>(
+    pathname === "/match",
   );
+  const [isDetailsVisible, setIsDetailsVisible] = useState<boolean>(false);
+
+  const toggleAside = () => setIsAsideVisible((prevState) => !prevState);
+  const toggleDetails = () => setIsDetailsVisible((prevState) => !prevState);
 
   return (
-    <MobileViewContext.Provider value={{ mobileView, setMobileView }}>
+    <LayoutContext.Provider
+      value={{
+        isAsideVisible,
+        isDetailsVisible,
+        toggleAside,
+        toggleDetails,
+      }}
+    >
       <div className="w-dvw overflow-hidden">
         <div className={"relative flex"}>
           <aside
             className={clsx(
-              "fixed left-0 top-0 z-10 h-dvh overflow-hidden bg-default-50 transition-width md:static",
-              mobileView === "main" ? "w-0 md:w-0" : "w-full  md:w-96",
+              "fixed left-0 top-0 z-20 h-dvh overflow-hidden bg-default-50 transition-width md:static",
+              isAsideVisible ? "w-full md:w-96" : "w-0 md:w-0",
             )}
           >
             {sidebar}
           </aside>
           <main className="z-0 h-dvh flex-1">{children}</main>
+          <details
+            className={clsx(
+              "fixed right-0 top-0 z-10 h-dvh overflow-hidden bg-default-50 transition-width md:static",
+              isDetailsVisible ? "w-full md:w-96" : "w-0 md:w-0",
+            )}
+          >
+            {sidebar}
+          </details>
         </div>
       </div>
-    </MobileViewContext.Provider>
+    </LayoutContext.Provider>
   );
 }

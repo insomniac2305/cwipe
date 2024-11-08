@@ -151,8 +151,6 @@ export interface Movie {
   cast: MovieDetails["credits"]["cast"];
 }
 
-export type LayoutArea = "aside" | "main";
-
 export type SwipeDirection = "left" | "right";
 
 export interface SwipeCardRef {

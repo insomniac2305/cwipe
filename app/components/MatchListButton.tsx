@@ -2,19 +2,19 @@
 import { Button } from "@nextui-org/react";
 import { useContext } from "react";
 import { LayoutContext } from "@/app/match/MatchLayout";
-import { FaBars } from "react-icons/fa6";
+import { FaListCheck } from "react-icons/fa6";
 
-export function MenuButton() {
-  const { toggleSideNav } = useContext(LayoutContext);
+export function MatchListButton() {
+  const { toggleSideInfo } = useContext(LayoutContext);
 
   return (
     <Button
       isIconOnly
       variant="flat"
-      onPress={() => toggleSideNav()}
+      onPress={() => toggleSideInfo()}
       aria-description="Back"
     >
-      <FaBars />
+      <FaListCheck />
     </Button>
   );
 }

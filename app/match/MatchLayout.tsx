@@ -5,61 +5,63 @@ import { usePathname } from "next/navigation";
 import { createContext, useState } from "react";
 
 export const LayoutContext = createContext<{
-  isAsideVisible: boolean;
-  isDetailsVisible: boolean;
-  toggleAside: () => void;
-  toggleDetails: () => void;
+  isSideNavVisible: boolean;
+  isSideInfoVisible: boolean;
+  toggleSideNav: () => void;
+  toggleSideInfo: () => void;
 }>({
-  isAsideVisible: true,
-  isDetailsVisible: false,
-  toggleAside: () => {},
-  toggleDetails: () => {},
+  isSideNavVisible: true,
+  isSideInfoVisible: false,
+  toggleSideNav: () => {},
+  toggleSideInfo: () => {},
 });
 
 export default function MatchLayout({
-  sidebar,
+  sideNav,
+  sideInfo,
   children,
 }: {
-  sidebar: React.ReactNode;
+  sideNav: React.ReactNode;
+  sideInfo: React.ReactNode;
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
-  const [isAsideVisible, setIsAsideVisible] = useState<boolean>(
+  const [isSideNavVisible, setIsSideNavVisible] = useState<boolean>(
     pathname === "/match",
   );
-  const [isDetailsVisible, setIsDetailsVisible] = useState<boolean>(false);
+  const [isSideInfoVisible, setIsSideInfoVisible] = useState<boolean>(false);
 
-  const toggleAside = () => setIsAsideVisible((prevState) => !prevState);
-  const toggleDetails = () => setIsDetailsVisible((prevState) => !prevState);
+  const toggleSideNav = () => setIsSideNavVisible((prevState) => !prevState);
+  const toggleSideInfo = () => setIsSideInfoVisible((prevState) => !prevState);
 
   return (
     <LayoutContext.Provider
       value={{
-        isAsideVisible,
-        isDetailsVisible,
-        toggleAside,
-        toggleDetails,
+        isSideNavVisible,
+        isSideInfoVisible: isSideInfoVisible,
+        toggleSideNav,
+        toggleSideInfo,
       }}
     >
       <div className="w-dvw overflow-hidden">
         <div className={"relative flex"}>
-          <aside
+          <nav
             className={clsx(
               "fixed left-0 top-0 z-20 h-dvh overflow-hidden bg-default-50 transition-width md:static",
-              isAsideVisible ? "w-full md:w-96" : "w-0 md:w-0",
+              isSideNavVisible ? "w-full md:w-96" : "w-0 md:w-0",
             )}
           >
-            {sidebar}
-          </aside>
+            {sideNav}
+          </nav>
           <main className="z-0 h-dvh flex-1">{children}</main>
-          <details
+          <aside
             className={clsx(
               "fixed right-0 top-0 z-10 h-dvh overflow-hidden bg-default-50 transition-width md:static",
-              isDetailsVisible ? "w-full md:w-96" : "w-0 md:w-0",
+              isSideInfoVisible ? "w-full md:w-96" : "w-0 md:w-0",
             )}
           >
-            {sidebar}
-          </details>
+            {sideInfo}
+          </aside>
         </div>
       </div>
     </LayoutContext.Provider>

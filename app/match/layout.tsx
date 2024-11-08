@@ -20,6 +20,8 @@ export default async function Match({
   }
 
   return (
-    <MatchLayout sidebar={<MatchSessionSidebar />}>{children}</MatchLayout>
+    <MatchLayout sideNav={<MatchSessionSidebar />} sideInfo={<div>Aside</div>}>
+      {children}
+    </MatchLayout>
   );
 }

@@ -12,6 +12,7 @@ import useMatches from "@/app/match/[id]/useMatches";
 import { filterUniqueObjectArray } from "@/app/lib/util";
 import { ErrorMessage } from "@/app/components/ErrorMessage";
 import { MenuButton } from "../../components/MenuButton";
+import { MatchListButton } from "@/app/components/MatchListButton";
 
 const RENDER_LIMIT = 3;
 const FETCH_NEXT_PAGE_LIMIT = 5;
@@ -140,6 +141,9 @@ export default function MovieStack({
     <div className="relative h-dvh w-full xl:flex xl:items-center xl:justify-center">
       <div className="absolute left-2 top-2 z-10">
         <MenuButton />
+      </div>
+      <div className="absolute right-2 top-2 z-10">
+        <MatchListButton />
       </div>
       <div className="relative z-0 h-[calc(100%-4.5rem)] w-full xl:mb-20 xl:h-5/6 xl:w-11/12">
         {!error &&

@@ -13,7 +13,7 @@ import { useSession } from "next-auth/react";
 import { ErrorMessage } from "@/app/components/ErrorMessage";
 import { MenuButton } from "@/app/components/MenuButton";
 
-export default function Lobby({
+export default function MatchSessionLobby({
   matchSession,
 }: {
   matchSession: MatchSession;

@@ -1,5 +1,5 @@
 import { auth } from "@/app/lib/auth";
-import Lobby from "@/app/match/[id]/Lobby";
+import MatchSessionLobby from "@/app/match/[id]/MatchSessionLobby";
 import {
   getMovies,
   getMatchSession,
@@ -31,7 +31,7 @@ export default async function MatchSession({
       //fall through
     }
     case !isSessionStarted && isUserJoined:
-      return <Lobby matchSession={matchSession} />;
+      return <MatchSessionLobby matchSession={matchSession} />;
     case isSessionStarted && !isUserJoined:
       throw new Error(
         "The host has already started this matching session! Please go back to create a new one.",

@@ -1,4 +1,4 @@
-import { MatchSessionItem } from "@/app/match/MatchSessionItem";
+import { MatchSessionListItem } from "@/app/match/MatchSessionListItem";
 import { getMatchSessions } from "@/app/match/actions";
 import { ErrorMessage } from "../components/ErrorMessage";
 
@@ -15,7 +15,7 @@ export async function MatchSessionList() {
       ) : (
         <ul className="flex flex-1 flex-col gap-2 self-stretch">
           {matchSessions.map((matchSession) => (
-            <MatchSessionItem
+            <MatchSessionListItem
               key={matchSession.id}
               matchSession={matchSession}
             />

@@ -1,11 +1,11 @@
 "use client";
 import { Button } from "@nextui-org/react";
 import { useContext } from "react";
-import { LayoutContext } from "@/app/match/MatchLayout";
 import { FaListCheck } from "react-icons/fa6";
+import { SideInfoContext } from "@/app/match/[id]/MatchSessionLayout";
 
 export function MatchListButton() {
-  const { toggleSideInfo } = useContext(LayoutContext);
+  const { toggleSideInfo } = useContext(SideInfoContext);
 
   return (
     <Button

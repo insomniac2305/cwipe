@@ -2,9 +2,9 @@ import React from "react";
 import { Chip, AvatarGroup, Avatar } from "@nextui-org/react";
 import { MatchSession } from "@/app/lib/definitions";
 import { auth } from "@/app/lib/auth";
-import { ContinueMatchButton } from "./ContinueMatchButton";
+import { ContinueMatchSessionButton } from "./ContinueMatchSessionButton";
 
-export async function MatchSessionItem({
+export async function MatchSessionListItem({
   matchSession,
 }: {
   matchSession: MatchSession;
@@ -51,7 +51,7 @@ export async function MatchSessionItem({
               : "Started"
             : "Not started"}
         </Chip>
-        <ContinueMatchButton id={matchSession.id} />
+        <ContinueMatchSessionButton id={matchSession.id} />
       </div>
     </li>
   );

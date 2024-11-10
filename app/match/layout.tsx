@@ -1,6 +1,6 @@
 import { auth } from "@/app/lib/auth";
 import MatchLayout from "@/app/match/MatchLayout";
-import { MatchSessionSidebar } from "@/app/match/MatchSessionSidebar";
+import { MatchSideNav } from "@/app/match/MatchSideNav";
 import { verifyOnboardingComplete } from "@/app/onboarding/actions";
 import { redirect } from "next/navigation";
 
@@ -19,7 +19,5 @@ export default async function Match({
     redirect(`/onboarding?${searchParams.toString()}`);
   }
 
-  return (
-    <MatchLayout sideNav={<MatchSessionSidebar />}>{children}</MatchLayout>
-  );
+  return <MatchLayout sideNav={<MatchSideNav />}>{children}</MatchLayout>;
 }

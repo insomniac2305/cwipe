@@ -1,7 +1,8 @@
 "use client";
 
+import { SideNavContext } from "@/app/match/MatchLayout";
 import clsx from "clsx";
-import { createContext, useState } from "react";
+import { createContext, useContext, useState } from "react";
 
 export const SideInfoContext = createContext<{
   isSideInfoVisible: boolean;
@@ -20,6 +21,7 @@ export default function MatchSessionLayout({
 }) {
   const [isSideInfoVisible, setIsSideInfoVisible] = useState<boolean>(false);
   const toggleSideInfo = () => setIsSideInfoVisible((prevState) => !prevState);
+  const { isSideNavVisible } = useContext(SideNavContext);
 
   return (
     <SideInfoContext.Provider
@@ -33,7 +35,12 @@ export default function MatchSessionLayout({
         <aside
           className={clsx(
             "fixed right-0 top-0 z-10 h-full overflow-hidden bg-default-50 transition-width md:static",
-            isSideInfoVisible ? "w-full md:w-96" : "w-0 md:w-0",
+            isSideInfoVisible && !isSideNavVisible
+              ? "w-full lg:w-[32rem]"
+              : "w-0 lg:w-0",
+            isSideInfoVisible &&
+              isSideNavVisible &&
+              "w-full lg:w-full 2xl:w-[32rem]",
           )}
         >
           {sideInfo}

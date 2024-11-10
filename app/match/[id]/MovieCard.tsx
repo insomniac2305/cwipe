@@ -1,14 +1,13 @@
 import { Movie, SwipeCardRef, SwipeDirection } from "@/app/lib/definitions";
 import SwipeCard from "@/app/match/[id]/SwipeCard";
-import { Divider } from "@nextui-org/react";
 import clsx from "clsx";
 import NextImage from "next/image";
 
 import { useEffect, useRef } from "react";
-import { HiMiniStar } from "react-icons/hi2";
 import { GenreList } from "./GenreList";
 import { ActorList } from "./ActorList";
 import { WatchProviderList } from "./WatchProviderList";
+import { MovieKeyFacts } from "@/app/match/[id]/MovieKeyFacts";
 
 export default function MovieCard({
   movie,
@@ -66,21 +65,17 @@ export default function MovieCard({
             )}
           >
             <div className="absolute top-[calc(100%-10rem)] flex h-full w-full flex-col bg-gradient-to-b from-transparent via-default-50/90 via-[4rem] to-default-50 to-[7rem] transition-all xl:static xl:justify-center xl:bg-none">
-              <div className="flex h-40 w-full flex-col justify-end gap-2 pb-3 xl:mt-10 xl:h-fit">
-                <h1 className="line-clamp-2 w-full text-ellipsis px-6 font-heading text-2xl xl:line-clamp-none xl:text-4xl">
+              <div className="flex h-40 w-full flex-col justify-end gap-2 px-6 pb-3 xl:mt-10 xl:h-fit">
+                <h1 className="line-clamp-2 w-full text-ellipsis font-heading text-2xl xl:line-clamp-none xl:text-4xl">
                   {movie.title}
                 </h1>
                 <GenreList genres={movie.genres}></GenreList>
-                <div className="flex gap-2 px-6 text-sm text-gray-200 xl:text-base">
-                  <div>
-                    <HiMiniStar className="relative top-[1px] inline align-baseline xl:top-[2px] xl:text-lg" />{" "}
-                    {movie.vote_average.toFixed(1)}
-                  </div>
-                  <Divider orientation="vertical" />
-                  {movie.release_date.slice(0, 4)}
-                  <Divider orientation="vertical" />
-                  {`${Math.floor(movie.runtime / 60)}h ${movie.runtime % 60}m`}
-                </div>
+                <MovieKeyFacts
+                  voteAverage={movie.vote_average}
+                  releaseDate={movie.release_date}
+                  runtime={movie.runtime}
+                  shouldScale
+                />
               </div>
               <div
                 className={clsx(

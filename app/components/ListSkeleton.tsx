@@ -1,6 +1,6 @@
 import { Skeleton } from "@nextui-org/react";
 
-export default function MatchSessionListSkeleton() {
+export default function ListSkeleton() {
   return (
     <div className="flex flex-1 flex-col items-center justify-center">
       <ul className="flex flex-1 flex-col gap-2 self-stretch">

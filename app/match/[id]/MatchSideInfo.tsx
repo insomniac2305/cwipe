@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 import ListSkeleton from "@/app/components/ListSkeleton";
 import { MatchList } from "./MatchList";
+import { MatchListButton } from "@/app/components/MatchListButton";
 
 export async function MatchSideInfo({
   matchSessionId,
@@ -8,8 +9,11 @@ export async function MatchSideInfo({
   matchSessionId: string;
 }) {
   return (
-    <div className="flex h-full w-full flex-col gap-2 p-8">
-      <h1 className="mb-2 text-nowrap font-heading text-2xl">Movie Matches</h1>
+    <div className="flex h-full w-full flex-col gap-2 p-6">
+      <div className="mb-2 flex items-center justify-between">
+        <h1 className="text-nowrap font-heading text-2xl">Movie Matches</h1>
+        <MatchListButton />
+      </div>
       <Suspense fallback={<ListSkeleton />}>
         <MatchList matchSessionId={matchSessionId} />
       </Suspense>

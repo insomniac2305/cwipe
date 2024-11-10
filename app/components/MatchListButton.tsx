@@ -1,11 +1,11 @@
 "use client";
 import { Button } from "@nextui-org/react";
 import { useContext } from "react";
-import { FaListCheck } from "react-icons/fa6";
+import { FaListCheck, FaXmark } from "react-icons/fa6";
 import { SideInfoContext } from "@/app/match/[id]/MatchSessionLayout";
 
 export function MatchListButton() {
-  const { toggleSideInfo } = useContext(SideInfoContext);
+  const { isSideInfoVisible, toggleSideInfo } = useContext(SideInfoContext);
 
   return (
     <Button
@@ -14,7 +14,7 @@ export function MatchListButton() {
       onPress={() => toggleSideInfo()}
       aria-description="Back"
     >
-      <FaListCheck />
+      {isSideInfoVisible ? <FaXmark /> : <FaListCheck />}
     </Button>
   );
 }

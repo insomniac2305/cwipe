@@ -2,10 +2,10 @@
 import { Button } from "@nextui-org/react";
 import { useContext } from "react";
 import { SideNavContext } from "@/app/match/MatchLayout";
-import { FaBars } from "react-icons/fa6";
+import { FaBars, FaXmark } from "react-icons/fa6";
 
 export function MenuButton() {
-  const { toggleSideNav } = useContext(SideNavContext);
+  const { isSideNavVisible, toggleSideNav } = useContext(SideNavContext);
 
   return (
     <Button
@@ -14,7 +14,7 @@ export function MenuButton() {
       onPress={() => toggleSideNav()}
       aria-description="Back"
     >
-      <FaBars />
+      {isSideNavVisible ? <FaXmark /> : <FaBars />}
     </Button>
   );
 }

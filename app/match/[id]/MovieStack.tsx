@@ -5,7 +5,7 @@ import { TMDB_PAGE_LIMIT } from "@/app/lib/tmdbConfiguration";
 import { getMovies, rateMovie } from "@/app/match/[id]/actions";
 import MovieCard from "@/app/match/[id]/MovieCard";
 import { Button, Spinner, useDisclosure } from "@nextui-org/react";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { SwipeButtonRow } from "./SwipeButtonRow";
 import MatchModal from "@/app/match/[id]/MatchModal";
 import useMatches from "@/app/match/[id]/useMatches";
@@ -13,6 +13,8 @@ import { filterUniqueObjectArray } from "@/app/lib/util";
 import { ErrorMessage } from "@/app/components/ErrorMessage";
 import { MenuButton } from "../../components/MenuButton";
 import { MatchListButton } from "@/app/components/MatchListButton";
+import { SideInfoContext } from "@/app/match/[id]/MatchSessionLayout";
+import { SideNavContext } from "@/app/match/MatchLayout";
 
 const RENDER_LIMIT = 3;
 const FETCH_NEXT_PAGE_LIMIT = 5;
@@ -43,6 +45,8 @@ export default function MovieStack({
   } = useMatches(matchSession.id, isMatchOpen);
 
   const [isInfoVisible, setIsInfoVisible] = useState(false);
+  const { isSideInfoVisible } = useContext(SideInfoContext);
+  const { isSideNavVisible } = useContext(SideNavContext);
 
   const currentMovieIndex = ratedMovies.findIndex(
     (movie) => movie.isLiked === undefined,
@@ -139,12 +143,16 @@ export default function MovieStack({
 
   return (
     <div className="relative h-dvh w-full xl:flex xl:items-center xl:justify-center">
-      <div className="absolute left-2 top-2 z-10">
-        <MenuButton />
-      </div>
-      <div className="absolute right-2 top-2 z-10">
-        <MatchListButton />
-      </div>
+      {!isSideNavVisible && (
+        <div className="absolute left-2 top-2 z-10">
+          <MenuButton />
+        </div>
+      )}
+      {!isSideInfoVisible && (
+        <div className="absolute right-2 top-2 z-10">
+          <MatchListButton />
+        </div>
+      )}
       <div className="relative z-0 h-[calc(100%-4.5rem)] w-full xl:mb-20 xl:h-5/6 xl:w-11/12">
         {!error &&
           ratedMovies.map(

@@ -9,7 +9,7 @@ export async function MatchList({
 }) {
   const { data: matchedMovies, error } = await getMatches(matchSessionId);
   return (
-    <div className="flex flex-1 flex-col items-center justify-center">
+    <div className="-mr-2 flex flex-1 flex-col items-center justify-center overflow-y-auto pr-2">
       {error ? (
         <ErrorMessage>{error.message}</ErrorMessage>
       ) : matchedMovies.length === 0 ? (

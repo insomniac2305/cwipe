@@ -69,7 +69,11 @@ export default function MovieCard({
                 <h1 className="line-clamp-2 w-full text-ellipsis font-heading text-2xl xl:line-clamp-none xl:text-4xl">
                   {movie.title}
                 </h1>
-                <GenreList genres={movie.genres}></GenreList>
+                <GenreList
+                  genres={movie.genres}
+                  isResponsive
+                  hasScrollbarOnHover
+                />
                 <MovieKeyFacts
                   voteAverage={movie.vote_average}
                   releaseDate={movie.release_date}

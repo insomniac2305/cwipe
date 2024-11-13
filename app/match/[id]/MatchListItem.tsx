@@ -3,6 +3,7 @@ import { Avatar, AvatarGroup, Link } from "@nextui-org/react";
 import { Movie } from "@/app/lib/definitions";
 import NextImage from "next/image";
 import { MovieKeyFacts } from "@/app/match/[id]/MovieKeyFacts";
+import { GenreList } from "@/app/match/[id]/GenreList";
 
 export async function MatchListItem({ movie }: { movie: Movie }) {
   return (
@@ -21,14 +22,19 @@ export async function MatchListItem({ movie }: { movie: Movie }) {
           draggable={false}
         />
       </Link>
-      <div className="flex h-full flex-col gap-2 px-2 py-4">
-        <h2 className="line-clamp-2 overflow-ellipsis font-heading text-lg">
+      <div className="flex h-full w-full flex-col gap-3 overflow-hidden px-2 py-3">
+        <h2 className="-mb-2 line-clamp-2 overflow-ellipsis font-heading text-lg">
           {movie.title}
         </h2>
         <MovieKeyFacts
           voteAverage={movie.vote_average}
           releaseDate={movie.release_date}
           runtime={movie.runtime}
+        />
+        <GenreList
+          genres={movie.genres}
+          isResponsive={false}
+          hasScrollbarOnHover={false}
         />
         <div className="flex justify-start">
           <AvatarGroup max={5} isGrid className="gap-2">

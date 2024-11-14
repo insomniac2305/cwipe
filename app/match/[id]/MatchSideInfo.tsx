@@ -1,5 +1,3 @@
-import { Suspense } from "react";
-import ListSkeleton from "@/app/components/ListSkeleton";
 import { MatchList } from "./MatchList";
 import { MatchListButton } from "@/app/components/MatchListButton";
 
@@ -14,9 +12,7 @@ export async function MatchSideInfo({
         <h1 className="text-nowrap font-heading text-2xl">Movie Matches</h1>
         <MatchListButton />
       </div>
-      <Suspense fallback={<ListSkeleton />}>
-        <MatchList matchSessionId={matchSessionId} />
-      </Suspense>
+      <MatchList matchSessionId={matchSessionId} />
     </div>
   );
 }

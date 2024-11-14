@@ -1,6 +1,6 @@
 "use server";
 
-import { GetResult, MatchSession } from "@/app/lib/definitions";
+import { GetResult, MatchSession, MovieMatch } from "@/app/lib/definitions";
 import { DiscoverMovies, Movie, MovieDetails } from "@/app/lib/definitions";
 import { sql } from "@vercel/postgres";
 import { notFound } from "next/navigation";
@@ -229,7 +229,7 @@ export async function rateMovie(id: number, isLiked?: boolean) {
 export async function getMatches(
   matchSessionId: string,
   from?: Date,
-): GetResult<Movie[]> {
+): GetResult<MovieMatch[]> {
   const session = await auth();
   const userId = session?.user?.id;
   try {
@@ -240,16 +240,18 @@ export async function getMatches(
 
     const { language, region } = userPreferenceData.rows[0];
 
-    const matchedMovieData = await sql`
-        SELECT movie_id
+    const matchesData = await sql`
+        SELECT movie_id, last_rated_at
         FROM match_session_matches
         WHERE match_session_id = ${matchSessionId}
         AND last_rated_at > ${from ? from.toISOString() : new Date(0).toISOString()}
         ORDER BY last_rated_at DESC`;
 
-    const matchedMovieIds = matchedMovieData.rows.map(
-      (match) => match.movie_id,
+    const matchesMap = new Map(
+      matchesData.rows.map((match) => [match.movie_id, match.last_rated_at]),
     );
+
+    const matchedMovieIds = Array.from(matchesMap.keys());
 
     const matchedMovies: Movie[] = await getMovieDetails(
       matchedMovieIds,
@@ -257,7 +259,12 @@ export async function getMatches(
       region,
     );
 
-    return { data: matchedMovies };
+    const movieMatches: MovieMatch[] = matchedMovies.map((movie) => ({
+      ...movie,
+      last_rated_at: matchesMap.get(movie.id),
+    }));
+
+    return { data: movieMatches };
   } catch (error) {
     return { error: { message: "Error loading matches" } };
   }

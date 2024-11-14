@@ -39,7 +39,7 @@ export default function MovieStack({
   } = useDisclosure();
 
   const {
-    matches,
+    newMatches,
     mutateMatches,
     error: matchError,
   } = useMatches(matchSession.id, isMatchOpen);
@@ -102,10 +102,10 @@ export default function MovieStack({
   }, [fetchNextMoviePage, shouldFetchNextMovies]);
 
   useEffect(() => {
-    if (matches?.length && matches.length > 0) {
-      // onMatchOpen();
+    if (newMatches?.length && newMatches.length > 0) {
+      onMatchOpen();
     }
-  }, [matches, onMatchOpen]);
+  }, [newMatches, onMatchOpen]);
 
   const toggleInfo = () => {
     setIsInfoVisible((prevState) => !prevState);
@@ -198,7 +198,7 @@ export default function MovieStack({
         />
       </div>
       <MatchModal
-        matches={matches}
+        matches={newMatches}
         isOpen={isMatchOpen}
         onOpenChange={onMatchOpenChange}
         error={matchError}

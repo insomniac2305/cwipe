@@ -151,6 +151,10 @@ export interface Movie {
   cast: MovieDetails["credits"]["cast"];
 }
 
+export interface MovieMatch extends Movie {
+  last_rated_at: Date;
+}
+
 export type SwipeDirection = "left" | "right";
 
 export interface SwipeCardRef {

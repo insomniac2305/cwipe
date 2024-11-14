@@ -5,7 +5,7 @@ import NextImage from "next/image";
 import { MovieKeyFacts } from "@/app/match/[id]/MovieKeyFacts";
 import { GenreList } from "@/app/match/[id]/GenreList";
 
-export async function MatchListItem({ movie }: { movie: Movie }) {
+export function MatchListItem({ movie }: { movie: Movie }) {
   return (
     <li className="flex w-full min-w-80 gap-2 rounded-2xl bg-content2 shadow-lg">
       <Link href={movie.watch_providers?.link} isExternal className="shrink-0">

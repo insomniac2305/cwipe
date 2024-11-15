@@ -7,7 +7,6 @@ import { ShareButton } from "@/app/match/[id]/ShareButton";
 import useSWR from "swr";
 import { getMatchSession, startMatchSession } from "@/app/match/[id]/actions";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import { FaCrown } from "react-icons/fa6";
 import { useSession } from "next-auth/react";
 import { ErrorMessage } from "@/app/components/ErrorMessage";
@@ -19,7 +18,6 @@ export default function MatchSessionLobby({
   matchSession: MatchSession;
 }) {
   const { data: session } = useSession();
-  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [startError, setStartError] = useState<string>();
   const { data, error: fetchError } = useSWR(
@@ -43,14 +41,14 @@ export default function MatchSessionLobby({
       setIsLoading(false);
       return;
     }
-    router.refresh();
+    location.reload();
   };
 
   useEffect(() => {
     if (data.is_started) {
-      router.refresh();
+      location.reload();
     }
-  }, [data.is_started, router]);
+  }, [data.is_started]);
 
   const error = startError || fetchError;
 

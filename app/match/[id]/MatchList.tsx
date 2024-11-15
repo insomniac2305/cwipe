@@ -8,7 +8,7 @@ export function MatchList({ matchSessionId }: { matchSessionId: string }) {
   const { matches: matchedMovies, error } = useMatches(matchSessionId);
 
   return (
-    <div className="-mr-2 flex flex-1 flex-col items-center justify-center overflow-y-auto pr-2">
+    <div className="flex flex-1 flex-col items-center justify-center overflow-hidden">
       {error ? (
         <ErrorMessage>{error.message}</ErrorMessage>
       ) : matchedMovies?.length === 0 ? (
@@ -16,7 +16,7 @@ export function MatchList({ matchSessionId }: { matchSessionId: string }) {
           No matches yet, keep swiping!
         </p>
       ) : (
-        <ul className="flex flex-1 flex-col gap-2 self-stretch">
+        <ul className="flex h-full flex-1 flex-col gap-2 self-stretch overflow-y-auto pr-2">
           {matchedMovies?.map((movie) => (
             <MatchListItem key={movie.id} movie={movie} />
           ))}

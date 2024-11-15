@@ -1,18 +1,24 @@
 import { Movie } from "@/app/lib/definitions";
 import { ScrollShadow, Link } from "@nextui-org/react";
 import { LogoImage } from "@/app/components/LogoImage";
+import clsx from "clsx";
 
 export function WatchProviderList({
   movieId,
   watchProviders,
+  hasScrollbarOnHover,
 }: {
   movieId: number;
   watchProviders: NonNullable<Movie["watch_providers"]>;
+  hasScrollbarOnHover: boolean;
 }) {
   return (
     <ScrollShadow
       orientation="horizontal"
-      className="flex items-start gap-2 scrollbar-hide hover:scrollbar-default"
+      className={clsx(
+        "flex items-start gap-2 scrollbar-hide",
+        hasScrollbarOnHover && "hover:scrollbar-default",
+      )}
     >
       {watchProviders.flatrate?.map((watchProvider) => {
         return (
@@ -20,6 +26,7 @@ export function WatchProviderList({
             href={watchProviders.link}
             isExternal
             key={movieId.toString() + watchProvider.provider_id.toString()}
+            className="shrink-0"
           >
             <LogoImage
               src={watchProvider.logo_path}

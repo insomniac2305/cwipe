@@ -1,9 +1,10 @@
 import React from "react";
-import { Avatar, AvatarGroup, Link } from "@nextui-org/react";
+import { Link } from "@nextui-org/react";
 import { Movie } from "@/app/lib/definitions";
 import NextImage from "next/image";
 import { MovieKeyFacts } from "@/app/match/[id]/MovieKeyFacts";
 import { GenreList } from "@/app/match/[id]/GenreList";
+import { WatchProviderList } from "@/app/match/[id]/WatchProviderList";
 
 export function MatchListItem({ movie }: { movie: Movie }) {
   return (
@@ -36,29 +37,13 @@ export function MatchListItem({ movie }: { movie: Movie }) {
           isResponsive={false}
           hasScrollbarOnHover={false}
         />
-        <div className="flex justify-start">
-          <AvatarGroup
-            max={5}
-            isGrid
-            className="grid-cols-6 gap-2"
-            classNames={{ count: "rounded-xl" }}
-          >
-            {movie.watch_providers?.flatrate?.map((watchProvider) => (
-              <Link
-                href={movie.watch_providers?.link}
-                isExternal
-                key={movie.id.toString() + watchProvider.provider_id.toString()}
-              >
-                <Avatar
-                  key={watchProvider.provider_id + movie.id}
-                  src={`${process.env.NEXT_PUBLIC_TMDB_IMAGE_BASE_URL}/original${watchProvider.logo_path}`}
-                  name={watchProvider.provider_name}
-                  radius="md"
-                />
-              </Link>
-            ))}
-          </AvatarGroup>
-        </div>
+        {movie.watch_providers && (
+          <WatchProviderList
+            movieId={movie.id}
+            watchProviders={movie.watch_providers}
+            hasScrollbarOnHover={false}
+          />
+        )}
       </div>
     </li>
   );

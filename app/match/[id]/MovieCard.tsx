@@ -101,6 +101,7 @@ export default function MovieCard({
                       <WatchProviderList
                         watchProviders={movie.watch_providers}
                         movieId={movie.id}
+                        hasScrollbarOnHover
                       />
                     </>
                   )}

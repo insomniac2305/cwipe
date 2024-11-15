@@ -31,7 +31,9 @@ export default async function MatchSession({
       //fall through
     }
     case !isSessionStarted && isUserJoined:
-      return <MatchSessionLobby matchSession={matchSession} />;
+      return (
+        <MatchSessionLobby matchSession={matchSession} session={session} />
+      );
     case isSessionStarted && !isUserJoined:
       throw new Error(
         "The host has already started this matching session! Please go back to create a new one.",

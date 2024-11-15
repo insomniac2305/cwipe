@@ -8,16 +8,17 @@ import useSWR from "swr";
 import { getMatchSession, startMatchSession } from "@/app/match/[id]/actions";
 import { useEffect, useState } from "react";
 import { FaCrown } from "react-icons/fa6";
-import { useSession } from "next-auth/react";
 import { ErrorMessage } from "@/app/components/ErrorMessage";
 import { MenuButton } from "@/app/components/MenuButton";
+import { Session } from "next-auth";
 
 export default function MatchSessionLobby({
   matchSession,
+  session,
 }: {
   matchSession: MatchSession;
+  session: Session | null;
 }) {
-  const { data: session } = useSession();
   const [isLoading, setIsLoading] = useState(false);
   const [startError, setStartError] = useState<string>();
   const { data, error: fetchError } = useSWR(

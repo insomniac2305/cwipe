@@ -37,14 +37,25 @@ export function MatchListItem({ movie }: { movie: Movie }) {
           hasScrollbarOnHover={false}
         />
         <div className="flex justify-start">
-          <AvatarGroup max={5} isGrid className="gap-2">
+          <AvatarGroup
+            max={5}
+            isGrid
+            className="grid-cols-6 gap-2"
+            classNames={{ count: "rounded-xl" }}
+          >
             {movie.watch_providers?.flatrate?.map((watchProvider) => (
-              <Avatar
-                key={watchProvider.provider_id + movie.id}
-                src={`${process.env.NEXT_PUBLIC_TMDB_IMAGE_BASE_URL}/original${watchProvider.logo_path}`}
-                name={watchProvider.provider_name}
-                radius="md"
-              />
+              <Link
+                href={movie.watch_providers?.link}
+                isExternal
+                key={movie.id.toString() + watchProvider.provider_id.toString()}
+              >
+                <Avatar
+                  key={watchProvider.provider_id + movie.id}
+                  src={`${process.env.NEXT_PUBLIC_TMDB_IMAGE_BASE_URL}/original${watchProvider.logo_path}`}
+                  name={watchProvider.provider_name}
+                  radius="md"
+                />
+              </Link>
             ))}
           </AvatarGroup>
         </div>

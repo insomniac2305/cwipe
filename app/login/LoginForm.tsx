@@ -4,7 +4,7 @@ import { signInAnonymous } from "@/app/login/actions";
 import { useFormState, useFormStatus } from "react-dom";
 import { Button, Input } from "@nextui-org/react";
 import { useSearchParams } from "next/navigation";
-import { Suspense } from "react";
+import { ReactNode, Suspense } from "react";
 
 function CallbackUrlInput() {
   const searchParams = useSearchParams();
@@ -14,9 +14,17 @@ function CallbackUrlInput() {
   );
 }
 
+function SubmitButton({ children }: { children: ReactNode }) {
+  const { pending } = useFormStatus();
+  return (
+    <Button type="submit" color="primary" isLoading={pending}>
+      {children}
+    </Button>
+  );
+}
+
 export default function LoginForm() {
   const [errorMessage, dispatch] = useFormState(signInAnonymous, undefined);
-  const { pending } = useFormStatus();
 
   return (
     <form action={dispatch} className="flex flex-col gap-4">
@@ -30,9 +38,7 @@ export default function LoginForm() {
       <Suspense>
         <CallbackUrlInput />
       </Suspense>
-      <Button type="submit" color="primary" isLoading={pending}>
-        Start session
-      </Button>
+      <SubmitButton>Start Session</SubmitButton>
     </form>
   );
 }

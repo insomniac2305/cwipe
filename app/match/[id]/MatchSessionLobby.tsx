@@ -6,11 +6,12 @@ import { Badge, Button } from "@nextui-org/react";
 import { ShareButton } from "@/app/match/[id]/ShareButton";
 import useSWR from "swr";
 import { getMatchSession, startMatchSession } from "@/app/match/[id]/actions";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { FaCrown } from "react-icons/fa6";
 import { ErrorMessage } from "@/app/components/ErrorMessage";
 import { MenuButton } from "@/app/components/MenuButton";
 import { Session } from "next-auth";
+import { SideNavContext } from "@/app/match/MatchLayout";
 
 export default function MatchSessionLobby({
   matchSession,
@@ -19,6 +20,7 @@ export default function MatchSessionLobby({
   matchSession: MatchSession;
   session: Session | null;
 }) {
+  const { isSideNavVisible } = useContext(SideNavContext);
   const [isLoading, setIsLoading] = useState(false);
   const [startError, setStartError] = useState<string>();
   const { data, error: fetchError } = useSWR(
@@ -55,10 +57,12 @@ export default function MatchSessionLobby({
 
   return (
     <main className="flex h-dvh items-center justify-center overflow-hidden">
-      <div className="flex h-full w-full flex-col overflow-auto p-8">
+      <div className="flex h-full w-full flex-col overflow-auto p-6">
         <div className="flex items-center gap-4">
-          <MenuButton />
-          <h1 className="font-heading text-2xl">Lobby</h1>
+          {!isSideNavVisible && <MenuButton />}
+          <h1 className="flex h-10 items-center font-heading text-2xl">
+            Lobby
+          </h1>
         </div>
         <div className="grid flex-auto grid-cols-[repeat(auto-fill,minmax(5rem,1fr))] content-start justify-items-center gap-2 py-4">
           {data.users.map((user, index) => (

@@ -3,6 +3,7 @@ import { Suspense } from "react";
 import ListSkeleton from "@/app/components/ListSkeleton";
 import { MatchSessionList } from "./MatchSessionList";
 import { MenuButton } from "@/app/components/MenuButton";
+import { UserAvatarLink } from "@/app/match/UserAvatarLink";
 
 export async function MatchSideNav() {
   return (
@@ -14,7 +15,8 @@ export async function MatchSideNav() {
       <Suspense fallback={<ListSkeleton />}>
         <MatchSessionList />
       </Suspense>
-      <div className="self-center">
+      <div className="flex justify-between">
+        <UserAvatarLink href="/preferences" />
         <CreateMatchSessionForm />
       </div>
     </div>

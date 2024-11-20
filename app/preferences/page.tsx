@@ -2,10 +2,11 @@ import ListSkeleton from "@/app/components/ListSkeleton";
 import SignOutButton from "@/app/components/SignOutButton";
 import { auth } from "@/app/lib/auth";
 import GoogleSignInButton from "@/app/login/GoogleSignInButton";
+import { EditPreferencesButton } from "@/app/preferences/EditPreferencesButton";
 import { UserPreferences } from "@/app/preferences/UserPreferences";
 import { Avatar, Button, Divider, Link } from "@nextui-org/react";
 import { Suspense } from "react";
-import { FaHouse, FaPenToSquare } from "react-icons/fa6";
+import { FaHouse } from "react-icons/fa6";
 
 export default async function Preferences() {
   const session = await auth();
@@ -38,14 +39,7 @@ export default async function Preferences() {
               />
               <p className="text-xl font-bold">{session.user.name}</p>
             </div>
-            <Button
-              as={Link}
-              href="/onboarding"
-              startContent={<FaPenToSquare />}
-              color="primary"
-            >
-              Edit preferences
-            </Button>
+            <EditPreferencesButton />
             <Divider className="my-4" />
             <Suspense fallback={<ListSkeleton />}>
               <UserPreferences />

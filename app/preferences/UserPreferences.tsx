@@ -1,35 +1,40 @@
+import { ErrorMessage } from "@/app/components/ErrorMessage";
 import { Genre } from "@/app/components/Genre";
 import { LogoImage } from "@/app/components/LogoImage";
+import { getUserPreferences } from "@/app/preferences/actions";
 import { PreferenceCard } from "@/app/preferences/PreferenceCard";
 import { FaEarthAmericas, FaIcons, FaLanguage, FaVideo } from "react-icons/fa6";
 
-export function UserPreferences() {
-  return (
+export async function UserPreferences() {
+  const { data: userPreferences, error } = await getUserPreferences();
+
+  return error ? (
+    <div className="flex justify-center">
+      <ErrorMessage>{error.message}</ErrorMessage>
+    </div>
+  ) : (
     <div className="flex flex-col gap-2">
       <PreferenceCard icon={<FaLanguage />} title="Language">
-        English
+        {userPreferences.language?.name}
       </PreferenceCard>
       <PreferenceCard icon={<FaEarthAmericas />} title="Region">
-        Germany
+        {userPreferences.region?.native_name}
       </PreferenceCard>
       <PreferenceCard icon={<FaVideo />} title="Streaming Providers" isList>
-        <LogoImage src="/9ghgSC0MA082EL6HLCW3GalykFD.jpg" name="Apple TV" />
-        <LogoImage src="/pbpMk2JmcoNnQwx5JGpXngfoWtp.jpg" name="Netflix" />
-        <LogoImage
-          src="/dQeAar5H991VYporEjUspolDarG.jpg"
-          name="Amazon Prime Video"
-        />
+        {userPreferences.providers?.map((provider) => (
+          <LogoImage
+            key={provider.provider_id}
+            src={provider.logo_path}
+            name={provider.provider_name}
+          />
+        ))}
       </PreferenceCard>
       <PreferenceCard icon={<FaIcons />} title="Favorite Genres" isList>
-        <Genre id={28} size="md">
-          Action
-        </Genre>
-        <Genre id={12} size="md">
-          Adventure
-        </Genre>
-        <Genre id={16} size="md">
-          Animation
-        </Genre>
+        {userPreferences.genres?.map((genre) => (
+          <Genre key={genre.id} id={genre.id} size="md">
+            {genre.name}
+          </Genre>
+        ))}
       </PreferenceCard>
     </div>
   );

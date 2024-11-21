@@ -4,7 +4,7 @@ import { auth } from "@/app/lib/auth";
 import GoogleSignInButton from "@/app/login/GoogleSignInButton";
 import { EditPreferencesButton } from "@/app/preferences/EditPreferencesButton";
 import { UserPreferences } from "@/app/preferences/UserPreferences";
-import { Avatar, Button, Divider, Link } from "@nextui-org/react";
+import { Avatar, Button, Divider, Link, Skeleton } from "@nextui-org/react";
 import { Suspense } from "react";
 import { FaHouse } from "react-icons/fa6";
 
@@ -39,7 +39,9 @@ export default async function Preferences() {
               />
               <p className="text-xl font-bold">{session.user.name}</p>
             </div>
-            <EditPreferencesButton />
+            <Suspense fallback={<Skeleton className="h-10 rounded-2xl" />}>
+              <EditPreferencesButton />
+            </Suspense>
             <Divider className="my-4" />
             <Suspense fallback={<ListSkeleton />}>
               <UserPreferences />

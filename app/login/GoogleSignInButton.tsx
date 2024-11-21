@@ -11,7 +11,7 @@ function GoogleSignInButton() {
   const callbackUrl = searchParams.get("callbackUrl");
   return (
     <Button
-      className="bg-white font-medium text-[#1F1F1F]"
+      className="shrink-0 bg-white font-medium text-[#1F1F1F]"
       aria-description="Google"
       startContent={<FcGoogle className="text-2xl" />}
       onPress={() => signInWithGoogle(callbackUrl || undefined)}

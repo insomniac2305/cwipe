@@ -3,8 +3,31 @@
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { HiHandThumbUp } from "react-icons/hi2";
+import { DiscoverMovies } from "@/app/lib/definitions";
+import fallbackImage1 from "@/public/movie-poster-fallback-1.jpg";
+import fallbackImage2 from "@/public/movie-poster-fallback-2.jpg";
+import fallbackImage3 from "@/public/movie-poster-fallback-3.jpg";
 
-export function DynamicMoviePosters() {
+export function DynamicMoviePosters({
+  movies,
+}: {
+  movies?: DiscoverMovies["results"];
+}) {
+  const fallbackMovies = [
+    {
+      poster_path: fallbackImage1,
+      title: "Movie 1",
+    },
+    {
+      poster_path: fallbackImage2,
+      title: "Movie 2",
+    },
+    {
+      poster_path: fallbackImage3,
+      title: "Movie 3",
+    },
+  ];
+
   return (
     <div className="relative mx-16 my-32">
       <motion.div
@@ -14,16 +37,20 @@ export function DynamicMoviePosters() {
           y: 0,
         }}
         whileInView={{
-          x: -64,
-          y: -128,
+          x: -32,
+          y: -64,
           opacity: 1,
         }}
       >
         <Image
           width={300}
           height={500}
-          src={`${process.env.NEXT_PUBLIC_TMDB_IMAGE_BASE_URL}/original/wTnV3PCVW5O92JMrFvvrRcV39RU.jpg`}
-          alt="The Wild Robot Poster"
+          src={
+            movies
+              ? `${process.env.NEXT_PUBLIC_TMDB_IMAGE_BASE_URL}/original/${movies[0].poster_path}`
+              : fallbackMovies[0].poster_path
+          }
+          alt={`${movies ? movies[0].title : fallbackMovies[0].title} poster`}
         />
       </motion.div>
       <motion.div
@@ -39,8 +66,12 @@ export function DynamicMoviePosters() {
         <Image
           width={300}
           height={500}
-          src={`${process.env.NEXT_PUBLIC_TMDB_IMAGE_BASE_URL}/original/ty8TGRuvJLPUmAR1H1nRIsgwvim.jpg`}
-          alt="Gladiator Poster"
+          src={
+            movies
+              ? `${process.env.NEXT_PUBLIC_TMDB_IMAGE_BASE_URL}/original/${movies[1].poster_path}`
+              : fallbackMovies[1].poster_path
+          }
+          alt={`${movies ? movies[1].title : fallbackMovies[1].title} poster`}
         />
       </motion.div>
       <motion.div
@@ -72,8 +103,12 @@ export function DynamicMoviePosters() {
         <Image
           width={300}
           height={500}
-          src={`${process.env.NEXT_PUBLIC_TMDB_IMAGE_BASE_URL}/original/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg`}
-          alt="Interstellar Poster"
+          src={
+            movies
+              ? `${process.env.NEXT_PUBLIC_TMDB_IMAGE_BASE_URL}/original/${movies[2].poster_path}`
+              : fallbackMovies[2].poster_path
+          }
+          alt={`${movies ? movies[2].title : fallbackMovies[2].title} poster`}
         />
       </motion.div>
     </div>

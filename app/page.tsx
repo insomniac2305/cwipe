@@ -1,8 +1,11 @@
+import { getTopMovies } from "@/app/actions";
 import { MainBackground } from "@/app/components/MainBackground";
 import { DynamicMoviePosters } from "@/app/DynamicMoviePosters";
 import { Button, Link } from "@nextui-org/react";
 
-export default function Home() {
+export default async function Home() {
+  const { data: topMovies } = await getTopMovies();
+
   return (
     <MainBackground>
       <div className="flex w-full max-w-screen-2xl flex-wrap items-center justify-between gap-8 p-8 md:pl-24 lg:flex-nowrap">
@@ -19,7 +22,7 @@ export default function Home() {
           </div>
         </div>
         <div className="flex grow justify-center">
-          <DynamicMoviePosters />
+          <DynamicMoviePosters movies={topMovies} />
         </div>
       </div>
     </MainBackground>

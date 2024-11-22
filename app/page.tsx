@@ -1,3 +1,4 @@
+import { BrandLogo } from "@/app/components/Brand";
 import { MainBackground } from "@/app/components/MainBackground";
 import { Button, Link } from "@nextui-org/react";
 import Image from "next/image";
@@ -5,11 +6,11 @@ import Image from "next/image";
 export default function Home() {
   return (
     <MainBackground>
-      <div className="flex w-full max-w-screen-xl flex-wrap items-center justify-between gap-16 p-8 md:p-16">
-        <div className="flex grow flex-col items-center gap-8 md:gap-16">
-          <h1 className="text text-center font-heading text-5xl md:text-7xl">
-            Swipe to find
-            <br /> your movie match
+      <div className="flex w-full max-w-screen-2xl flex-wrap items-center justify-between gap-8 p-8 md:pl-24 lg:flex-nowrap">
+        <div className="flex grow flex-col items-center gap-8 md:gap-16 lg:items-start">
+          <h1 className="text-center font-heading text-5xl md:text-7xl lg:text-start">
+            <span className="text-7xl md:text-9xl">Cwipe</span>
+            <br /> to find your <br /> movie match
           </h1>
           <div className="flex items-center gap-8">
             <Button as={Link} color="primary" size="lg" href="/login">

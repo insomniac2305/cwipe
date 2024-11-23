@@ -9,7 +9,7 @@ export function MainBackground({ children }: { children: React.ReactNode }) {
   });
   const bgImageSet = getImageSet(bgImageProps.srcSet);
   return (
-    <main className="relative flex min-h-dvh flex-col items-center justify-center gap-4 overflow-hidden bg-gradient-radial from-background/60 to-background to-95%">
+    <div className="relative flex min-h-dvh flex-col items-center justify-center gap-4 overflow-hidden bg-gradient-radial from-background/60 to-background to-95%">
       <div
         className="absolute left-0 top-0 -z-10 h-full w-full -rotate-6 skew-y-[18deg] bg-cover"
         style={{
@@ -17,6 +17,6 @@ export function MainBackground({ children }: { children: React.ReactNode }) {
         }}
       />
       {children}
-    </main>
+    </div>
   );
 }

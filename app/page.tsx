@@ -2,8 +2,13 @@ import { getTopMovies } from "@/app/actions";
 import { MainBackground } from "@/app/components/MainBackground";
 import { DynamicMoviePosters } from "@/app/DynamicMoviePosters";
 import { Button, Divider, Link } from "@nextui-org/react";
-import { FaGlobeAmericas, FaTheaterMasks } from "react-icons/fa";
-import { FaHeart, FaPeopleGroup, FaVideo } from "react-icons/fa6";
+import {
+  FaEarthAmericas,
+  FaHeart,
+  FaMasksTheater,
+  FaPeopleGroup,
+  FaPlay,
+} from "react-icons/fa6";
 
 export default async function Home() {
   const { data: topMovies } = await getTopMovies();
@@ -31,45 +36,48 @@ export default async function Home() {
       </MainBackground>
       <div className="flex flex-col items-center gap-4 p-8 md:p-16">
         <h2 className="text-center font-heading text-3xl">
-          Find the perfect movie, Together!
+          Don&apos;t know what to watch together?
         </h2>
         <p className="mb-16 text-center text-foreground/75">
-          Swipe through movies with your friends and discover your next watch in
-          minutes. Here&apos;s how it works:
+          Swipe your way to the perfect movie for you and your friends in just a
+          few steps! Here&apos;s how it works:
         </p>
         <ol className="flex w-full max-w-screen-lg flex-col items-center gap-12">
           <li className="flex max-w-lg items-center justify-center gap-16 p-4">
             <div className="text-7xl text-primary">
-              <FaGlobeAmericas />
+              <FaEarthAmericas />
             </div>
             <div>
               <h3 className="text-lg font-medium">Set the Scene</h3>
               <p className="text-foreground/75">
-                Choose your language and region to unlock a tailored movie list.
+                Choose your language and region to determine which streaming
+                providers and movies are available to you.
               </p>
             </div>
           </li>
           <Divider className="max-w-96" />
           <li className="flex max-w-lg items-center justify-center gap-16 p-4">
             <div>
-              <h3 className="text-lg font-medium">Stream Your Way</h3>
+              <h3 className="text-lg font-medium">Streamline the Choices</h3>
               <p className="text-foreground/75">
-                Pick your go-to streaming platforms for seamless choices.
+                Select your favorite streaming providers so all recommendations
+                are at your fingertips.
               </p>
             </div>
             <div className="text-7xl text-secondary">
-              <FaVideo />
+              <FaPlay />
             </div>
           </li>
           <Divider className="max-w-96" />
           <li className="flex max-w-lg items-center justify-center gap-16 p-4">
             <div className="text-7xl text-success">
-              <FaTheaterMasks />
+              <FaMasksTheater />
             </div>
             <div>
-              <h3 className="text-lg font-medium">Define Your Vibe</h3>
+              <h3 className="text-lg font-medium">Check Your Vibe</h3>
               <p className="text-foreground/75">
-                Select your favorite genres to match your style.
+                Pick your favorite genres and let us curate a selection
+                you&apos;ll love.
               </p>
             </div>
           </li>

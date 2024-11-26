@@ -43,23 +43,27 @@ export default async function Home() {
           few steps! Here&apos;s how it works:
         </p>
         <ol className="flex w-full max-w-screen-lg flex-col items-center gap-12">
-          <li className="flex max-w-lg items-center justify-center gap-16 p-4">
+          <li className="flex max-w-lg flex-col items-center justify-center gap-6 p-4 sm:flex-row sm:gap-16">
             <div className="text-7xl text-primary">
               <FaEarthAmericas />
             </div>
-            <div>
-              <h3 className="text-lg font-medium">Set the Scene</h3>
-              <p className="text-foreground/75">
+            <div className="flex flex-col gap-1">
+              <h3 className="text-center text-lg font-medium sm:text-start">
+                Set the Scene
+              </h3>
+              <p className="text-center text-foreground/75 sm:text-start">
                 Choose your language and region to determine which streaming
                 providers and movies are available to you.
               </p>
             </div>
           </li>
           <Divider className="max-w-96" />
-          <li className="flex max-w-lg items-center justify-center gap-16 p-4">
-            <div>
-              <h3 className="text-lg font-medium">Streamline the Choices</h3>
-              <p className="text-foreground/75">
+          <li className="flex max-w-lg flex-col-reverse items-center justify-center gap-6 p-4 sm:flex-row sm:gap-16">
+            <div className="flex flex-col gap-1">
+              <h3 className="text-center text-lg font-medium sm:text-start">
+                Streamline the Choices
+              </h3>
+              <p className="text-center text-foreground/75 sm:text-start">
                 Select your favorite streaming providers so all recommendations
                 are at your fingertips.
               </p>
@@ -69,23 +73,27 @@ export default async function Home() {
             </div>
           </li>
           <Divider className="max-w-96" />
-          <li className="flex max-w-lg items-center justify-center gap-16 p-4">
+          <li className="flex max-w-lg flex-col items-center justify-center gap-6 p-4 sm:flex-row sm:gap-16">
             <div className="text-7xl text-success">
               <FaMasksTheater />
             </div>
-            <div>
-              <h3 className="text-lg font-medium">Check Your Vibe</h3>
-              <p className="text-foreground/75">
+            <div className="flex flex-col gap-1">
+              <h3 className="text-center text-lg font-medium sm:text-start">
+                Check Your Vibe
+              </h3>
+              <p className="text-center text-foreground/75 sm:text-start">
                 Pick your favorite genres and let us curate a selection
                 you&apos;ll love.
               </p>
             </div>
           </li>
           <Divider className="max-w-96" />
-          <li className="flex max-w-lg items-center justify-center gap-16 p-4">
-            <div>
-              <h3 className="text-lg font-medium">Squad Up</h3>
-              <p className="text-foreground/75">
+          <li className="flex max-w-lg flex-col-reverse items-center justify-center gap-6 p-4 sm:flex-row sm:gap-16">
+            <div className="flex flex-col gap-1">
+              <h3 className="text-center text-lg font-medium sm:text-start">
+                Squad Up
+              </h3>
+              <p className="text-center text-foreground/75 sm:text-start">
                 Invite your friends and get ready to swipe together.
               </p>
             </div>
@@ -94,13 +102,15 @@ export default async function Home() {
             </div>
           </li>
           <Divider className="max-w-96" />
-          <li className="flex max-w-lg items-center justify-center gap-16 p-4">
+          <li className="flex max-w-lg flex-col items-center justify-center gap-6 p-4 sm:flex-row sm:gap-16">
             <div className="text-7xl text-danger">
               <FaHeart />
             </div>
-            <div>
-              <h3 className="text-lg font-medium">Find the One</h3>
-              <p className="text-foreground/75">
+            <div className="flex flex-col gap-1">
+              <h3 className="text-center text-lg font-medium sm:text-start">
+                Find the One
+              </h3>
+              <p className="text-center text-foreground/75 sm:text-start">
                 Swipe, match, and discover the movie everyone&apos;s excited
                 about!
               </p>

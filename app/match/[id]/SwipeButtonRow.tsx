@@ -58,7 +58,7 @@ export function SwipeButtonRow({
         <HiHandThumbUp />
       </Button>
       <Button
-        className="text-xl"
+        className="text-xl xl:hidden"
         aria-label="More Info"
         radius="full"
         variant="flat"

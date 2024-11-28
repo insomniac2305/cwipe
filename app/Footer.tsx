@@ -3,7 +3,7 @@ import Image from "next/image";
 import TMDBLogo from "@/public/tmdb-logo.svg";
 import JustWatchLogo from "@/public/justwatch-logo.webp";
 
-export async function Footer() {
+export function Footer() {
   return (
     <footer className="flex w-full flex-wrap justify-around gap-8 bg-default-50 p-8">
       <div className="flex items-center">

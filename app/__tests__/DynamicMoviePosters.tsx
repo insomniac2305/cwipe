@@ -1,4 +1,4 @@
-import "@/app/__mocks__/intersectionObserver";
+import "@/app/__mocks__/IntersectionObserver";
 import "@/app/__mocks__/Image";
 import "@/app/__mocks__/FallbackImages";
 import { DynamicMoviePosters } from "@/app/DynamicMoviePosters";

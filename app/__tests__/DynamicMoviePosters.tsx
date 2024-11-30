@@ -1,5 +1,6 @@
 import "@/app/__mocks__/intersectionObserver";
 import "@/app/__mocks__/Image";
+import "@/app/__mocks__/FallbackImages";
 import { DynamicMoviePosters } from "@/app/DynamicMoviePosters";
 import { DiscoverMovies } from "@/app/lib/definitions";
 import "@testing-library/jest-dom";
@@ -45,5 +46,17 @@ describe("Dynamic Movie Posters", () => {
     );
 
     expect(actualPosterPaths).toEqual(mockPosterPaths);
+  });
+
+  it("displays three fallback images when movies prop undefined", () => {
+    render(<DynamicMoviePosters />);
+
+    const posters = screen.getAllByRole("img");
+
+    const arePosterPathsFallback = posters.map((poster) =>
+      poster.getAttribute("src")?.includes("fallback"),
+    );
+
+    expect(arePosterPathsFallback).toEqual([true, true, true]);
   });
 });

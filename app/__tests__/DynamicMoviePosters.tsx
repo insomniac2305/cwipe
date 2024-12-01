@@ -1,43 +1,24 @@
 import "@/app/__mocks__/IntersectionObserver";
 import "@/app/__mocks__/Image";
 import "@/app/__mocks__/FallbackImages";
+import { mockDiscoverMovie } from "@/app/__mocks__/actions";
 import { DynamicMoviePosters } from "@/app/DynamicMoviePosters";
-import { DiscoverMovies } from "@/app/lib/definitions";
 import "@testing-library/jest-dom";
 import { render, screen } from "@testing-library/react";
 
-const mockDiscoverMovie = (
-  title = "",
-  posterPath = "",
-): DiscoverMovies["results"][0] => ({
-  adult: false,
-  backdrop_path: "",
-  genre_ids: [],
-  id: 1,
-  original_language: "",
-  original_title: "",
-  overview: "",
-  popularity: 0,
-  poster_path: posterPath,
-  release_date: "",
-  title: title,
-  video: false,
-  vote_average: 0,
-  vote_count: 0,
-});
+const mockMovies = [
+  mockDiscoverMovie("1", "1.jpg"),
+  mockDiscoverMovie("2", "2.jpg"),
+  mockDiscoverMovie("3", "3.jpg"),
+];
+
+const mockPosterPaths = mockMovies.map(
+  (mockMovie) =>
+    `${process.env.NEXT_PUBLIC_TMDB_IMAGE_BASE_URL}/original/${mockMovie.poster_path}`,
+);
 
 describe("Dynamic Movie Posters", () => {
   it("displays images posters of first three movies passed as prop", () => {
-    const mockMovies = [
-      mockDiscoverMovie("1", "1.jpg"),
-      mockDiscoverMovie("2", "2.jpg"),
-      mockDiscoverMovie("3", "3.jpg"),
-    ];
-    const mockPosterPaths = mockMovies.map(
-      (mockMovie) =>
-        `${process.env.NEXT_PUBLIC_TMDB_IMAGE_BASE_URL}/original/${mockMovie.poster_path}`,
-    );
-
     render(<DynamicMoviePosters movies={mockMovies} />);
 
     const posters = screen.getAllByRole("img");

@@ -1,14 +1,14 @@
+import { redirect } from "next/navigation";
+import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
+import { auth } from "@/app/lib/auth";
 import {
   getRegions,
   getLanguages,
   getWatchProviders,
   getGenres,
 } from "@/app/lib/tmdbActions";
-import { StartForm } from "./StartForm";
-import { auth } from "@/app/lib/auth";
-import { verifyOnboardingComplete } from "@/app/onboarding/actions";
-import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
-import { redirect } from "next/navigation";
+import { verifyOnboardingComplete } from "@/app/onboarding/lib/actions";
+import { StartForm } from "@/app/onboarding/components/StartForm";
 
 export default async function Onboarding({
   searchParams,

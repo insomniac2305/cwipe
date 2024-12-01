@@ -1,9 +1,4 @@
-import ListSkeleton from "@/app/components/ListSkeleton";
-import SignOutButton from "@/app/components/SignOutButton";
-import { auth } from "@/app/lib/auth";
-import GoogleSignInButton from "@/app/login/GoogleSignInButton";
-import { EditPreferencesButton } from "@/app/preferences/EditPreferencesButton";
-import { UserPreferences } from "@/app/preferences/UserPreferences";
+import { Suspense } from "react";
 import {
   Avatar,
   Button,
@@ -14,8 +9,13 @@ import {
   Link,
   Skeleton,
 } from "@nextui-org/react";
-import { Suspense } from "react";
 import { FaHouse } from "react-icons/fa6";
+import { auth } from "@/app/lib/auth";
+import ListSkeleton from "@/app/components/ListSkeleton";
+import SignOutButton from "@/app/components/SignOutButton";
+import GoogleSignInButton from "@/app/components/GoogleSignInButton";
+import { UserPreferences } from "@/app/preferences/components/UserPreferences";
+import { EditPreferencesButton } from "@/app/preferences/components/EditPreferencesButton";
 
 export default async function Preferences() {
   const session = await auth();

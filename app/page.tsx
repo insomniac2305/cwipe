@@ -1,7 +1,3 @@
-import { getTopMovies } from "@/app/actions";
-import { MainBackground } from "@/app/components/MainBackground";
-import { DynamicMoviePosters } from "@/app/DynamicMoviePosters";
-import { Footer } from "@/app/Footer";
 import { Button, Divider, Link } from "@nextui-org/react";
 import {
   FaEarthAmericas,
@@ -10,6 +6,10 @@ import {
   FaPeopleGroup,
   FaPlay,
 } from "react-icons/fa6";
+import { getTopMovies } from "@/app/lib/actions";
+import { Footer } from "@/app/components/Footer";
+import { MainBackground } from "@/app/components/MainBackground";
+import { DynamicMoviePosters } from "@/app/components/DynamicMoviePosters";
 
 export default async function Home() {
   const { data: topMovies } = await getTopMovies();

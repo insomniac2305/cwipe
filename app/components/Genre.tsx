@@ -1,6 +1,6 @@
-import genreIcons from "@/app/lib/genreIcons";
-import { Chip } from "@nextui-org/react";
 import clsx from "clsx";
+import { Chip } from "@nextui-org/react";
+import genreIcons from "@/app/lib/genreIcons";
 
 export function Genre({
   id,
@@ -23,7 +23,7 @@ export function Genre({
     <Chip
       className={clsx(
         "transition-background",
-        isResponsive && " xl:h-7 xl:text-sm",
+        isResponsive && "xl:h-7 xl:text-sm",
         isFocused && "outline outline-2 outline-primary",
       )}
       classNames={{ content: clsx(isResponsive && "xl:pl-1") }}

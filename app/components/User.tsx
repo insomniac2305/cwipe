@@ -1,5 +1,5 @@
-import { getInitials } from "@/app/lib/util";
 import { User as NextUIUser } from "@nextui-org/react";
+import { getInitials } from "@/app/lib/util";
 
 export function User({
   name,

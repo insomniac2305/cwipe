@@ -1,12 +1,12 @@
+import { User } from "next-auth";
 import { auth } from "@/app/lib/auth";
-import MatchSessionLobby from "@/app/match/[id]/MatchSessionLobby";
 import {
   getMovies,
   getMatchSession,
   addUserToMatchSession,
-} from "@/app/match/[id]/actions";
-import MovieStack from "@/app/match/[id]/MovieStack";
-import { User } from "next-auth";
+} from "@/app/match/[id]/lib/actions";
+import MatchSessionLobby from "@/app/match/[id]/components/MatchSessionLobby";
+import MovieStack from "@/app/match/[id]/components/MovieStack";
 
 export default async function MatchSession({
   params,

@@ -1,9 +1,9 @@
 import "@/app/__mocks__/IntersectionObserver";
 import { mockDiscoverMovie } from "@/app/__mocks__/actions";
-import { getTopMovies } from "@/app/actions";
-import Home from "@/app/page";
 import "@testing-library/jest-dom";
 import { render, screen } from "@testing-library/react";
+import { getTopMovies } from "@/app/lib/actions";
+import Home from "@/app/page";
 
 jest.mock("@/app/actions");
 const mockGetTopMovies = jest.mocked(getTopMovies);

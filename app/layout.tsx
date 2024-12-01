@@ -1,7 +1,7 @@
+import clsx from "clsx";
 import type { Metadata } from "next";
 import { Schibsted_Grotesk, Suez_One } from "next/font/google";
-import "./globals.css";
-import clsx from "clsx";
+import "@/app/globals.css";
 import { Providers } from "@/app/providers";
 
 const schibstedGrotesk = Schibsted_Grotesk({

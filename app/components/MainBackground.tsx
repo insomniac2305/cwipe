@@ -1,5 +1,5 @@
-import { getImageSet } from "@/app/lib/util";
 import { getImageProps } from "next/image";
+import { getImageSet } from "@/app/lib/util";
 import bgImage from "@/public/start-background.jpg";
 
 export function MainBackground({ children }: { children: React.ReactNode }) {

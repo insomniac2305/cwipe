@@ -2,9 +2,9 @@ import "@/app/__mocks__/IntersectionObserver";
 import "@/app/__mocks__/Image";
 import "@/app/__mocks__/FallbackImages";
 import { mockDiscoverMovie } from "@/app/__mocks__/actions";
-import { DynamicMoviePosters } from "@/app/DynamicMoviePosters";
 import "@testing-library/jest-dom";
 import { render, screen } from "@testing-library/react";
+import { DynamicMoviePosters } from "@/app/components/DynamicMoviePosters";
 
 const mockMovies = [
   mockDiscoverMovie("1", "1.jpg"),

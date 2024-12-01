@@ -1,5 +1,5 @@
-import { Image } from "@nextui-org/react";
 import NextImage from "next/image";
+import { Image } from "@nextui-org/react";
 
 export function LogoImage({ src, name }: { src: string; name: string }) {
   return (

@@ -1,5 +1,5 @@
-import MatchSessionLayout from "@/app/match/[id]/MatchSessionLayout";
-import { MatchSideInfo } from "@/app/match/[id]/MatchSideInfo";
+import MatchSessionLayout from "@/app/match/[id]/components/MatchSessionLayout";
+import { MatchSideInfo } from "@/app/match/[id]/components/MatchSideInfo";
 
 export default async function MatchSession({
   params,

@@ -1,8 +1,8 @@
-import { auth } from "@/app/lib/auth";
-import MatchLayout from "@/app/match/MatchLayout";
-import { MatchSideNav } from "@/app/match/MatchSideNav";
-import { verifyOnboardingComplete } from "@/app/onboarding/actions";
 import { redirect } from "next/navigation";
+import { auth } from "@/app/lib/auth";
+import { verifyOnboardingComplete } from "@/app/onboarding/lib/actions";
+import MatchLayout from "@/app/match/components/MatchLayout";
+import { MatchSideNav } from "@/app/match/components/MatchSideNav";
 
 export default async function Match({
   children,

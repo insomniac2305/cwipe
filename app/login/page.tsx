@@ -1,4 +1,3 @@
-import { MainBackground } from "@/app/components/MainBackground";
 import {
   Card,
   CardBody,
@@ -6,9 +5,10 @@ import {
   CardHeader,
   Divider,
 } from "@nextui-org/react";
-import LoginForm from "./LoginForm";
-import GoogleSignInButton from "./GoogleSignInButton";
+import { MainBackground } from "@/app/components/MainBackground";
+import GoogleSignInButton from "@/app/components/GoogleSignInButton";
 import { BrandLogo } from "@/app/components/Brand";
+import LoginForm from "@/app/login/components/LoginForm";
 
 export default async function Login() {
   return (

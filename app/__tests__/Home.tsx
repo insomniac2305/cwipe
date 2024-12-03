@@ -5,7 +5,7 @@ import { render, screen } from "@testing-library/react";
 import { getTopMovies } from "@/app/lib/actions";
 import Home from "@/app/page";
 
-jest.mock("@/app/actions");
+jest.mock("@/app/lib/actions");
 const mockGetTopMovies = jest.mocked(getTopMovies);
 
 const mockTopMovies = [

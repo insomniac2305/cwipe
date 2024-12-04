@@ -14,7 +14,11 @@ export async function UserAvatarLink({ href }: { href: string }) {
       radius="full"
     >
       {session?.user?.image ? (
-        <Image src={session.user.image} alt="User" />
+        <Image
+          src={session.user.image}
+          alt="User"
+          referrerPolicy="no-referrer"
+        />
       ) : (
         <FaUser />
       )}

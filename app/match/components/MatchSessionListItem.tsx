@@ -26,6 +26,7 @@ export async function MatchSessionListItem({
                 key={user.id + matchSession.id}
                 src={user.image as string | undefined}
                 name={user.name as string | undefined}
+                imgProps={{ referrerPolicy: "no-referrer" }}
               />
             ))}
           </AvatarGroup>

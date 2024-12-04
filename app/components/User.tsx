@@ -19,7 +19,7 @@ export function User({
         },
         getInitials: getInitials,
         src: imageSrc,
-        imgProps: { draggable: false },
+        imgProps: { draggable: false, referrerPolicy: "no-referrer" },
       }}
       name={name}
       description={description}

@@ -43,6 +43,7 @@ export default async function Preferences() {
             <Avatar
               name={session.user.name || ""}
               src={session.user.image || ""}
+              imgProps={{ referrerPolicy: "no-referrer" }}
               className="h-20 w-20 shrink-0 text-lg"
             />
             <p className="text-xl font-bold">{session.user.name}</p>

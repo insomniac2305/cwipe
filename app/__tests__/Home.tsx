@@ -1,6 +1,6 @@
 import "@/app/__mocks__/IntersectionObserver";
 import "@/app/__mocks__/Image";
-import { mockDiscoverMovie } from "@/app/__mocks__/actions";
+import { mockDiscoverMovie } from "@/app/lib/__mocks__/actions";
 import { describe, expect, it, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { getTopMovies } from "@/app/lib/actions";

@@ -1,12 +1,13 @@
 import "@/app/__mocks__/IntersectionObserver";
+import "@/app/__mocks__/Image";
 import { mockDiscoverMovie } from "@/app/__mocks__/actions";
-import "@testing-library/jest-dom";
+import { describe, expect, it, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { getTopMovies } from "@/app/lib/actions";
 import Home from "@/app/page";
 
-jest.mock("@/app/lib/actions");
-const mockGetTopMovies = jest.mocked(getTopMovies);
+vi.mock("@/app/lib/actions");
+const mockGetTopMovies = vi.mocked(getTopMovies);
 
 const mockTopMovies = [
   mockDiscoverMovie("1", "1.jpg"),

@@ -1,12 +1,11 @@
-jest.mock(
-  "@/public/movie-poster-fallback-1.jpg",
-  () => "/movie-poster-fallback-1.jpg",
-);
-jest.mock(
-  "@/public/movie-poster-fallback-2.jpg",
-  () => "/movie-poster-fallback-2.jpg",
-);
-jest.mock(
-  "@/public/movie-poster-fallback-3.jpg",
-  () => "/movie-poster-fallback-3.jpg",
-);
+import { vi } from "vitest";
+
+vi.mock("@/public/movie-poster-fallback-1.jpg", () => ({
+  default: "/movie-poster-fallback-1.jpg",
+}));
+vi.mock("@/public/movie-poster-fallback-2.jpg", () => ({
+  default: "/movie-poster-fallback-2.jpg",
+}));
+vi.mock("@/public/movie-poster-fallback-3.jpg", () => ({
+  default: "/movie-poster-fallback-3.jpg",
+}));

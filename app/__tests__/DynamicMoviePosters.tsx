@@ -2,7 +2,7 @@ import "@/app/__mocks__/IntersectionObserver";
 import "@/app/__mocks__/Image";
 import "@/app/__mocks__/FallbackImages";
 import { mockDiscoverMovie } from "@/app/__mocks__/actions";
-import "@testing-library/jest-dom";
+import { describe, expect, it } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { DynamicMoviePosters } from "@/app/components/DynamicMoviePosters";
 

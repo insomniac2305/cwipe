@@ -1,6 +1,7 @@
+import { vi } from "vitest";
 import { DiscoverMovies } from "@/app/lib/definitions";
 
-export const getTopMovies = jest.fn();
+export const getTopMovies = vi.fn();
 
 export const mockDiscoverMovie = (
   title = "",

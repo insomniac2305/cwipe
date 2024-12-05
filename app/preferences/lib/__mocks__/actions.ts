@@ -17,36 +17,40 @@ export const mockUserPreferences = {
     providers: [
       {
         display_priority: 0,
-        logo_path: "",
-        provider_name: "",
+        logo_path: "/provider-1.jpg",
+        provider_name: "Provider 1",
         provider_id: 1,
       },
       {
         display_priority: 0,
-        logo_path: "",
-        provider_name: "",
+        logo_path: "/provider-2.jpg",
+        provider_name: "Provider 2",
         provider_id: 2,
       },
       {
         display_priority: 0,
-        logo_path: "",
-        provider_name: "",
+        logo_path: "/provider-3.jpg",
+        provider_name: "Provider 3",
         provider_id: 3,
       },
     ],
     genres: [
       {
         id: 4,
-        name: "",
+        name: "Genre 1",
       },
       {
         id: 5,
-        name: "",
+        name: "Genre 2",
       },
       {
         id: 6,
-        name: "",
+        name: "Genre 3",
       },
     ],
   },
+};
+
+export const mockUserPreferencesError = {
+  error: { message: "Error" },
 };

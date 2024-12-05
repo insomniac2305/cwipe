@@ -13,6 +13,7 @@ describe("Preferences", () => {
     vi.mocked(auth, { partial: true }).mockResolvedValueOnce({
       user: { name: "Test", image: "", isProviderAccount: false },
     });
+
     const page = await Preferences();
     render(page);
 
@@ -21,5 +22,22 @@ describe("Preferences", () => {
 
     expect(warning).toBeInTheDocument();
     expect(button).toBeInTheDocument();
+  });
+
+  it("shows no warning and Google sign in when user is a provider account", async () => {
+    vi.mocked(auth, { partial: true }).mockResolvedValueOnce({
+      user: { name: "Test", image: "", isProviderAccount: true },
+    });
+
+    const page = await Preferences();
+    render(page);
+
+    const warning = screen.queryByText(/temporary account/i);
+    const button = screen.queryByRole("button", {
+      name: /sign in with google/i,
+    });
+
+    expect(warning).not.toBeInTheDocument();
+    expect(button).not.toBeInTheDocument();
   });
 });

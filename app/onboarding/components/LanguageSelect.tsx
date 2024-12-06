@@ -1,9 +1,8 @@
 "use client";
 
-import { useState } from "react";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { Select, SelectItem, Selection } from "@nextui-org/react";
+import { Select, SelectItem } from "@nextui-org/react";
 import { Language } from "@/app/lib/definitions";
+import { useSearchParamSelect } from "@/app/onboarding/lib/useSearchParamSelect";
 
 export function LanguageSelect({
   languages,
@@ -12,31 +11,7 @@ export function LanguageSelect({
   languages: Language[];
   errors?: string[];
 }) {
-  const router = useRouter();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
-
-  const [selection, setSelection] = useState<Selection>(
-    new Set([searchParams.get("lang") || "en"]),
-  );
-
-  const handleSelect = (keys: Selection) => {
-    setSelection(keys);
-
-    const params = new URLSearchParams(Array.from(searchParams.entries()));
-    const values = Array.from(keys);
-
-    if (!values[0]) {
-      params.delete("lang");
-    } else {
-      params.set("lang", values[0].toString());
-    }
-
-    const search = params.toString();
-    const query = search ? `?${search}` : "";
-
-    router.push(`${pathname}${query}`);
-  };
+  const [selection, handleSelect] = useSearchParamSelect("lang", "en");
 
   return (
     <Select

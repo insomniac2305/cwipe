@@ -12,7 +12,7 @@ export const mockMatchSession = (
   users: MatchSessionUser[] = [],
   is_started = false,
   match_count = 0,
-) => {
+): MatchSession => {
   return {
     id,
     providers,

@@ -1,6 +1,6 @@
 "use client";
 
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Session } from "next-auth";
 import { Badge, Button } from "@nextui-org/react";
 import { FaCrown } from "react-icons/fa6";
@@ -8,7 +8,7 @@ import { MatchSession } from "@/app/lib/definitions";
 import { User } from "@/app/components/User";
 import { MenuButton } from "@/app/components/MenuButton";
 import { ErrorMessage } from "@/app/components/ErrorMessage";
-import { SideNavContext } from "@/app/match/components/MatchLayout";
+import { useSideNavContext } from "@/app/match/components/MatchLayout";
 import { startMatchSession } from "@/app/match/[id]/lib/actions";
 import { ShareButton } from "@/app/match/[id]/components/ShareButton";
 import { useMatchSession } from "@/app/match/[id]/lib/useMatchSession";
@@ -20,7 +20,7 @@ export default function MatchSessionLobby({
   matchSession: MatchSession;
   session: Session | null;
 }) {
-  const { isSideNavVisible } = useContext(SideNavContext);
+  const { isSideNavVisible } = useSideNavContext();
   const [isLoading, setIsLoading] = useState(false);
   const [startError, setStartError] = useState<string>();
   const { matchSession: updatedMatchSession, error: updateError } =

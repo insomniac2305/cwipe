@@ -1,12 +1,12 @@
 "use client";
 
-import React, { useContext } from "react";
+import React from "react";
 import { Link, Button } from "@nextui-org/react";
 import { FaPlay } from "react-icons/fa6";
-import { SideNavContext } from "@/app/match/components/MatchLayout";
+import { useSideNavContext } from "@/app/match/components/MatchLayout";
 
 export function ContinueMatchSessionButton({ id }: { id: string }) {
-  const { toggleSideNav } = useContext(SideNavContext);
+  const { toggleSideNav } = useSideNavContext();
 
   return (
     <Button

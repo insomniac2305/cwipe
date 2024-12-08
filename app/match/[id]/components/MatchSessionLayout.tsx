@@ -2,15 +2,17 @@
 
 import clsx from "clsx";
 import { createContext, useContext, useState } from "react";
-import { SideNavContext } from "@/app/match/components/MatchLayout";
+import { useSideNavContext } from "@/app/match/components/MatchLayout";
 
-export const SideInfoContext = createContext<{
+const SideInfoContext = createContext<{
   isSideInfoVisible: boolean;
   toggleSideInfo: () => void;
 }>({
   isSideInfoVisible: false,
   toggleSideInfo: () => {},
 });
+
+export const useSideInfoContext = () => useContext(SideInfoContext);
 
 export default function MatchSessionLayout({
   sideInfo,
@@ -21,7 +23,7 @@ export default function MatchSessionLayout({
 }) {
   const [isSideInfoVisible, setIsSideInfoVisible] = useState<boolean>(false);
   const toggleSideInfo = () => setIsSideInfoVisible((prevState) => !prevState);
-  const { isSideNavVisible } = useContext(SideNavContext);
+  const { isSideNavVisible } = useSideNavContext();
 
   return (
     <SideInfoContext.Provider

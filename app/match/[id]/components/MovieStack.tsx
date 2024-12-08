@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useContext, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Button, Spinner, useDisclosure } from "@nextui-org/react";
 import { filterUniqueObjectArray } from "@/app/lib/util";
 import { MatchSession, Movie } from "@/app/lib/definitions";
@@ -8,13 +8,13 @@ import { TMDB_PAGE_LIMIT } from "@/app/lib/tmdbConfiguration";
 import { MenuButton } from "@/app/components/MenuButton";
 import { ErrorMessage } from "@/app/components/ErrorMessage";
 import { MatchListButton } from "@/app/components/MatchListButton";
-import { SideNavContext } from "@/app/match/components/MatchLayout";
+import { useSideNavContext } from "@/app/match/components/MatchLayout";
 import { getMovies, rateMovie } from "@/app/match/[id]/lib/actions";
 import useMatches from "@/app/match/[id]/lib/useMatches";
 import { SwipeButtonRow } from "@/app/match/[id]/components/SwipeButtonRow";
 import MovieCard from "@/app/match/[id]/components/MovieCard";
 import MatchModal from "@/app/match/[id]/components/MatchModal";
-import { SideInfoContext } from "@/app/match/[id]/components/MatchSessionLayout";
+import { useSideInfoContext } from "@/app/match/[id]/components/MatchSessionLayout";
 
 const RENDER_LIMIT = 3;
 const FETCH_NEXT_PAGE_LIMIT = 5;
@@ -45,8 +45,8 @@ export default function MovieStack({
   } = useMatches(matchSession.id, isMatchOpen);
 
   const [isInfoVisible, setIsInfoVisible] = useState(false);
-  const { isSideInfoVisible } = useContext(SideInfoContext);
-  const { isSideNavVisible } = useContext(SideNavContext);
+  const { isSideInfoVisible } = useSideInfoContext();
+  const { isSideNavVisible } = useSideNavContext();
 
   const currentMovieIndex = ratedMovies.findIndex(
     (movie) => movie.isLiked === undefined,

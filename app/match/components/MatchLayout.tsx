@@ -1,16 +1,18 @@
 "use client";
 
 import clsx from "clsx";
-import { createContext, useState } from "react";
+import { createContext, useContext, useState } from "react";
 import { usePathname } from "next/navigation";
 
-export const SideNavContext = createContext<{
+const SideNavContext = createContext<{
   isSideNavVisible: boolean;
   toggleSideNav: () => void;
 }>({
   isSideNavVisible: true,
   toggleSideNav: () => {},
 });
+
+export const useSideNavContext = () => useContext(SideNavContext);
 
 export default function MatchLayout({
   sideNav,

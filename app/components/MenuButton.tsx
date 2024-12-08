@@ -1,12 +1,11 @@
 "use client";
-import { useContext } from "react";
 import { usePathname } from "next/navigation";
 import { Button } from "@nextui-org/react";
 import { FaBars, FaXmark } from "react-icons/fa6";
-import { SideNavContext } from "@/app/match/components/MatchLayout";
+import { useSideNavContext } from "@/app/match/components/MatchLayout";
 
 export function MenuButton() {
-  const { isSideNavVisible, toggleSideNav } = useContext(SideNavContext);
+  const { isSideNavVisible, toggleSideNav } = useSideNavContext();
   const pathname = usePathname();
   const isVisible = pathname !== "/match";
 

@@ -1,4 +1,4 @@
-import { Movie } from "@/app/lib/definitions";
+import { Movie, MovieMatch } from "@/app/lib/definitions";
 import { vi } from "vitest";
 
 export const getMatchSession = vi.fn();
@@ -21,3 +21,8 @@ export const mockMovie = (id = 0, title = "", poster_path = ""): Movie => ({
   watch_providers: { link: "", flatrate: [], rent: [], buy: [] },
   cast: [],
 });
+
+export const mockMovieMatch = (
+  last_rated_at: Date,
+  ...mockMovieArgs: Parameters<typeof mockMovie>
+): MovieMatch => ({ ...mockMovie(...mockMovieArgs), last_rated_at });

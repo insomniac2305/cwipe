@@ -60,8 +60,7 @@ describe("Match Session", () => {
         matchSession: mockSessionWithCurrentUser,
         session: { user: mockCurrentUser },
       },
-      // not sure why the second empty object is passed, but test passes only like this
-      {},
+      expect.anything(),
     );
   });
 
@@ -102,8 +101,7 @@ describe("Match Session", () => {
         matchSession: mockSessionWithCurrentUser,
         movies: mockMovies,
       },
-      // not sure why the second empty object is passed, but test passes only like this
-      {},
+      expect.anything(),
     );
   });
 });

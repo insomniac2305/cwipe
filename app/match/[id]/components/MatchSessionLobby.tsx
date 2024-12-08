@@ -1,6 +1,5 @@
 "use client";
 
-import useSWR from "swr";
 import { useContext, useEffect, useState } from "react";
 import { Session } from "next-auth";
 import { Badge, Button } from "@nextui-org/react";
@@ -10,11 +9,9 @@ import { User } from "@/app/components/User";
 import { MenuButton } from "@/app/components/MenuButton";
 import { ErrorMessage } from "@/app/components/ErrorMessage";
 import { SideNavContext } from "@/app/match/components/MatchLayout";
-import {
-  getMatchSession,
-  startMatchSession,
-} from "@/app/match/[id]/lib/actions";
+import { startMatchSession } from "@/app/match/[id]/lib/actions";
 import { ShareButton } from "@/app/match/[id]/components/ShareButton";
+import { useMatchSession } from "@/app/match/[id]/lib/useMatchSession";
 
 export default function MatchSessionLobby({
   matchSession,
@@ -26,16 +23,10 @@ export default function MatchSessionLobby({
   const { isSideNavVisible } = useContext(SideNavContext);
   const [isLoading, setIsLoading] = useState(false);
   const [startError, setStartError] = useState<string>();
-  const { data, error: fetchError } = useSWR(
-    ["match/lobby", matchSession.id],
-    matchSessionFetcher,
-    {
-      refreshInterval: 10000,
-      fallbackData: matchSession,
-    },
-  );
+  const { matchSession: updatedMatchSession, error: updateError } =
+    useMatchSession(matchSession.id, matchSession);
 
-  const isUserHost = data.users.find(
+  const isUserHost = updatedMatchSession?.users.find(
     (user) => user.id === session?.user?.id,
   )?.is_host;
 
@@ -51,12 +42,12 @@ export default function MatchSessionLobby({
   };
 
   useEffect(() => {
-    if (data.is_started) {
+    if (updatedMatchSession?.is_started) {
       location.reload();
     }
-  }, [data.is_started]);
+  }, [updatedMatchSession?.is_started]);
 
-  const error = startError || fetchError;
+  const error = startError || updateError;
 
   return (
     <main className="flex h-dvh items-center justify-center overflow-hidden">
@@ -68,7 +59,7 @@ export default function MatchSessionLobby({
           </h1>
         </div>
         <div className="grid flex-auto grid-cols-[repeat(auto-fill,minmax(5rem,1fr))] content-start justify-items-center gap-2 py-4">
-          {data.users.map((user, index) => (
+          {updatedMatchSession?.users.map((user, index) => (
             <Badge
               key={user.id}
               content={<FaCrown />}
@@ -101,17 +92,4 @@ export default function MatchSessionLobby({
       </div>
     </main>
   );
-}
-
-async function matchSessionFetcher([, matchSessionId]: [
-  key: string,
-  matchSessionId: string,
-]) {
-  const { data, error } = await getMatchSession(matchSessionId);
-
-  if (error) {
-    throw new Error(error.message);
-  }
-
-  return data;
 }

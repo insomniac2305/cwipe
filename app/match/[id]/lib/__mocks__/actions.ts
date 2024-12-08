@@ -3,6 +3,7 @@ import { vi } from "vitest";
 
 export const getMatchSession = vi.fn();
 export const addUserToMatchSession = vi.fn();
+export const startMatchSession = vi.fn();
 export const getMovies = vi.fn();
 export const rateMovie = vi.fn();
 export const getMatches = vi.fn();

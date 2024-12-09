@@ -18,7 +18,7 @@ export const mockMovie = (id = 0, title = "", poster_path = ""): Movie => ({
   runtime: 0,
   title,
   vote_average: 0,
-  watch_providers: { link: "", flatrate: [], rent: [], buy: [] },
+  watch_providers: { link: `/watch/${id}`, flatrate: [], rent: [], buy: [] },
   cast: [],
 });
 

@@ -22,7 +22,7 @@ export default function MatchModal({
   matches: Movie[] | undefined;
   isOpen: boolean;
   onOpenChange: (isOpen: boolean) => void;
-  error: { message: string };
+  error?: { message: string };
 }) {
   return (
     <Modal

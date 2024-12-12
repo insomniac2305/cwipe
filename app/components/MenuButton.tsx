@@ -14,7 +14,7 @@ export function MenuButton() {
       isIconOnly
       variant="flat"
       onPress={() => toggleSideNav()}
-      aria-description="Back"
+      aria-label="Menu"
     >
       {isSideNavVisible ? <FaXmark /> : <FaBars />}
     </Button>

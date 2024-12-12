@@ -11,7 +11,7 @@ export function MatchListButton() {
       isIconOnly
       variant="flat"
       onPress={() => toggleSideInfo()}
-      aria-description="Back"
+      aria-label="Match List"
     >
       {isSideInfoVisible ? <FaXmark /> : <FaListCheck />}
     </Button>

@@ -96,10 +96,10 @@ export default function MovieStack({
   }, [matchSession.id, page]);
 
   useEffect(() => {
-    if (!isLoading.current && shouldFetchNextMovies) {
+    if (!isLoading.current && shouldFetchNextMovies && !error) {
       fetchNextMoviePage();
     }
-  }, [fetchNextMoviePage, shouldFetchNextMovies]);
+  }, [fetchNextMoviePage, shouldFetchNextMovies, error]);
 
   useEffect(() => {
     if (newMatches?.length && newMatches.length > 0) {

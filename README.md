@@ -10,6 +10,8 @@
 <p align="center">Next.js application for finding movies to watch together by swiping through suggestions</p>
 <h3 align="center">🏠 <a href="https://cwipe.vercel.app/">Live application </a></h3>
 
+![Device Mockup Images](https://github.com/insomniac2305/cwipe/blob/main/public/device-mockup.png?raw=true)
+
 ## Features
 
 🚪 Login with your Google account or start with a temporary account<br>
@@ -32,9 +34,17 @@
 
 ## Attribution
 
-<p><img src="https://raw.githubusercontent.com/insomniac2305/cwipe/refs/heads/main/public/tmdb-logo.svg" alt="JustWatch" height="25"/><br>This product uses the TMDB API but is not endorsed or certified by TMDB.</p>
+<h3><img src="https://raw.githubusercontent.com/insomniac2305/cwipe/refs/heads/main/public/tmdb-logo.svg" alt="JustWatch" height="25"/></h3>
 
-<p><img src="https://raw.githubusercontent.com/insomniac2305/cwipe/refs/heads/main/public/justwatch-logo.webp" alt="JustWatch" height="25"/><br>Source of streaming availability data by country and provider is JustWatch</p>
+This product uses the TMDB API but is not endorsed or certified by [TMDB](https://www.themoviedb.org).
+
+<h3><img src="https://raw.githubusercontent.com/insomniac2305/cwipe/refs/heads/main/public/justwatch-logo.webp" alt="JustWatch" height="25"/></h3>
+
+Source of streaming availability data by country and provider is [JustWatch](https://www.justwatch.com)
+
+### MockUPhone
+
+Device mockup images were created with [MockUPhone](https://mockuphone.com)</p>
 
 ## License
 

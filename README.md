@@ -1,16 +1,10 @@
 <h1 align="center"><img src="https://raw.githubusercontent.com/insomniac2305/cwipe/refs/heads/main/public/logo.svg" alt="Cwipe" width="400"/></h1>
 <p align="center">
-  <img alt="Version" src="https://img.shields.io/badge/version-0.9.0-blue.svg?cacheSeconds=2592000" />
-  <a href="https://github.com/insomniac2305/cwipe/deployments/production" target="_blank">
-  <img alt="GitHub deployments" src="https://img.shields.io/github/deployments/insomniac2305/cwipe/production?label=deployment&cacheSeconds=2592000">
-  </a>
-  <a href="https://github.com/insomniac2305/cwipe/graphs/commit-activity" target="_blank">
-    <img alt="GitHub commit activity" src="https://img.shields.io/github/commit-activity/t/insomniac2305/cwipe">
-    <img alt="Last commit" src="https://img.shields.io/github/last-commit/insomniac2305/cwipe">
-  </a>
-  <a href="https://github.com/insomniac2305/cwipe/blob/master/LICENSE" target="_blank">
-    <img alt="License: GPL-3.0" src="https://img.shields.io/github/license/insomniac2305/cwipe" />
-  </a>
+  <img alt="Version" src="https://img.shields.io/github/package-json/v/insomniac2305/cwipe?color=blue&cacheSeconds=2592000" />
+  <a href="https://github.com/insomniac2305/cwipe/deployments/production" target="_blank"><img alt="Deployment status" src="https://img.shields.io/github/deployments/insomniac2305/cwipe/production?label=deployment&cacheSeconds=2592000"></a>
+  <a href="https://github.com/insomniac2305/cwipe/graphs/commit-activity" target="_blank"><img alt="Commit activity" src="https://img.shields.io/github/commit-activity/t/insomniac2305/cwipe"></a>
+  <img alt="Last commit" src="https://img.shields.io/github/last-commit/insomniac2305/cwipe">
+  <a href="https://github.com/insomniac2305/cwipe/blob/master/LICENSE" target="_blank"><img alt="License: GPL-3.0" src="https://img.shields.io/github/license/insomniac2305/cwipe" /></a>
 </p>
 <br>
 <p align="center">Next.js application for finding movies to watch together by swiping through suggestions</p>

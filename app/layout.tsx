@@ -18,8 +18,15 @@ const suezOne = Suez_One({
 
 export const metadata: Metadata = {
   title: "Cwipe - Movie Matcher",
-  description:
-    "This app let's you match a movie to watch together by swiping through suggestions.",
+  description: "Find a movie to watch together by swiping through suggestions.",
+  openGraph: {
+    title: "Cwipe - Movie Matcher",
+    description:
+      "Find a movie to watch together by swiping through suggestions.",
+    url: "https://cwipe.vercel.app",
+    locale: "en_US",
+    type: "website",
+  },
 };
 
 export default function RootLayout({

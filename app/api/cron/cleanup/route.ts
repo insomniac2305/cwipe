@@ -2,18 +2,11 @@ import { sql } from "@vercel/postgres";
 
 export const dynamic = "force-dynamic";
 
-export async function GET(request: Request) {
-  const authHeader = request.headers.get("authorization");
-  if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
-    return new Response("Unauthorized", {
-      status: 401,
-    });
-  }
-
+export async function GET() {
   const result = await cleanTempUsers();
 
   if (result.success) {
-    return new Response(`Success`, { status: 204 });
+    return new Response(`Success`, { status: 200 });
   } else {
     return new Response(`Error`, { status: 500 });
   }

@@ -14,38 +14,40 @@ export async function GET() {
 
 const cleanTempUsers = async () => {
   try {
-    await sql`
+    await sql`      
           DELETE
           FROM match_sessions_users msu
-          INNER JOIN users u
-          ON msu.user_id = u.id
-          WHERE u.id NOT IN (SELECT user_id FROM accounts) 
-          AND u.updated_at < NOW()::date - 90;
+          USING users u
+          WHERE msu.user_id = u.id
+          AND u.id NOT IN (SELECT user_id FROM accounts) 
+          AND u.updated_at < NOW()::date - 90`;
 
+    await sql`      
           DELETE
           FROM user_preferences up
-          INNER JOIN users u
-          ON up.user_id = u.id
-          WHERE u.id NOT IN (SELECT user_id FROM accounts) 
-          AND u.updated_at < NOW()::date - 90;
+          USING users u
+          WHERE up.user_id = u.id
+          AND u.id NOT IN (SELECT user_id FROM accounts) 
+          AND u.updated_at < NOW()::date - 90`;
 
+    await sql`      
           DELETE
           FROM users_movies um
-          INNER JOIN users u
-          ON um.user_id = u.id
-          WHERE u.id NOT IN (SELECT user_id FROM accounts) 
-          AND u.updated_at < NOW()::date - 90;
+          USING users u
+          WHERE um.user_id = u.id
+          AND u.id NOT IN (SELECT user_id FROM accounts) 
+          AND u.updated_at < NOW()::date - 90`;
 
+    await sql`      
           DELETE
           FROM users u
           WHERE u.id NOT IN (SELECT user_id FROM accounts) 
-          AND u.updated_at < NOW()::date - 90;
+          AND u.updated_at < NOW()::date - 90`;
 
+    await sql`      
           DELETE
           FROM match_sessions ms
-          LEFT JOIN match_sessions_users msu
-          ON ms.id = msu.match_session_id
-          WHERE msu.match_session_id IS NULL;`;
+          WHERE ms.id NOT IN (SELECT match_session_id FROM match_sessions_users)`;
 
     return { success: true };
   } catch (error) {

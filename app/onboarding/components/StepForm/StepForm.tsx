@@ -1,7 +1,7 @@
 "use client";
 import { ZodType } from "zod";
-import { ReactNode, useState } from "react";
-import { useFormState, useFormStatus } from "react-dom";
+import { ReactNode, useState, useActionState } from "react";
+import { useFormStatus } from "react-dom";
 import { Button, Progress } from "@nextui-org/react";
 import { FaChevronLeft } from "react-icons/fa6";
 import { validateFormData } from "@/app/lib/util";
@@ -48,7 +48,7 @@ export default function StepForm({
   validationSteps: ZodType[];
   children: ReactNode;
 }) {
-  const [state, formAction] = useFormState(action, undefined);
+  const [state, formAction] = useActionState(action, undefined);
   const [currentStep, setCurrentStep] = useState(0);
   const [validationErrors, setValidationErrors] =
     useState<FlattenedValidationErrors>();

@@ -5,11 +5,13 @@ export default async function MatchSession({
   params,
   children,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
   children: React.ReactNode;
 }) {
+  const { id } = await params;
+
   return (
-    <MatchSessionLayout sideInfo={<MatchSideInfo matchSessionId={params.id} />}>
+    <MatchSessionLayout sideInfo={<MatchSideInfo matchSessionId={id} />}>
       {children}
     </MatchSessionLayout>
   );

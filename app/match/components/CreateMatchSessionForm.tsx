@@ -1,6 +1,7 @@
 "use client";
 
-import { useFormState, useFormStatus } from "react-dom";
+import { useFormStatus } from "react-dom";
+import { useActionState } from "react";
 import { Button } from "@nextui-org/react";
 import { ErrorMessage } from "@/app/components/ErrorMessage";
 import { createMatchSession } from "@/app/match/lib/actions";
@@ -15,7 +16,7 @@ function SubmitButton() {
 }
 
 export function CreateMatchSessionForm() {
-  const [state, dispatch] = useFormState(createMatchSession, undefined);
+  const [state, dispatch] = useActionState(createMatchSession, undefined);
 
   return (
     <form action={dispatch} className="flex flex-col items-center gap-4">

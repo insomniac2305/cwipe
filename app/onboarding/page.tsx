@@ -13,21 +13,21 @@ import { StartForm } from "@/app/onboarding/components/StartForm";
 export default async function Onboarding({
   searchParams,
 }: {
-  searchParams: {
+  searchParams: Promise<{
     lang?: string;
     region?: string;
     skip?: string;
     callbackUrl?: string;
-  };
+  }>;
 }) {
-  const shouldSkip = searchParams.skip === "true";
+  const { lang, region, skip, callbackUrl } = await searchParams;
+  const shouldSkip = skip === "true";
 
   if (shouldSkip) {
     const session = await auth();
     const userId = session?.user?.id;
     const isOnboardingComplete = await verifyOnboardingComplete(userId);
-    const callbackUrl = searchParams.callbackUrl || DEFAULT_LOGIN_REDIRECT;
-    if (isOnboardingComplete) redirect(callbackUrl);
+    if (isOnboardingComplete) redirect(callbackUrl || DEFAULT_LOGIN_REDIRECT);
   }
 
   const languages = await getLanguages();
@@ -36,14 +36,8 @@ export default async function Onboarding({
   languages.sort((a, b) => (a.english_name > b.english_name ? 1 : -1));
   regions.sort((a, b) => (a.english_name > b.english_name ? 1 : -1));
 
-  const language = searchParams.lang;
-  const region = searchParams.region;
-
-  const watchProviders = await getWatchProviders(
-    language || "en",
-    region || "DE",
-  );
-  const genres = await getGenres(language || "en");
+  const watchProviders = await getWatchProviders(lang || "en", region || "DE");
+  const genres = await getGenres(lang || "en");
 
   return (
     <main className="flex h-dvh items-center justify-center overflow-hidden">
@@ -53,7 +47,7 @@ export default async function Onboarding({
           regions={regions}
           watchProviders={watchProviders}
           genres={genres}
-          callbackUrl={searchParams.callbackUrl}
+          callbackUrl={callbackUrl || DEFAULT_LOGIN_REDIRECT}
         />
       </div>
     </main>

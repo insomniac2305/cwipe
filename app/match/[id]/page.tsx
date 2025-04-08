@@ -11,9 +11,10 @@ import MovieStack from "@/app/match/[id]/components/MovieStack";
 export default async function MatchSession({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
-  const { data: matchSession, error } = await getMatchSession(params.id);
+  const { id } = await params;
+  const { data: matchSession, error } = await getMatchSession(id);
   const session = await auth();
   const userId = session?.user?.id as string;
 

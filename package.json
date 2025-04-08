@@ -23,7 +23,7 @@
     "test:watch": "vitest watch"
   },
   "dependencies": {
-    "@nextui-org/react": "^2.6.11",
+    "@heroui/react": "2.7.6",
     "@vercel/postgres": "^0.10.0",
     "clsx": "^2.1.1",
     "framer-motion": "^11.18.2",

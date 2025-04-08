@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import { memo } from "react";
 import { useSearchParams } from "next/navigation";
-import { CheckboxGroup } from "@nextui-org/react";
+import { CheckboxGroup } from "@heroui/react";
 import { WatchProvider } from "@/app/lib/definitions";
 import WatchProviderCheckbox from "@/app/onboarding/components/WatchProviderCheckbox";
 

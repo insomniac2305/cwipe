@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { Button } from "@nextui-org/react";
+import { Button } from "@heroui/react";
 import { FaCheck, FaPlus } from "react-icons/fa6";
 
 export function ShareButton({ id }: { id: string }) {

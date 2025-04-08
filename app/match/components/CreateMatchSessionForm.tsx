@@ -2,7 +2,7 @@
 
 import { useFormStatus } from "react-dom";
 import { useActionState } from "react";
-import { Button } from "@nextui-org/react";
+import { Button } from "@heroui/react";
 import { ErrorMessage } from "@/app/components/ErrorMessage";
 import { createMatchSession } from "@/app/match/lib/actions";
 

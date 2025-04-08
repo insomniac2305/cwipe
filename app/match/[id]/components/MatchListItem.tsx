@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "@nextui-org/react";
+import { Link } from "@heroui/react";
 import NextImage from "next/image";
 import { Movie } from "@/app/lib/definitions";
 import { MovieKeyFacts } from "@/app/match/[id]/components/MovieKeyFacts";

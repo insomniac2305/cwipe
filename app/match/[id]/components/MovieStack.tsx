@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Button, Spinner, useDisclosure } from "@nextui-org/react";
+import { Button, Spinner, useDisclosure } from "@heroui/react";
 import { filterUniqueObjectArray } from "@/app/lib/util";
 import { MatchSession, Movie } from "@/app/lib/definitions";
 import { TMDB_PAGE_LIMIT } from "@/app/lib/tmdbConfiguration";

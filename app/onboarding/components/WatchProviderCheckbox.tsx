@@ -7,7 +7,7 @@ import {
   VisuallyHidden,
   User,
   CheckboxIcon,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { WatchProvider } from "@/app/lib/definitions";
 
 export default function WatchProviderCheckbox({

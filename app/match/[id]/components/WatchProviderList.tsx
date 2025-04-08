@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import { ScrollShadow, Link } from "@nextui-org/react";
+import { ScrollShadow, Link } from "@heroui/react";
 import { Movie } from "@/app/lib/definitions";
 import { LogoImage } from "@/app/components/LogoImage";
 

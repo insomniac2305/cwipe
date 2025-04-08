@@ -3,7 +3,7 @@
 import { Suspense } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { useSearchParams } from "next/navigation";
-import { Button } from "@nextui-org/react";
+import { Button } from "@heroui/react";
 import { signInWithGoogle } from "@/app/login/lib/actions";
 
 function GoogleSignInButton() {

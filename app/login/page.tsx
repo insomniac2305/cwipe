@@ -4,7 +4,7 @@ import {
   CardFooter,
   CardHeader,
   Divider,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { MainBackground } from "@/app/components/MainBackground";
 import GoogleSignInButton from "@/app/components/GoogleSignInButton";
 import { BrandLogo } from "@/app/components/Brand";

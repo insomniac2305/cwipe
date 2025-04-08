@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import { memo } from "react";
 import { useSearchParams } from "next/navigation";
-import { CheckboxGroup } from "@nextui-org/react";
+import { CheckboxGroup } from "@heroui/react";
 import { Genre } from "@/app/lib/definitions";
 import GenreCheckbox from "@/app/onboarding/components/GenreCheckbox";
 

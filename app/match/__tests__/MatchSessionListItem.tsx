@@ -5,8 +5,8 @@ import { render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 vi.mock("@/app/lib/auth");
-vi.mock("@nextui-org/react", async () => {
-  const nextUI = await vi.importActual("@nextui-org/react");
+vi.mock("@heroui/react", async () => {
+  const nextUI = await vi.importActual("@heroui/react");
   return {
     ...nextUI,
     Avatar: ({ name }: { name: string }) => (

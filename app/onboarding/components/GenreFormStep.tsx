@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { ScrollShadow } from "@nextui-org/react";
+import { ScrollShadow } from "@heroui/react";
 import { Genre } from "@/app/lib/definitions";
 import {
   FormStep,

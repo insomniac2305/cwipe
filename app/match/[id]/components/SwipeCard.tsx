@@ -8,7 +8,7 @@ import {
   useRef,
   useState,
 } from "react";
-import { Card } from "@nextui-org/react";
+import { Card } from "@heroui/react";
 import { SwipeCardRef, SwipeDirection } from "@/app/lib/definitions";
 
 const MAX_ROTATION = 10;
@@ -37,10 +37,7 @@ export default forwardRef<SwipeCardRef, Props>(function SwipeCard(
     offsetCenterX: 0,
     rotation: 0,
   });
-  const [pointer, setPointer] = useState({
-    x: 0,
-    y: 0,
-  });
+  const [pointer, setPointer] = useState({ x: 0, y: 0 });
   const [swipeDirection, setSwipeDirection] = useState<SwipeDirection>();
   const [isSwipeDone, setIsSwipeDone] = useState(false);
   const [shouldHandleSwipe, setShouldHandleSwipe] = useState(true);
@@ -49,10 +46,7 @@ export default forwardRef<SwipeCardRef, Props>(function SwipeCard(
     return {
       swipe(direction: SwipeDirection, shouldCallHandler = true) {
         const width = ref.current?.getBoundingClientRect().width || 0;
-        setRenderProps((prevState) => ({
-          ...prevState,
-          width,
-        }));
+        setRenderProps((prevState) => ({ ...prevState, width }));
         setSwipeDirection(direction);
         shouldCallHandler || setShouldHandleSwipe(false);
       },
@@ -82,22 +76,21 @@ export default forwardRef<SwipeCardRef, Props>(function SwipeCard(
         "touches" in e ? (e as TouchEvent).touches[0] : (e as MouseEvent);
       const rect = ref.current?.getBoundingClientRect();
 
-      setRenderProps((prevState) => ({
-        ...prevState,
-        width: rect.width,
-        centerX: rect.width / 2 + rect.left,
-        originalX: rect.left,
-        originalY: rect.top,
-        offsetX: clientX - rect.left,
-        offsetY: clientY - rect.top,
-        offsetCenterX: clientX - (rect.width / 2 + rect.left),
-        rotation: 0,
-      }));
+      if (rect) {
+        setRenderProps((prevState) => ({
+          ...prevState,
+          width: rect.width,
+          centerX: rect.width / 2 + rect.left,
+          originalX: rect.left,
+          originalY: rect.top,
+          offsetX: clientX - rect.left,
+          offsetY: clientY - rect.top,
+          offsetCenterX: clientX - (rect.width / 2 + rect.left),
+          rotation: 0,
+        }));
+      }
 
-      setPointer({
-        x: clientX,
-        y: clientY,
-      });
+      setPointer({ x: clientX, y: clientY });
 
       setIsSwiping(true);
       setShouldHandleSwipe(true);

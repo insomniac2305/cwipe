@@ -3,7 +3,7 @@
 import { ReactNode, Suspense, useActionState } from "react";
 import { useFormStatus } from "react-dom";
 import { useSearchParams } from "next/navigation";
-import { Button, Input } from "@nextui-org/react";
+import { Button, Input } from "@heroui/react";
 import { signInAnonymous } from "@/app/login/lib/actions";
 
 function CallbackUrlInput() {

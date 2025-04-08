@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Session } from "next-auth";
-import { Badge, Button } from "@nextui-org/react";
+import { Badge, Button } from "@heroui/react";
 import { FaCrown } from "react-icons/fa6";
 import { MatchSession } from "@/app/lib/definitions";
 import { User } from "@/app/components/User";

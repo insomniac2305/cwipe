@@ -1,6 +1,6 @@
 "use client";
 import { usePathname } from "next/navigation";
-import { Button } from "@nextui-org/react";
+import { Button } from "@heroui/react";
 import { FaBars, FaXmark } from "react-icons/fa6";
 import { useSideNavContext } from "@/app/match/components/MatchLayout";
 

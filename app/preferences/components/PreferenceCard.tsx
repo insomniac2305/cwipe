@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { Card } from "@nextui-org/react";
+import { Card } from "@heroui/react";
 
 export function PreferenceCard({
   icon,

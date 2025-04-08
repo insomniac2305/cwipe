@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import { ScrollShadow } from "@nextui-org/react";
+import { ScrollShadow } from "@heroui/react";
 import { Movie } from "@/app/lib/definitions";
 import { Genre } from "@/app/components/Genre";
 

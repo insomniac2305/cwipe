@@ -2,14 +2,14 @@
 
 import { useRouter } from "next/navigation";
 import { SessionProvider } from "next-auth/react";
-import { NextUIProvider } from "@nextui-org/react";
+import { HeroUIProvider } from "@heroui/react";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   const router = useRouter();
 
   return (
     <SessionProvider>
-      <NextUIProvider navigate={router.push}>{children}</NextUIProvider>
+      <HeroUIProvider navigate={router.push}>{children}</HeroUIProvider>
     </SessionProvider>
   );
 }

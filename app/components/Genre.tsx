@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import { Chip } from "@nextui-org/react";
+import { Chip } from "@heroui/react";
 import genreIcons from "@/app/lib/genreIcons";
 
 export function Genre({

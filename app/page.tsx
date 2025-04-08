@@ -1,4 +1,4 @@
-import { Button, Divider, Link } from "@nextui-org/react";
+import { Button, Divider, Link } from "@heroui/react";
 import {
   FaEarthAmericas,
   FaHeart,

@@ -2,7 +2,7 @@
 import { ZodType } from "zod";
 import { ReactNode, useState, useActionState } from "react";
 import { useFormStatus } from "react-dom";
-import { Button, Progress } from "@nextui-org/react";
+import { Button, Progress } from "@heroui/react";
 import { FaChevronLeft } from "react-icons/fa6";
 import { validateFormData } from "@/app/lib/util";
 import { FlattenedValidationErrors, FormState } from "@/app/lib/definitions";

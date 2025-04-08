@@ -1,4 +1,4 @@
-import { Button, Image, Link } from "@nextui-org/react";
+import { Button, Image, Link } from "@heroui/react";
 import { FaUser } from "react-icons/fa6";
 import { auth } from "@/app/lib/auth";
 

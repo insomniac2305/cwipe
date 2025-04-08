@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Link, Button } from "@nextui-org/react";
+import { Link, Button } from "@heroui/react";
 import { FaPlay } from "react-icons/fa6";
 import { useSideNavContext } from "@/app/match/components/MatchLayout";
 

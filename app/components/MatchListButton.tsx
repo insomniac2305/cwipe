@@ -1,5 +1,5 @@
 "use client";
-import { Button } from "@nextui-org/react";
+import { Button } from "@heroui/react";
 import { FaListCheck, FaXmark } from "react-icons/fa6";
 import { useSideInfoContext } from "@/app/match/[id]/components/MatchSessionLayout";
 

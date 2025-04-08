@@ -8,7 +8,7 @@ import {
   Divider,
   Link,
   Skeleton,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { FaHouse } from "react-icons/fa6";
 import { auth } from "@/app/lib/auth";
 import ListSkeleton from "@/app/components/ListSkeleton";

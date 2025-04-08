@@ -1,6 +1,6 @@
 "use client";
 
-import { useCheckbox, VisuallyHidden } from "@nextui-org/react";
+import { useCheckbox, VisuallyHidden } from "@heroui/react";
 import { Genre as GenreType } from "@/app/lib/definitions";
 import { Genre } from "@/app/components/Genre";
 

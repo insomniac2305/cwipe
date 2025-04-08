@@ -8,7 +8,7 @@ import {
   ModalContent,
   ModalFooter,
   ModalHeader,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { FaExternalLinkAlt } from "react-icons/fa";
 import { Movie } from "@/app/lib/definitions";
 import { ErrorMessage } from "@/app/components/ErrorMessage";

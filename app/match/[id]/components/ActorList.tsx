@@ -1,4 +1,4 @@
-import { ScrollShadow } from "@nextui-org/react";
+import { ScrollShadow } from "@heroui/react";
 import { Movie } from "@/app/lib/definitions";
 import { User } from "@/app/components/User";
 

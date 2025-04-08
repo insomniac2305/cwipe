@@ -1,4 +1,4 @@
-import { Selection } from "@nextui-org/react";
+import { Selection } from "@heroui/react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 

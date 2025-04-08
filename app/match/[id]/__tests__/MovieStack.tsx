@@ -8,7 +8,7 @@ import { getMovies, rateMovie } from "@/app/match/[id]/lib/actions";
 import useMatches from "@/app/match/[id]/lib/useMatches";
 import { useSideNavContext } from "@/app/match/components/MatchLayout";
 import { mockMatchSession } from "@/app/match/lib/__mocks__/actions";
-import { useDisclosure } from "@nextui-org/react";
+import { useDisclosure } from "@heroui/react";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -17,8 +17,8 @@ vi.mock("@/app/match/[id]/components/MatchSessionLayout");
 vi.mock("@/app/match/components/MatchLayout");
 vi.mock("@/app/match/[id]/lib/useMatches");
 vi.mock("@/app/match/[id]/lib/actions");
-vi.mock("@nextui-org/react", async () => {
-  const nextUI = await vi.importActual("@nextui-org/react");
+vi.mock("@heroui/react", async () => {
+  const nextUI = await vi.importActual("@heroui/react");
   return {
     ...nextUI,
     useDisclosure: vi.fn(),

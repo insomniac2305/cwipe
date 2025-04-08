@@ -1,4 +1,4 @@
-import { Button, Link } from "@nextui-org/react";
+import { Button, Link } from "@heroui/react";
 import { FaPenToSquare } from "react-icons/fa6";
 import { getUserPreferences } from "@/app/preferences/lib/actions";
 

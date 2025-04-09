@@ -27,7 +27,7 @@ export function LanguageSelect({
       errorMessage={errors}
     >
       {(language) => (
-        <SelectItem key={language.iso_639_1} value={language.iso_639_1}>
+        <SelectItem key={language.iso_639_1}>
           {language.english_name}
         </SelectItem>
       )}

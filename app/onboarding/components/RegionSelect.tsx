@@ -27,9 +27,7 @@ export function RegionSelect({
       errorMessage={errors}
     >
       {(region) => (
-        <SelectItem key={region.iso_3166_1} value={region.iso_3166_1}>
-          {region.english_name}
-        </SelectItem>
+        <SelectItem key={region.iso_3166_1}>{region.english_name}</SelectItem>
       )}
     </Select>
   );

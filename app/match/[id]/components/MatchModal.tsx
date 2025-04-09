@@ -1,14 +1,14 @@
 import NextImage from "next/image";
+import { Button } from "@heroui/button";
+import { Image } from "@heroui/image";
+import { Link } from "@heroui/link";
 import {
-  Button,
-  Image,
-  Link,
   Modal,
   ModalBody,
   ModalContent,
   ModalFooter,
   ModalHeader,
-} from "@heroui/react";
+} from "@heroui/modal";
 import { FaExternalLinkAlt } from "react-icons/fa";
 import { Movie } from "@/app/lib/definitions";
 import { ErrorMessage } from "@/app/components/ErrorMessage";

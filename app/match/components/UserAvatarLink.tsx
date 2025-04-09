@@ -1,4 +1,6 @@
-import { Button, Image, Link } from "@heroui/react";
+import { Button } from "@heroui/button";
+import { Image } from "@heroui/image";
+import { Link } from "@heroui/link";
 import { FaUser } from "react-icons/fa6";
 import { auth } from "@/app/lib/auth";
 

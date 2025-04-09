@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { Card } from "@heroui/react";
+import { Card } from "@heroui/card";
 
 export function PreferenceCard({
   icon,

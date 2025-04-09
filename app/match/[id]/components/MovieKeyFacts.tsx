@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import { Divider } from "@heroui/react";
+import { Divider } from "@heroui/divider";
 import { HiMiniStar } from "react-icons/hi2";
 
 export function MovieKeyFacts({

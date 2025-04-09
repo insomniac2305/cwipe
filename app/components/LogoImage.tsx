@@ -1,5 +1,5 @@
 import NextImage from "next/image";
-import { Image } from "@heroui/react";
+import { Image } from "@heroui/image";
 
 export function LogoImage({ src, name }: { src: string; name: string }) {
   return (

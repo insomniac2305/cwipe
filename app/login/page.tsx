@@ -1,10 +1,5 @@
-import {
-  Card,
-  CardBody,
-  CardFooter,
-  CardHeader,
-  Divider,
-} from "@heroui/react";
+import { Card, CardBody, CardFooter, CardHeader } from "@heroui/card";
+import { Divider } from "@heroui/divider";
 import { MainBackground } from "@/app/components/MainBackground";
 import GoogleSignInButton from "@/app/components/GoogleSignInButton";
 import { BrandLogo } from "@/app/components/Brand";

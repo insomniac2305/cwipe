@@ -1,4 +1,4 @@
-import { Spinner } from "@heroui/react";
+import { Spinner } from "@heroui/spinner";
 
 export default async function MatchLoading() {
   return (

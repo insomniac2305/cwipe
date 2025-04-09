@@ -1,14 +1,10 @@
 import { Suspense } from "react";
-import {
-  Avatar,
-  Button,
-  Card,
-  CardBody,
-  CardFooter,
-  Divider,
-  Link,
-  Skeleton,
-} from "@heroui/react";
+import { Avatar } from "@heroui/avatar";
+import { Button } from "@heroui/button";
+import { Card, CardBody, CardFooter } from "@heroui/card";
+import { Divider } from "@heroui/divider";
+import { Link } from "@heroui/link";
+import { Skeleton } from "@heroui/skeleton";
 import { FaHouse } from "react-icons/fa6";
 import { auth } from "@/app/lib/auth";
 import ListSkeleton from "@/app/components/ListSkeleton";

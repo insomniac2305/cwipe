@@ -8,7 +8,7 @@ import { getMovies, rateMovie } from "@/app/match/[id]/lib/actions";
 import useMatches from "@/app/match/[id]/lib/useMatches";
 import { useSideNavContext } from "@/app/match/components/MatchLayout";
 import { mockMatchSession } from "@/app/match/lib/__mocks__/actions";
-import { useDisclosure } from "@heroui/react";
+import { useDisclosure } from "@heroui/use-disclosure";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -19,10 +19,7 @@ vi.mock("@/app/match/[id]/lib/useMatches");
 vi.mock("@/app/match/[id]/lib/actions");
 vi.mock("@heroui/react", async () => {
   const nextUI = await vi.importActual("@heroui/react");
-  return {
-    ...nextUI,
-    useDisclosure: vi.fn(),
-  };
+  return { ...nextUI, useDisclosure: vi.fn() };
 });
 
 const mockOnOpen = vi.fn();
@@ -104,15 +101,9 @@ describe("Movie Stack", () => {
       .mockResolvedValueOnce({
         data: [mockMovieOne, mockMovieTwo, mockMovieThree],
       })
-      .mockResolvedValueOnce({
-        data: [mockMovieFour],
-      })
-      .mockResolvedValueOnce({
-        data: [mockMovieFive],
-      })
-      .mockResolvedValueOnce({
-        data: [mockMovieSix],
-      });
+      .mockResolvedValueOnce({ data: [mockMovieFour] })
+      .mockResolvedValueOnce({ data: [mockMovieFive] })
+      .mockResolvedValueOnce({ data: [mockMovieSix] });
 
     render(<MovieStack movies={[]} matchSession={mockedMatchSession} />);
 

@@ -1,4 +1,4 @@
-import { Chip } from "@heroui/react";
+import { Chip } from "@heroui/chip";
 import { FaExclamationCircle } from "react-icons/fa";
 
 export function ErrorMessage({ children }: { children: React.ReactNode }) {

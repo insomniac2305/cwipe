@@ -1,5 +1,6 @@
 import clsx from "clsx";
-import { ScrollShadow, Link } from "@heroui/react";
+import { ScrollShadow } from "@heroui/scroll-shadow";
+import { Link } from "@heroui/link";
 import { Movie } from "@/app/lib/definitions";
 import { LogoImage } from "@/app/components/LogoImage";
 

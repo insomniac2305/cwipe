@@ -2,12 +2,7 @@
 
 import clsx from "clsx";
 import Image from "next/image";
-import {
-  useCheckbox,
-  VisuallyHidden,
-  User,
-  CheckboxIcon,
-} from "@heroui/react";
+import { useCheckbox, VisuallyHidden, User, CheckboxIcon } from "@heroui/react";
 import { WatchProvider } from "@/app/lib/definitions";
 
 export default function WatchProviderCheckbox({

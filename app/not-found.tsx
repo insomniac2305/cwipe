@@ -1,4 +1,5 @@
-import { Button, Link } from "@heroui/react";
+import { Button } from "@heroui/button";
+import { Link } from "@heroui/link";
 
 export default function NotFound() {
   return (

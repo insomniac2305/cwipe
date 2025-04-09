@@ -1,4 +1,4 @@
-import { ScrollShadow } from "@heroui/react";
+import { ScrollShadow } from "@heroui/scroll-shadow";
 import { Movie } from "@/app/lib/definitions";
 import { User } from "@/app/components/User";
 

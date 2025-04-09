@@ -1,4 +1,4 @@
-import { User as NextUIUser } from "@heroui/react";
+import { User as HeroUIUser } from "@heroui/user";
 import { getInitials } from "@/app/lib/util";
 
 export function User({
@@ -11,7 +11,7 @@ export function User({
   imageSrc?: string;
 }) {
   return (
-    <NextUIUser
+    <HeroUIUser
       avatarProps={{
         className: "h-20 w-20",
         classNames: {

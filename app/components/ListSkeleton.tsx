@@ -1,4 +1,4 @@
-import { Skeleton } from "@heroui/react";
+import { Skeleton } from "@heroui/skeleton";
 
 export default function ListSkeleton() {
   return (

@@ -1,5 +1,6 @@
 import React from "react";
-import { Chip, AvatarGroup, Avatar } from "@heroui/react";
+import { Chip } from "@heroui/chip";
+import { Avatar, AvatarGroup } from "@heroui/avatar";
 import { MatchSession } from "@/app/lib/definitions";
 import { auth } from "@/app/lib/auth";
 import { ContinueMatchSessionButton } from "@/app/match/components/ContinueMatchSessionButton";

@@ -1,5 +1,4 @@
 import vercelPostgresAdapter from "@/app/lib/vercelPostgresAdapter";
-import { randomUUID } from "crypto";
 import type { NextAuthConfig } from "next-auth";
 import {} from "next-auth/jwt";
 import { AdapterUser } from "next-auth/adapters";
@@ -22,9 +21,7 @@ declare module "next-auth/jwt" {
 const dbAdapter = vercelPostgresAdapter();
 
 export const authConfig = {
-  pages: {
-    signIn: "/login",
-  },
+  pages: { signIn: "/login" },
   adapter: dbAdapter,
   session: { strategy: "jwt" },
   providers: [
@@ -37,9 +34,9 @@ export const authConfig = {
 
         if (parsedCredentials.success) {
           let user: AdapterUser = {
-            id: randomUUID(),
+            id: crypto.randomUUID(),
             name: parsedCredentials.data.name,
-            email: randomUUID(),
+            email: crypto.randomUUID(),
             emailVerified: null,
           };
 

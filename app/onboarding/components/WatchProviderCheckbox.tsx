@@ -1,7 +1,6 @@
 "use client";
 
 import clsx from "clsx";
-import Image from "next/image";
 import { useCheckbox, VisuallyHidden, User, CheckboxIcon } from "@heroui/react";
 import { WatchProvider } from "@/app/lib/definitions";
 
@@ -32,9 +31,8 @@ export default function WatchProviderCheckbox({
           wrapper: "w-full",
         }}
         avatarProps={{
-          ImgComponent: Image,
           imgProps: { width: 64, height: 64 },
-          src: `${process.env.NEXT_PUBLIC_TMDB_IMAGE_BASE_URL}/original${provider.logo_path}`,
+          src: `${process.env.NEXT_PUBLIC_TMDB_IMAGE_BASE_URL}/w92${provider.logo_path}`,
           className: "transition-opacity w-16 h-16",
           isDisabled: isSelected,
           radius: "lg",

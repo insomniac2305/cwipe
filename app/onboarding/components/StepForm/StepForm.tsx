@@ -1,6 +1,12 @@
 "use client";
 import { ZodType } from "zod";
-import { ReactNode, useState, useActionState } from "react";
+import {
+  ReactNode,
+  useState,
+  useActionState,
+  FormEventHandler,
+  startTransition,
+} from "react";
 import { useFormStatus } from "react-dom";
 import { Button, Progress } from "@heroui/react";
 import { FaChevronLeft } from "react-icons/fa6";
@@ -56,11 +62,15 @@ export default function StepForm({
   const hasNextStep = currentStep < stepCount - 1;
   const hasPrevStep = currentStep > 0;
 
-  const handleSubmit = (formData: FormData) => {
+  const handleSubmit: FormEventHandler<HTMLFormElement> = (event) => {
+    event.preventDefault();
+
+    const formData = new FormData(event.currentTarget);
     const validator = validationSteps[currentStep];
 
     if (validator) {
       const validationResult = validateFormData(formData, validator);
+
       if (validationResult.success) {
         setValidationErrors(undefined);
       } else {
@@ -73,7 +83,7 @@ export default function StepForm({
       setCurrentStep((prev) => prev + 1);
     } else {
       if (typeof action !== "function") return;
-      formAction(formData);
+      startTransition(() => formAction(formData));
     }
   };
 
@@ -84,7 +94,11 @@ export default function StepForm({
         validationErrors: validationErrors || state?.errors,
       }}
     >
-      <form action={handleSubmit} className="flex h-full w-full flex-col gap-8">
+      <form
+        onSubmit={handleSubmit}
+        className="flex h-full w-full flex-col gap-8"
+        noValidate
+      >
         <div className="relative flex flex-none items-center justify-center gap-2">
           <Button
             isIconOnly

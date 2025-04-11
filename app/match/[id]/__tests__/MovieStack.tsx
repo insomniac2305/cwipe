@@ -8,7 +8,7 @@ import { getMovies, rateMovie } from "@/app/match/[id]/lib/actions";
 import useMatches from "@/app/match/[id]/lib/useMatches";
 import { useSideNavContext } from "@/app/match/components/MatchLayout";
 import { mockMatchSession } from "@/app/match/lib/__mocks__/actions";
-import { useDisclosure } from "@heroui/use-disclosure";
+import { useDisclosure } from "@heroui/react";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 

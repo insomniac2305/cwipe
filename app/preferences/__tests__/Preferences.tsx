@@ -3,8 +3,12 @@ import { render, screen } from "@testing-library/react";
 import { auth } from "@/app/lib/auth";
 import Preferences from "@/app/preferences/page";
 
-vi.mock("@/app/preferences/components/UserPreferences");
-vi.mock("@/app/preferences/components/EditPreferencesButton");
+vi.mock("@/app/preferences/components/UserPreferences", () => ({
+  UserPreferences: () => <div>UserPreferences</div>,
+}));
+vi.mock("@/app/preferences/components/EditPreferencesButton", () => ({
+  EditPreferencesButton: () => <div>EditPreferencesButton</div>,
+}));
 vi.mock("@/app/components/GoogleSignInButton");
 vi.mock("@/app/lib/auth");
 

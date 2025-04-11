@@ -11,6 +11,11 @@ vi.mock("@/app/lib/tmdbActions");
 vi.mock("@/app/onboarding/components/StartForm");
 vi.mock("@/app/onboarding/lib/actions");
 
+const composeSearchParams = async (skip?: string, callbackUrl?: string) => ({
+  skip,
+  callbackUrl,
+});
+
 describe("Onboarding", () => {
   beforeEach(() => {
     vi.mocked(redirect).mockClear();
@@ -24,7 +29,7 @@ describe("Onboarding", () => {
     const callbackUrl = "/test";
 
     const page = await Onboarding({
-      searchParams: { skip: "true", callbackUrl },
+      searchParams: composeSearchParams("true", callbackUrl),
     });
     render(page);
 
@@ -32,7 +37,7 @@ describe("Onboarding", () => {
   });
 
   it("does not redirect when it should not skip", async () => {
-    const page = await Onboarding({ searchParams: {} });
+    const page = await Onboarding({ searchParams: composeSearchParams() });
     render(page);
 
     expect(redirect).not.toHaveBeenCalled();

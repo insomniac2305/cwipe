@@ -22,6 +22,8 @@ const mockNewSession = mockMatchSession("1", [], [], [], false);
 const mockStartedSession = mockMatchSession("1", [], [], [], true);
 const mockMovies = [mockMovie(1, "Movie One")];
 
+const composeSearchParams = async (id: string) => ({ id });
+
 describe("Match Session", () => {
   beforeEach(() => {
     vi.mocked(auth, { partial: true }).mockResolvedValueOnce({
@@ -34,7 +36,9 @@ describe("Match Session", () => {
   it("adds user when match session is not started and user has not joined yet", async () => {
     vi.mocked(getMatchSession).mockResolvedValueOnce({ data: mockNewSession });
 
-    const page = await MatchSession({ params: { id: mockNewSession.id } });
+    const page = await MatchSession({
+      params: composeSearchParams(mockNewSession.id),
+    });
     render(page);
 
     expect(addUserToMatchSession).toHaveBeenCalledWith(mockNewSession.id);
@@ -51,7 +55,7 @@ describe("Match Session", () => {
     });
 
     const page = await MatchSession({
-      params: { id: mockSessionWithCurrentUser.id },
+      params: composeSearchParams(mockSessionWithCurrentUser.id),
     });
     render(page);
 
@@ -60,7 +64,7 @@ describe("Match Session", () => {
         matchSession: mockSessionWithCurrentUser,
         session: { user: mockCurrentUser },
       },
-      expect.anything(),
+      undefined,
     );
   });
 
@@ -71,7 +75,7 @@ describe("Match Session", () => {
 
     await expect(async () => {
       const page = await MatchSession({
-        params: { id: mockStartedSession.id },
+        params: composeSearchParams(mockStartedSession.id),
       });
       render(page);
     }).rejects.toThrowError(/already started/i);
@@ -92,7 +96,7 @@ describe("Match Session", () => {
     });
 
     const page = await MatchSession({
-      params: { id: mockSessionWithCurrentUser.id },
+      params: composeSearchParams(mockSessionWithCurrentUser.id),
     });
     render(page);
 
@@ -101,7 +105,7 @@ describe("Match Session", () => {
         matchSession: mockSessionWithCurrentUser,
         movies: mockMovies,
       },
-      expect.anything(),
+      undefined,
     );
   });
 });

@@ -1,11 +1,12 @@
 "use client";
-import { ZodType } from "zod";
+import { AnyZodObject } from "zod";
 import {
   ReactNode,
   useState,
   useActionState,
   FormEventHandler,
   startTransition,
+  useEffect,
 } from "react";
 import { useFormStatus } from "react-dom";
 import { Button, Progress } from "@heroui/react";
@@ -51,7 +52,7 @@ export default function StepForm({
     formData: FormData,
   ) => Promise<FormState | undefined>;
   stepCount: number;
-  validationSteps: ZodType[];
+  validationSteps: AnyZodObject[];
   children: ReactNode;
 }) {
   const [state, formAction] = useActionState(action, undefined);
@@ -86,6 +87,20 @@ export default function StepForm({
       startTransition(() => formAction(formData));
     }
   };
+
+  useEffect(() => {
+    if (!state?.errors) return;
+
+    for (let i = 0; i < validationSteps.length; i++) {
+      const fields = Object.keys(validationSteps[i].shape);
+      for (const field of fields) {
+        if (state.errors?.fieldErrors[field]) {
+          setCurrentStep(i);
+          return;
+        }
+      }
+    }
+  }, [state, validationSteps]);
 
   return (
     <StepFormContext.Provider

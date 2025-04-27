@@ -1,6 +1,5 @@
 import clsx from "clsx";
-import { memo } from "react";
-import { useSearchParams } from "next/navigation";
+import { Dispatch, memo, SetStateAction } from "react";
 import { CheckboxGroup } from "@heroui/checkbox";
 import { WatchProvider } from "@/app/lib/definitions";
 import WatchProviderCheckbox from "@/app/onboarding/components/WatchProviderCheckbox";
@@ -8,15 +7,15 @@ import WatchProviderCheckbox from "@/app/onboarding/components/WatchProviderChec
 export const WatchProviderCheckboxGroup = memo(
   function WatchProviderCheckboxGroup({
     watchProviders,
+    selectedProviders,
+    setSelectedProviders,
     errors,
   }: {
     watchProviders: WatchProvider[];
+    selectedProviders?: string[];
+    setSelectedProviders: Dispatch<SetStateAction<string[] | undefined>>;
     errors?: string[];
   }) {
-    const searchParams = useSearchParams();
-    const providersParam = searchParams.get("providers");
-    const providerIds = providersParam?.split(",");
-
     return (
       <CheckboxGroup
         name="providers"
@@ -30,7 +29,8 @@ export const WatchProviderCheckboxGroup = memo(
         }}
         isInvalid={!!errors}
         errorMessage={clsx(!!errors && "Please select at least one provider")}
-        defaultValue={providerIds}
+        value={selectedProviders}
+        onValueChange={setSelectedProviders}
       >
         {watchProviders.map((provider) => (
           <WatchProviderCheckbox
